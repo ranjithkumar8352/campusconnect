@@ -1,6 +1,0 @@
-<html>
-<link rel="stylesheet" href="{{STATIC_URL}}/css/1.css">
-<body>
-Hello
-</body>
-</html>
