@@ -33,6 +33,14 @@ def start(request):
 		return HttpResponse(template.render())
 
 @csrf_exempt
+def sign_up(request):
+	#call the api
+	template = loader.get_template("home.html")
+	response = HttpResponseRedirect("/home")
+	response.set_cookie("id","hi")
+	return response
+
+@csrf_exempt
 def home(request):
 	template = loader.get_template("home.html") #home
 	return HttpResponse(template.render())

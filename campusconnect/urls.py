@@ -29,7 +29,8 @@ urlpatterns = [
     url(r'^search_action','app.views.search_action'),
     url(r'^search','app.views.search_page'),
     url(r'^upload_page','app.views.upload_page'),
-    url(r'^upload','app.views.upload')
+    url(r'^upload','app.views.upload'),
+    url(r'^sign_up','app.views.sign_up')
 
 
     
