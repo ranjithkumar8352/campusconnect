@@ -20,6 +20,17 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^hello/','app.views.hello'),
+    url(r'^signin','app.views.signin'),
+    url(r'^start','app.views.start'),
+    url(r'^home','app.views.home'),
+    url(r'^course','app.views.course_page'),
+    url(r'^notebook','app.views.notes_page'),
+    url(r'^profile','app.views.profile'),
+    url(r'^search_action','app.views.search_action'),
+    url(r'^search','app.views.search_page'),
+    url(r'^upload_page','app.views.upload_page'),
+    url(r'^upload','app.views.upload')
+
+
     
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
