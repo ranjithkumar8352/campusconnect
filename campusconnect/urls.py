@@ -20,18 +20,22 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^oauth2/', include('provider.oauth2.urls', namespace = 'oauth2')),
     url(r'^signin', 'app.views.signin'),
     url(r'^start', 'app.views.start'),
     url(r'^home', 'app.views.home'),
     url(r'^course', 'app.views.course_page'),
     url(r'^notebook', 'app.views.notes_page'),
+    url(r'^assignment', 'app.views.assignment'),
+    url(r'^exam', 'app.views.exam'),
     url(r'^profile', 'app.views.profile'),
     url(r'^search_action', 'app.views.search_action'),
     url(r'^search', 'app.views.search_page'),
     url(r'^upload_page', 'app.views.upload_page'),
     url(r'^upload', 'app.views.upload'),
-    url(r'^sign_up', 'app.views.sign_up_page'),
-    url(r'^sign_up_api','app.views.sign_up')
+    url(r'^sign_up', 'app.views.sign_up'),
+    url(r'^register_api','app.views.sign_up_api'),
+    url(r'^signout','app.views.sign_out')
 
 
 

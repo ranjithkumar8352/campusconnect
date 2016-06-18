@@ -121,9 +121,10 @@ background-color:blue;
 </style>
 <script>
 $(document).ready(function(){
+  pId = document.cookie.split(";")[1].split("=")[1]
     bList=[];
     uList=[];
-     data={"profileId":"ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgLyhggoM"};
+     data={"profileId":pId};
         
   $.ajax({
   type:'GET',
@@ -164,7 +165,7 @@ $(document).ready(function(){
 			});
     
     data={
-        "bpid":"ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgLyhggoM",
+        "bpid":pId,
         };
         $.ajax({
         type:'POST',
@@ -231,7 +232,7 @@ $(document).ready(function(){
         if(uPressed==0)
         {
         data={
-            "upid":"ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgLyhggoM",
+            "upid":pId,
         };
         $.ajax({
         type:'POST',

@@ -9,13 +9,13 @@ def sign_up():
     dummy_data["profileName"] = "Sarthak Shetty"
     dummy_data[
         "collegeId"] = "ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB0NvbGxlZ2UYgICAgICAgAoM"
-    dummy_data["batchName"] = "2015"
+    dummy_data["batchName"] = "2016"
     dummy_data["branchName"] = "Computer Science and Engineering"
     dummy_data["sectionName"] = "A"
-    dummy_data["photoUrl"] = "http://www.1.jpg"
+    dummy_data["photoUrl"] = "/static/style/profile.png"
     dummy_data["email"] = "sarthakshetty1@gmail.com"
     dummy_data["gcmId"] = "invalid"
     r = requests.post(url, data=json.dumps(dummy_data), headers=headers)
-    print(r)
+    #print(r)
     print(r.json())
     return(r.json())

@@ -8,7 +8,7 @@ from django.conf.urls.static import static
 import app.validate
 from app.models import User
 import json
-import sign_up_api
+import sign_up_api as register_api
 # Create your views here.
 
 
@@ -22,6 +22,7 @@ def signin(request):
 def start(request):
     gId = None
     cookies = request.COOKIES
+    print cookies
 
     if "gid" in cookies:
         gId = cookies["gid"]
@@ -31,6 +32,8 @@ def start(request):
         user = User.objects.get(gprofileId=gId)
         if user.profileId != "":
         # template = loader.get_template("home.html") #home
+        	temp = HttpResponseRedirect("/home")
+        	request.session["active"]=True
         	return HttpResponseRedirect("/home")
         else:
         	return HttpResponseRedirect("/sign_up")
@@ -41,25 +44,32 @@ def start(request):
 
 
 @csrf_exempt
-def sign_up_page(request):
+def sign_up(request):
+	print "here"
 	template = loader.get_template("login.html")
 	return HttpResponse(template.render())
 
 
 @csrf_exempt
-def sign_up(request):
+def sign_up_api(request):
+	print request.body
     # call the api
-    sign_up_response = sign_up_api.sign_up("form data")
-    if "profileId" in sign_up_response:
-    	profileId = sign_up_response["profileId"]
-    	user = User.objects
-    	template = loader.get_template("home.html")
-    	response = HttpResponseRedirect("/home")
-    	response.set_cookie("profileId", profileId)
-    	request.session["active"] = True
-    	return response
-    else:
-    	return HttpResponse("Error")
+	sign_up_response = register_api.sign_up() #form data
+	print sign_up_response
+	if "key" in sign_up_response:
+		profileId = sign_up_response["key"]
+    	#user = User.objects
+    	#template = loader.get_template("home.html")
+		gid = request.COOKIES["gid"]
+		user = User.objects.get(gprofileId=gid)
+		user.profileId = profileId
+		user.save()
+		response = HttpResponseRedirect("/home")
+		response.set_cookie("profileId", profileId)
+		request.session["active"] = True
+		return response
+	else:
+		return HttpResponse("Error")
 
 
 @csrf_exempt
@@ -67,9 +77,9 @@ def home(request):
 	if "active" in request.session:
 		if request.session["active"]:
 			template = loader.get_template("home.html")  # home
-    		return HttpResponse(template.render())
-    	else:
-    		return HttpResponseRedirect("/signin")
+			return HttpResponse(template.render())
+		else:
+			return HttpResponseRedirect("/signin")
 
 
 @csrf_exempt
@@ -87,6 +97,28 @@ def course_page(request):
 
 @csrf_exempt
 def notes_page(request):
+	if "active" in request.session:
+		if request.session["active"]:
+    		# note_id = QueryDict(request.META['QUERY_STRING'])["course_id"]
+			template = loader.get_template("notes.html")
+			response = HttpResponse(template.render())
+    		# response.set_cookie()
+			return HttpResponse(template.render())
+	else:
+		return HttpResponseRedirect("/signin")
+@csrf_exempt
+def assignment(request):
+	if "active" in request.session:
+		if request.session["active"]:
+    		# note_id = QueryDict(request.META['QUERY_STRING'])["course_id"]
+			template = loader.get_template("notes.html")
+			response = HttpResponse(template.render())
+    		# response.set_cookie()
+			return HttpResponse(template.render())
+	else:
+		return HttpResponseRedirect("/signin")
+@csrf_exempt
+def exam(request):
 	if "active" in request.session:
 		if request.session["active"]:
     		# note_id = QueryDict(request.META['QUERY_STRING'])["course_id"]

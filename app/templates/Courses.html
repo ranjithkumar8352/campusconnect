@@ -140,49 +140,42 @@ background-color:blue;
 </style>
 <script>
 $(document).ready(function(){
-var noteBookId=[];
- courseList=[];
+    pId = document.cookie.split(";")[1].split("=")[1]
+    var noteBookId=[];
+    courseList=[];
+    notesPressed=0;
     assPressed=0; assList=[];
     examPressed=0;examList=[];
-var exam=['<div class="ui card bottom " style="background-color:white;border:1px solid #ccc;height:200px;color:black;width:440px;" id = "card">\
-        <div class="row" >\
-        <div class="col-xs-8">\
-        <div class="course-name"  style="font-size:15px;"> &nbsp SEMESTER EXAM</div>\
-        <div class="author-name"  style="font-size:10px;"> &nbsp;  &nbsp;By XYZ</div>\
-        </div>\
-        <div class="col-xs-4" style="padding:0px;">\
-        <center><div>Posted on</div>\
-        <div id="date1">26/05/2016</div></center>\
-        </div>\
-        </div>\
-        <div class="row" style="margin-left:-6px;">\
-        <div class="col-xs-12">\
-        <br>\
-        <div class="desc"  style="font-size:10px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum laoreet, nunc eget laoreet sagittis, quam ligula sodales orci, congue imperdiet eros tortor ac lectus. Duis eget nisl orci. </div>\
-        </div>\
-        </div>\
-        <div class="row" style="margin-left:-6px;margin-top:35px;">\
-        <div class="col-xs-4">\
-        <div><i class="fa fa-eye" aria-hidden="true"></i> 0</div>\
-        </div>\
-        <div class="col-xs-8" style="padding:0px;">\
-        <div><center><i class="fa fa-calendar" aria-hidden="true"></i> DUE: <span id="due-date">25 May 2016</span></center></div>\
-        </div>\
-        </div>\
-        </div>'];
-    
-
-
+    //url splitting
+   url2= $(location).attr('href'); 
+   url1=url2.split('=');
+   url=url1[1].split('-');
+   if(url.length!=1)
+   {
+   tabShow=url[1].split('#');
+   if(tabShow[1]=='view2')
+   {
+    ajaxAssignments();
+    assPressed=1;
+   }
+       
+   else if(tabShow[1]=='view1')
+    {
+        ajaxNotes();
+        notesPressed=1;
+    }
+    else
+    {
+        ajaxExam();
+        examPressed=1;
+    }
+       
+   }
   
-	$('#layout1').layout({
-		itemMargin: 10,
-		itemPadding: 10
-			});
-    
-    
-    data={"profileId":"ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgLyhggoM"};
-        
-  $.ajax({
+
+//getting profile details    
+data={"profileId":pId};        
+$.ajax({
   type:'GET',
   dataType: 'json',
   url: 'https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/feed/ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgLyhggoM',
@@ -194,7 +187,7 @@ var exam=['<div class="ui card bottom " style="background-color:white;border:1px
   },
   success: function (data) {
      // console.log(data);
-      $('img[src="profile.png"]').attr('src', data.photoUrl);
+   //   $('img[src="/static/style/profile.png"]').attr('src', data.photoUrl);
      //$("#image").src()
       // alert(data.subscribedCourseList[i].points);
      $('#pts').text(data.points);
@@ -203,12 +196,11 @@ var exam=['<div class="ui card bottom " style="background-color:white;border:1px
   }
 });
     
+//getting course details    
 data={"profileId":"ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgLyhggoM",
-      "courseId" :"ahJzfnVwbG9hZG5vdGVzLTIwMTZyEwsSBkNvdXJzZRiAgICA2uOGCQw"
+      "courseId" :url[0]
      };
-    
-   // alert(JSON.stringify(data));
-     $.ajax({
+ $.ajax({
   type:'POST',
   dataType: 'json',
   contentType: 'application/json',
@@ -251,10 +243,20 @@ data={"profileId":"ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgLyhggoM",
   }
 });
 
-    data={
-        "courseId" :"ahJzfnVwbG9hZG5vdGVzLTIwMTZyEwsSBkNvdXJzZRiAgICA2uOGCQw",
-    };
+
     
+ function ajaxNotes()
+{
+      
+	$('#layout1').layout({
+		itemMargin: 10,
+		itemPadding: 10
+			});  
+    
+    
+    data={
+        "courseId" :url[0]
+        };
    
       $.ajax({
   type:'POST',
@@ -263,16 +265,13 @@ data={"profileId":"ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgLyhggoM",
   url: 'https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/notebookList',
   data: JSON.stringify(data),
   success: function (data) {
-      console.log(data);
-      //$('img[src="profile.png"]').attr('src', data.photoUrl);
-     //$("#image").src()
-      // alert(data.subscribedCourseList[i].points);
-     // alert(data.courseName);
-   //$(".course-name").text(data.courseName);
-       
+  console.log(data);
+try{
+      if(data.noteBookList.length!=0)
+    {
       for(i=0;i<data.noteBookList.length;i++)
       {
-          var card=['<div class="ui card bottom " style="background-color:white;border:1px solid #ccc;height:200px;color:black;width:440px;" id = "card" >\
+          var card=['<div class="ui card bottom" id="'+data.noteBookList[i].noteBookId+'" style="background-color:white;border:1px solid\ #ccc;height:200px;color:black;width:440px;cursor:pointer" >\
         <div class="row" >\
         <div class="col-xs-8">\
         <div class="course-name"  style="font-size:15px;"> &nbsp '+data.noteBookList[i].courseName+'</div>\
@@ -298,50 +297,34 @@ data={"profileId":"ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgLyhggoM",
         courseList.push(card);
            $('#layout1').layout('addBefore', card);
           noteBookId.push(data.noteBookList[i].noteBookId);
-          s="#card "+i;
-          alert(s);
-          $("#card").bind("click",nextPage);
+          //s="#card "+i;
+            document.getElementById(data.noteBookList[i].noteBookId).addEventListener('click',function(e){ 
+                 // id=document.getElementById(e.id).cid;
+                window.location="/notebook?id="+this.id;
+                });
+          
+          
       }
       
+    }
+   }
+    catch(err){}
   }
 });
+}
 
- function nextPage()
- {
-     alert("hi");
-
- }
     
-  // $('#layout').layout('addBefore', append2);
-  $('.tabs1').on('click',function(){
-	$('#layout1').layout({
-		itemMargin: 10,
-		itemPadding: 10
-			});
-      for(i=0;i<courseList.length;i++)
-          {
-              
-              	$('#layout1').layout('addBefore', courseList[i]);
-		
-          }
+    
 	
-       // $(".course-name").text('Python');
-  
-  });
-  
-  
-        $('.tabs2').on('click',function(){
-		$('#layout2').layout({
+function ajaxAssignments()
+{
+    $('#layout2').layout({
 			itemMargin: 10,
 			itemPadding: 10
 							});
-       
-   
-    if(assPressed==0)   
-      {
-          data={
+ data={
         
-        "courseId" :"ahJzfnVwbG9hZG5vdGVzLTIwMTZyEwsSBkNvdXJzZRiAgICA2uOGCQw"
+        "courseId" :url[0]
         };
 
           
@@ -354,10 +337,13 @@ data={"profileId":"ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgLyhggoM",
         data: JSON.stringify(data),
         success: function (data) {
         console.log(data);
+    try{
+        if(data.assList.length!=0)
+    {
         for(i=0;i<data.assList.length;i++)
           {
                   
-         var ass=['<div class="ui card bottom " style="background-color:white;border:1px solid #ccc;height:200px;color:black;width:440px;" id = "card">\
+         var ass=['<div class="ui card bottom " id="'+data.assList[i].assignmentId+'" style="cursor:pointer;background-color:white;border:1px solid\ #ccc;height:200px;color:black;width:440px;" >\
         <div class="row" >\
         <div class="col-xs-8">\
         <div class="course-name"  style="font-size:15px;"> &nbsp '+data.assList[i].assignmentTitle+'</div>\
@@ -385,35 +371,27 @@ data={"profileId":"ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgLyhggoM",
         </div>'];
               assList.push(ass);
             $('#layout2').layout('addBefore', ass);  
+            document.getElementById(data.assList[i].assignmentId).addEventListener('click',function(e){ 
+                 // id=document.getElementById(e.id).cid;
+                window.location="/assignment?id="+this.id;
+                });
           }
   }
-      });
-          assPressed++;
+    }
+            catch(err){}
       }
-        else
-            {
-                
-                  for(i=0;i<assList.length;i++)
-          {
-              
-              	$('#layout2').layout('addBefore', assList[i]);
-		
-          }
-                
-                
-            }
-  });
-   
-   $('.tabs3').on('click',function(){
-		$('#layout3').layout({
+        });
+}
+  
+function ajaxExam()
+{
+    $('#layout3').layout({
 			itemMargin: 10,
 			itemPadding: 10
 			} );
-		  if(examPressed==0)   
-      {
-          data={
-        
-        "courseId" :"ahJzfnVwbG9hZG5vdGVzLTIwMTZyEwsSBkNvdXJzZRiAgICA2uOGCQw"
+    
+      data={
+        "courseId" :url[0]
         };
 
           
@@ -426,10 +404,13 @@ data={"profileId":"ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgLyhggoM",
         data: JSON.stringify(data),
         success: function (data) {
         console.log(data);
+    try{
+        if(data.testList.length!=0)
+    {
         for(i=0;i<data.testList.length;i++)
           {
                   
-         var ass=['<div class="ui card bottom " style="background-color:white;border:1px solid #ccc;height:200px;color:black;width:440px;" id = "card">\
+         var ass=['<div class="ui card bottom " id="'+data.testList[i].testId+'" style="cursor:pointer;background-color:white;border:1px solid\ #ccc;height:200px;color:black;width:440px;" >\
         <div class="row" >\
         <div class="col-xs-8">\
         <div class="course-name"  style="font-size:15px;"> &nbsp '+data.testList[i].testTitle+'</div>\
@@ -456,25 +437,91 @@ data={"profileId":"ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgLyhggoM",
         </div>\
         </div>'];
               examList.push(ass);
+              
             $('#layout3').layout('addBefore', ass);  
+               document.getElementById(data.testList[i].testId).addEventListener('click',function(e){ 
+                 // id=document.getElementById(e.id).cid;
+                window.location="/exam?id="+this.id;
+                });
           }
-  }
-      });
-          examPressed++;
+        }
+    
+      }
+            catch(err){}
+        }
+        });
+    
+    }
+
+    
+  $('.tabs1').on('click',function(){
+	$('#layout1').layout({
+		itemMargin: 10,
+		itemPadding: 10
+			});
+      if(notesPressed==0)
+        {
+          ajaxNotes();
+          notesPressed++;
+        }
+      else
+    {
+      for(i=0;i<courseList.length;i++)
+          {
+              
+              	$('#layout1').layout('addBefore', courseList[i]);
+		
+          }
+    }
+       // $(".course-name").text('Python');
+  
+  });
+  
+     $('.tabs2').on('click',function(){
+		$('#layout2').layout({
+			itemMargin: 10,
+			itemPadding: 10
+							});
+    if(assPressed==0)   
+      {
+         ajaxAssignments();
+          assPressed++;
       }
         else
             {
                 
-                  for(i=0;i<examList.length;i++)
+                  for(i=0;i<assList.length;i++)
           {
               
-              	$('#layout2').layout('addBefore', examList[i]);
+              	$('#layout2').layout('addBefore', assList[i]);
 		
           }
                 
                 
             }
-					});
+  });
+   
+   $('.tabs3').on('click',function(){
+		$('#layout3').layout({
+			itemMargin: 10,
+			itemPadding: 10
+			} );
+		  if(examPressed==0)   
+            {
+            ajaxExam();
+            examPressed++;
+            }
+        else
+            {
+                
+          for(i=0;i<examList.length;i++)
+          {
+              
+            $('#layout2').layout('addBefore', examList[i]);
+		
+          }    
+            }
+                                    });
  
    /* $('window').on('scroll', function() {
         if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
@@ -578,7 +625,7 @@ data={"profileId":"ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgLyhggoM",
     <div class="row">
       <div class="col-xs-6 col-md-2 sidebar sidebar-left sidebar-animate sidebar-md-show" >
         <ul class="nav navbar-stacked">
-		<li><center><a href="#" width="50%" height="50%" class="profile.png"><img src="profile.png" class="img-circle" width="50%" height="50%"></a></center></li>
+		<li><center><a href="/profile" width="50%" height="50%" class="profile.png"><img src="/static/style/profile.png" class="img-circle" width="50%" height="50%"></a></center></li>
 		 <li><center><span id="pname">Name</span></center></li>
         
         <li><center>Points: &nbsp <span id="pts">0</span></center></li>

@@ -2,6 +2,9 @@
 <html>
 
   <head>
+    <meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id" content="22051677189-1f55k773ct0qnlb5dkr83surcfk6565t.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
       <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
@@ -98,7 +101,26 @@ background-color:transparent;
 }
 </style>
 <script>
+function SignOut() {
+    alert("hello");
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+          alert("hello");
+
+      console.log('User signed out.');
+      window.location="/signout"
+    });
+  }
 $(document).ready(function(){
+   
+
+
+  cookie = document.cookie;
+  alert(cookie);
+  c = cookie.split(";");
+  pId = c[0].split("=")[1];
+  alert(pId);
+  alert('https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/feed/ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgLyhggoM?profileId='+pId);
 data={};
     
      var append=['<div class="ui card bottom" style="background-color:white;border:1px solid #ccc;height:220px;margin-bottom:1px;margin-color:#ccc;width:400px;" id = "card"><center><button id="b1"> +CLICK ME</buton></canter></div>'];
@@ -115,7 +137,7 @@ data={};
     $.ajax({
   type:'GET',
   dataType: 'json',
-  url: 'https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/feed/ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgLyhggoM?profileId=ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgLyhggoM',
+  url: 'https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/feed/ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgLyhggoM?profileId='+pId,
   data: data,
   beforeSend: function (xhr) {
     if (xhr && xhr.overrideMimeType) {
@@ -133,31 +155,51 @@ data={};
           {//420  
            
               
-             
+             s="/course";
                 var card=['<div class="ui card bottom " style="background-color:white;border:1px solid #ccc;height:160px;;color:black;width:440px;" id = "card">\<div class="row" >\
-                <div class="course-name"  style="font-size:20px;"> &nbsp <u>'+data.subscribedCourseList[i].courseName+'</u></div>\
+                <div class="course-name" id="'+data.subscribedCourseList[i].courseId+'" style="cursor:pointer;font-size:20px;"> &nbsp\ <u>'+data.subscribedCourseList[i].courseName+'</u></div>\
                 </div>\
                 <div class="row" style="margin-top:20px;">\
-                <div class="col-xs-3 notes" onclick="alert("notes")" style="padding-right:0px;">\
+                <div class="col-xs-3 notes"  id="'+data.subscribedCourseList[i].courseId+'-notes" style="cursor:pointer;padding-right:0px;">\
                 <div style="">NOTES</div>\
                 <br>\
                 <div class="notes-no" style="margin-left:20px;">'+data.subscribedCourseList[i].recentNotes+'</div>\
                 </div>\
-                <div class="col-xs-5 col-xs-offset-1 ass" onclick="alert("notes")" style="padding:0px;">\
+                <div class="col-xs-5 col-xs-offset-1 ass"  id="'+data.subscribedCourseList[i].courseId+'-assignments" style="cursor:pointer;padding:0px;">\
                 <div>  ASSIGNMENTS</div>\
                 <br>\
                 <div class="ass-no" style="margin-left:40px;">'+data.subscribedCourseList[i].dueAssignments+'</div>\
                 </div>\
-                <div class="col-xs-3  exam" onclick="alert("notes")" style="padding:0px"><div> &nbsp &nbsp EXAMS</div>\
+                <div class="col-xs-3  exam"  id="'+data.subscribedCourseList[i].courseId+'-exams" style="cursor:pointer;padding:0px"><div> &nbsp &nbsp EXAMS</div>\
                 <br>\
                 <div class="date-no" style="margin-left:35px;">'+data.subscribedCourseList[i].dueTests+'</div>\
                 </div>\
                 </div>\
                 </div>'];
-
-                
-	           $('#layout').layout('addBefore', card);
-             
+                 $('#layout').layout('addBefore', card);
+              //document.getElementById("cid-"+i).addEventListener('click',f,123);
+	          
+                document.getElementById(data.subscribedCourseList[i].courseId).addEventListener('click',function(e){ 
+                 // id=document.getElementById(e.id).cid;
+                window.location="/course?id="+this.id;
+                });
+              
+              s=
+                document.getElementById(data.subscribedCourseList[i].courseId+"-notes").addEventListener('click',function(e){ 
+                 // id=document.getElementById(e.id).cid;
+                window.location="/course?id="+this.id+"#view1";
+                });
+              
+              
+                document.getElementById(data.subscribedCourseList[i].courseId+"-assignments").addEventListener('click',function(e){ 
+                 // id=document.getElementById(e.id).cid;
+                window.location="/course?id="+this.id+"#view2";
+                });
+              
+                document.getElementById(data.subscribedCourseList[i].courseId+"-exams").addEventListener('click',function(e){ 
+                 // id=document.getElementById(e.id).cid;
+                window.location="/course?id="+this.id+"#view3";
+                });
           }
   }
 });
@@ -170,59 +212,81 @@ data={};
 	});
 
 	
-	
-
 	});
-alert(document.cookie);
+    $('#cid-0').on('click',function(){
+    alert('ff')
+	 window.location="/course";
+	});
+    function  f(e,id)
+    {
+        alert(id);
+        v=id;
+            if(v!=0)
+            {
+                
+            }
+    }
 </script>
 
 <body>
     <!-- Fixed navbar -->
-	<nav class="navbar navbar-default nav" style="margin-top:-55px;">
+<nav class="navbar navbar-default nav" style="margin-top:-55px;">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
-	  <button type="button" class="navbar-toggle toggle-left hidden-md hidden-lg" data-toggle="sidebar" data-target=".sidebar-left">
         
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false" >
+	  <button type="button" class="navbar-toggle toggle-left hidden-md hidden-lg" data-toggle="sidebar" data-target=".sidebar-left">
         <span class="sr-only">Toggle navigation</span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
+         
+   
+         <button class="btn btn-default sub5 navbar-toggle visible-xs" ><span class="glyphicon glyphicon-bell" ></span></button>
+      <button  class="navbar-toggle collapsed"  aria-expanded="false" style="border:0px solid white;">
+          
+             <a href="#">
+                 <span class="glyphicon glyphicon-search" style="border:0px solid white;"></a><span>
+      </button>
+        
       <a class="navbar-brand" href="#">Brand</a>
+        
     </div>
 
      
-      <form class="navbar-form navbar-left" role="search">
+      <form class="navbar-form navbar-left hidden-xs" role="search">
         <div class="form-group">
-			<button type="submit" class="btn btn-default sub" ><span class="glyphicon glyphicon-search"></button>
-          <input type="text" class="form-control search"  id="search" style="width:700px;">
-		  
-		<span style="background-color:#5cb85c;color:white;" class="btn btn-default btn-success  center"  data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span>Upload
-     
+			<button type="submit" class="btn btn-default sub " ><span class="glyphicon glyphicon-search" style="width:10px;"></button>
+          <input type="text" class="form-control search "  id="search" style="width:700px;">
+       <div style="background-color:#5cb85c;color:white;" class="btn btn-default btn-success  center"  data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span>Upload</div>
+                
 		 
 	   </div>
-		
+		 
 		<!--  <input type="file"  class="btn btn-primary btn-success upload"><span class="glyphicon glyphicon-plus"></span> Upload  <span style="background-color:#5cb85c;color:white;" class="btn btn-default btn-success  center" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span>Upload
         <input type="file"/></span>-->
 	</form>
 	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+       
       <ul class="nav navbar-nav navbar-right">
-        
-        <li><a href="#"><span class="glyphicon glyphicon-bell" ></span></a></li>
+          <li><a href="#"><span class="glyphicon glyphicon-bell" ></span></a></li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user" ></span> </a>
+           
+        
           <ul class="dropdown-menu">
             <li><a href="#">Action</a></li>
             <li><a href="#">Another action</a></li>
             <li><a href="#">Something else here</a></li>
             <li role="separator" class="divider"></li>
-            <li><a href="#">Separated link</a></li>
+            <li  ><div class ="g-signin2" onclick="SignOut()"> &nbsp; Sign out</div></li>
           </ul>
         </li>
+          
       </ul>
     </div><!-- /.navbar-collapse -->
+          
   </div><!-- /.container-fluid -->
 </nav>
 <!--
@@ -243,14 +307,18 @@ alert(document.cookie);
   <!-- Begin page content -->
   <div class="container-fluid">
     <div class="row">
-      <div class="col-xs-6 col-md-2 sidebar sidebar-left sidebar-animate sidebar-md-show">
+      <div class="col-xs-6 col-md-2 sidebar sidebar-left sidebar-animate sidebar-md-show" >
         <ul class="nav navbar-stacked">
-		<li><center><a href="#" width="50%" height="50%" class="profile.png"><img id="image" src="profile.png" class="img-circle" width="50%" height="50%"></a></center></li>
-        <li><center><span id="pname">Name</span></center></li>
+		<li><center><a href="#" width="50%" height="50%" class="profile.png"><img src="profile.png" class="img-circle" width="50%" height="50%"></a></center></li>
+		 <li><center><span id="pname">Name</span></center></li>
         
         <li><center>Points: &nbsp <span id="pts">0</span></center></li>
 		<br>
 		<div style="border:1px solid #ccc;border-bottom:1px"></div>
+            
+            <li class="visible-xs"><div style="margin-top:5px;margin-left:10px;background-color:#5cb85c;color:white;" class="btn btn-default btn-success  center"  data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span>Upload</div>
+            <div style="border:1px solid #ccc;border-bottom:1px;margin-top:5px;"></div>
+            </li>
           <li class="active"><a href="#">Home</a></li>
           <li><a href="#about">My Bookmarks</a></li>
 		   <li><a href="#about">My Uploads</a></li>
