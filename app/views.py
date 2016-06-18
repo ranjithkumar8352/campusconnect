@@ -22,7 +22,7 @@ def signin(request):
 def start(request):
     gId = None
     cookies = request.COOKIES
-    
+
     if "gid" in cookies:
         gId = cookies["gid"]
     if gId is None:
@@ -31,19 +31,20 @@ def start(request):
         user = User.objects.get(gprofileId=gId)
         if user.profileId != "":
         # template = loader.get_template("home.html") #home
-        	request.session["active"]=True
         	return HttpResponseRedirect("/home")
         else:
-        	return HttpResponseRedirect("/sign_up")        	
+        	return HttpResponseRedirect("/sign_up")
     except:
         User.objects.create(gprofileId=gId)
         # TODO: change name signup page
         return HttpResponseRedirect("/sign_up")
 
+
 @csrf_exempt
 def sign_up_page(request):
 	template = loader.get_template("login.html")
 	return HttpResponse(template.render())
+
 
 @csrf_exempt
 def sign_up(request):
@@ -51,64 +52,106 @@ def sign_up(request):
     sign_up_response = sign_up_api.sign_up("form data")
     if "profileId" in sign_up_response:
     	profileId = sign_up_response["profileId"]
+    	user = User.objects
     	template = loader.get_template("home.html")
     	response = HttpResponseRedirect("/home")
     	response.set_cookie("profileId", profileId)
+    	request.session["active"] = True
     	return response
     else:
     	return HttpResponse("Error")
 
 
-
 @csrf_exempt
 def home(request):
-    template = loader.get_template("home.html")  # home
-    return HttpResponse(template.render())
+	if "active" in request.session:
+		if request.session["active"]:
+			template = loader.get_template("home.html")  # home
+    		return HttpResponse(template.render())
+    	else:
+    		return HttpResponseRedirect("/signin")
 
 
 @csrf_exempt
 def course_page(request):
-    #course_id = QueryDict(request.META['QUERY_STRING'])["course_id"]
-    template = loader.get_template("Courses.html")
-    response = HttpResponse(template.render())
-    # response.set_cookie()
-    return response
+	if "active" in request.session:
+		if request.session["active"]:
+	    	# course_id = QueryDict(request.META['QUERY_STRING'])["course_id"]
+			template = loader.get_template("Courses.html")
+			response = HttpResponse(template.render())
+	    	# response.set_cookie()
+	    	return response
+	else:
+		return HttpResponseRedirect("/signin")
 
 
 @csrf_exempt
 def notes_page(request):
-    #note_id = QueryDict(request.META['QUERY_STRING'])["course_id"]
-    template = loader.get_template("notes.html")
-    response = HttpResponse(template.render())
-    # response.set_cookie()
-    return HttpResponse(template.render())
+	if "active" in request.session:
+		if request.session["active"]:
+    		# note_id = QueryDict(request.META['QUERY_STRING'])["course_id"]
+			template = loader.get_template("notes.html")
+			response = HttpResponse(template.render())
+    		# response.set_cookie()
+			return HttpResponse(template.render())
+	else:
+		return HttpResponseRedirect("/signin")
 
 
 @csrf_exempt
 def profile(request):
-    template = loader.get_template("profile.html")
-    return HttpResponse(template.render())
+	if "active" in request.session:
+		if request.session["active"]:
+			template = loader.get_template("profile.html")
+    		return HttpResponse(template.render())
+    	else:
+    		return HttpResponseRedirect("/signin")
 
 
 @csrf_exempt
 def search_action(request):
-    if(request.method == "POST"):
-        return HttpResponseRedirect("/search")
+	if "active" in request.session:
+		if request.session["active"]:
+			if(request.method == "POST"):
+				return HttpResponseRedirect("/search")
+		else:
+			return HttpResponseRedirect("/signin")
 
 
 @csrf_exempt
 def search_page(request):
-    template = loader.get_template("search.html")
-    return HttpResponse(template.render())
+	if "active" in request.session:
+		if request.session["active"]:
+			template = loader.get_template("search.html")
+			return HttpResponse(template.render())
+		else:
+			return HttpResponseRedirect("/signin")
 
 
 @csrf_exempt
 def upload_page(request):
-    template = loader.get_template("uploads.html")
-    return HttpResponse(template.render())
+	if "active" in request.session:
+		if request.session["active"]:
+			template = loader.get_template("uploads.html")
+			return HttpResponse(template.render())
+		else:
+			return HttpResponseRedirect("/signin")
 
 
-#gId = "test"
+
+@csrf_exempt
+def sign_out(request):
+	if "active" in request.session:
+		if request.session["active"]:
+			request.session["active"] = False
+	return HttpResponseRedirect("/signin")
+
+
+
+
+
+
+# gId = "test"
 # @csrf_exempt
 # def test(request):
 # 	template = loader.get_template("uploads.html")
