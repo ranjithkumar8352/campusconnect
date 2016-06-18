@@ -8,6 +8,7 @@ from django.conf.urls.static import static
 import app.validate
 from app.models import User
 import json
+import sign_up_api
 # Create your views here.
 
 
@@ -20,28 +21,43 @@ def signin(request):
 @csrf_exempt
 def start(request):
     gId = None
-    if request.method == "POST":
-        gId = request.POST["gId"]
+    cookies = request.COOKIES
+    
+    if "gid" in cookies:
+        gId = cookies["gid"]
     if gId is None:
         return HttpResponseRedirect("/signin")
     try:
-        User.objects.get(gprofileId=gId)
+        user = User.objects.get(gprofileId=gId)
+        if user.profileId != "":
         # template = loader.get_template("home.html") #home
-        return HttpResponseRedirect("/home")
+        	request.session["active"]=True
+        	return HttpResponseRedirect("/home")
+        else:
+        	return HttpResponseRedirect("/sign_up")        	
     except:
         User.objects.create(gprofileId=gId)
         # TODO: change name signup page
-        template = loader.get_template("login.html")
-        return HttpResponse(template.render())
+        return HttpResponseRedirect("/sign_up")
 
+@csrf_exempt
+def sign_up_page(request):
+	template = loader.get_template("login.html")
+	return HttpResponse(template.render())
 
 @csrf_exempt
 def sign_up(request):
     # call the api
-    template = loader.get_template("home.html")
-    response = HttpResponseRedirect("/home")
-    response.set_cookie("id", "hi")
-    return response
+    sign_up_response = sign_up_api.sign_up("form data")
+    if "profileId" in sign_up_response:
+    	profileId = sign_up_response["profileId"]
+    	template = loader.get_template("home.html")
+    	response = HttpResponseRedirect("/home")
+    	response.set_cookie("profileId", profileId)
+    	return response
+    else:
+    	return HttpResponse("Error")
+
 
 
 @csrf_exempt

@@ -7,4 +7,4 @@ from django.db import models
 
 class User(models.Model):
     gprofileId = models.CharField(max_length=40, primary_key=True)
-    profileId = models.CharField(max_length=40, default=1)
+    profileId = models.CharField(max_length=40, default="")
