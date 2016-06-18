@@ -1,4 +1,4 @@
-import models
+from app.models import User
 
 
 def validate(profileId, gprofileId):

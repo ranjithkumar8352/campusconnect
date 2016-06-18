@@ -5,8 +5,8 @@ from django.http import *
 from django.template import loader
 from django.conf import settings
 from django.conf.urls.static import static
-import validate
-from models import User
+import app.validate
+from app.models import User
 import json
 # Create your views here.
 
@@ -20,9 +20,9 @@ def signin(request):
 @csrf_exempt
 def start(request):
     gId = None
-    if(request.method == "POST"):
+    if request.method == "POST":
         gId = request.POST["gId"]
-    if(gId == None):
+    if gId is None:
         return HttpResponseRedirect("/signin")
     try:
         User.objects.get(gprofileId=gId)
@@ -56,7 +56,7 @@ def course_page(request):
     template = loader.get_template("Courses.html")
     response = HttpResponse(template.render())
     # response.set_cookie()
-    return HttpResponse(template.render())
+    return response
 
 
 @csrf_exempt
