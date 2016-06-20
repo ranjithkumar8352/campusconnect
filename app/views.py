@@ -14,33 +14,35 @@ import sign_up_api as register_api
 
 @csrf_exempt
 def signin(request):
-    template = loader.get_template("signin.html")
-    return HttpResponse(template.render())
-
+	template = loader.get_template("signin.html")
+	return HttpResponse(template.render())
 
 @csrf_exempt
 def start(request):
-    gId = None
-    cookies = request.COOKIES
-    print cookies
-
-    if "gid" in cookies:
-        gId = cookies["gid"]
-    if gId is None:
-        return HttpResponseRedirect("/signin")
-    try:
-        user = User.objects.get(gprofileId=gId)
-        if user.profileId != "":
-        # template = loader.get_template("home.html") #home
-        	temp = HttpResponseRedirect("/home")
-        	request.session["active"]=True
-        	return HttpResponseRedirect("/home")
-        else:
-        	return HttpResponseRedirect("/sign_up")
-    except:
-        User.objects.create(gprofileId=gId)
+	gId = None
+	cookies = request.COOKIES
+	print cookies
+	if "gid" in cookies:
+		gId = cookies["gid"]
+		firstname = cookies["firstname"]
+		lastname = cookies["lastname"]
+		image_url = cookies["imageURL"]
+		email = cookies["email"]
+	if gId is None:
+		return HttpResponseRedirect("/signin")
+	try:
+		user = User.objects.get(gprofileId=gId)
+		if user.profileId != "":
+		# template = loader.get_template("home.html") #home
+			temp = HttpResponseRedirect("/home")
+			request.session["active"] = True
+			return HttpResponseRedirect("/home")
+		else:
+			return HttpResponseRedirect("/sign_up")
+	except:
+		User.objects.create(gprofileId=gId,firstname=firstname,lastname=lastname,email=email,image_url=image_url)
         # TODO: change name signup page
-        return HttpResponseRedirect("/sign_up")
+		return HttpResponseRedirect("/sign_up")
 
 
 @csrf_exempt
@@ -53,23 +55,26 @@ def sign_up(request):
 @csrf_exempt
 def sign_up_api(request):
 	print request.body
-    # call the api
-	sign_up_response = register_api.sign_up() #form data
-	print sign_up_response
-	if "key" in sign_up_response:
-		profileId = sign_up_response["key"]
-    	#user = User.objects
-    	#template = loader.get_template("home.html")
+	if request.method == "POST":
+		form_data = request.POST
 		gid = request.COOKIES["gid"]
 		user = User.objects.get(gprofileId=gid)
-		user.profileId = profileId
-		user.save()
-		response = HttpResponseRedirect("/home")
-		response.set_cookie("profileId", profileId)
-		request.session["active"] = True
-		return response
+		# call the api
+		sign_up_response = register_api.sign_up(user,form_data) #form data
+		if "key" in sign_up_response:
+			profileId = sign_up_response["key"]
+    		# user = User.objects
+    		# template = loader.get_template("home.html")
+			user.profileId = profileId
+			user.save()
+			response = HttpResponseRedirect("/home")
+			response.set_cookie("profileId", profileId)
+			request.session["active"] = True
+			return response
+		else:
+			return HttpResponse(sign_up_response)
 	else:
-		return HttpResponse("Error")
+		return HttpResponse("Get not supported")
 
 
 @csrf_exempt

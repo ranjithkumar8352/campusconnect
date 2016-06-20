@@ -1,21 +1,23 @@
 import requests
 import json
+url = 'https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/createProfile'
+headers = {'Content-Type': 'application/json'}
 
 
-def sign_up():
-    url = 'https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/createProfile'
-    headers = {'Content-Type': 'application/json'}
-    dummy_data = dict()
-    dummy_data["profileName"] = "Sarthak Shetty"
-    dummy_data[
-        "collegeId"] = "ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB0NvbGxlZ2UYgICAgICAgAoM"
-    dummy_data["batchName"] = "2016"
-    dummy_data["branchName"] = "Computer Science and Engineering"
-    dummy_data["sectionName"] = "A"
-    dummy_data["photoUrl"] = "/static/style/profile.png"
-    dummy_data["email"] = "sarthakshetty1@gmail.com"
-    dummy_data["gcmId"] = "invalid"
-    r = requests.post(url, data=json.dumps(dummy_data), headers=headers)
-    #print(r)
-    print(r.json())
-    return(r.json())
+def sign_up(user, form_data):
+    user_profile = dict()
+    user_profile["profileName"] = user.firstname + " " + user.lastname
+    user_profile["collegeId"] = "ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB0NvbGxlZ2UYgICAgPiWlQoM"#form_data["college"]
+    try:
+        user_profile["batchName"] = form_data["batch"]
+        user_profile["branchName"] = form_data["branch"]
+        user_profile["sectionName"] = form_data["section"]
+        user_profile["gcmId"] = "worst" #form_data[""]
+    except:
+        pass
+    user_profile["photoUrl"] = user.image_url
+    user_profile["email"] = user.email
+
+    api_call = requests.post(url, data=json.dumps(user_profile), headers=headers)
+    print(api_call.json())
+    return(api_call.json())

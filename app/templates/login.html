@@ -24,8 +24,15 @@ function f()
     <div class="login">
       <p>Log In</p>
 	  	  <form role="form" action = "/register_api" method ="post" >
-      <input id="college" type="text" value=""  name="college" placeholder="I'm in College/University"/>
-      <select value=""  name="year" placeholder="year" class="year">
+		<b>Which College do you go To?</b>
+		<br>
+      <select id="college" type="text" value=""  name="college" placeholder="I'm in College/University" style="width:80%"/>
+	   <option value="ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB0NvbGxlZ2UYgICAgPiWlQoM" style="color:#ccc">College</option>
+	  </select>
+	  <br>
+	  <br>
+	  <b>Which Batch are you in?</b><br>
+      <select value=""  name="batch" placeholder="year" class="year" style="width:80%">
 	  <option value="Year" style="color:#ccc">Year</option>
 	  <option value= "2016">2016</option>
 	  <option value="2017">2017</option>
@@ -34,8 +41,10 @@ function f()
 	  <option value="2017">2020</option>
 	  <option value="2017">2021</option>
 	  </select>
-	  &nbsp&nbsp
-	  <select value=""  name="branch" placeholder="Branch" class="branch">
+	  <br>
+	  <br>
+	  <b>Which Branch are you in?</b><br>
+	  <select value=""  name="branch" placeholder="Branch" class="branch" style="width:80%">
 	  <option value="Branch" style="color:#ccc">Branch</option>
 	  <option value="CS" id="branch"><center>CS</center></option>
 	  <option value="ECE" id="branch">ECE</option>
@@ -44,7 +53,19 @@ function f()
 	  <option value="EEE" id="branch">EEE</option>
 	  <option value="BIOTECH" id="branch">BIOTECH</option>
 	  </select>
-      <button id="submitBtn" type="submit" name="submit" onclick="f()">Submit</button>
+	  <br><br>
+	  <b>Which Section are you in?</b><br>
+	  <select value=""  name="section" placeholder="section" class="section" style="width:80%">
+	  <option value="section" style="color:#ccc">Section</option>
+	  <option value="A" id="branch"><center>CS</center></option>
+	  <option value="B" id="branch">ECE</option>
+	  <option value="C" id="branch">MECH</option>
+	  <option value="D" id="branch">CIVIL</option>
+	  <option value="E" id="branch">EEE</option>
+	  <option value="F" id="branch">BIOTECH</option>
+	  </select>
+	  <br><br>
+      <button id="submitBtn" type="submit" name="submit" style="background-color:orange">Submit</button>
       <p id="error" style="color:red;display:none; ">*Enter valid branch and year</p>
     </div>
     </form>

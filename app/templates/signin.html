@@ -2,6 +2,8 @@
   <head>
     <meta name="google-signin-scope" content="profile email">
     <meta name="google-signin-client_id" content="22051677189-1f55k773ct0qnlb5dkr83surcfk6565t.apps.googleusercontent.com">
+        <script src="/static/js/cookie-js.js"></script>
+
     <script src="https://apis.google.com/js/platform.js" async defer></script>
   </head>
   <body>
@@ -12,15 +14,20 @@
         var profile = googleUser.getBasicProfile();
        // alert("ID: " + profile.getId()); // Don't send this directly to your server!
         //alert('Full Name: ' + profile.getName());
-        console.log('Given Name: ' + profile.getGivenName());
-        console.log('Family Name: ' + profile.getFamilyName());
+       // console.log('Given Name: ' + profile.getGivenName());
+       // console.log('Family Name: ' + profile.getFamilyName());
         //alert("Image URL: " + profile.getImageUrl());
-        console.log("Email: " + profile.getEmail());
+       // console.log("Email: " + profile.getEmail());
 
-        // The ID token you need to pass to your backend:
-        var id_token = googleUser.getAuthResponse().id_token;
-        //alert("ID Token: " + id_token);
-          document.cookie = "gid="+profile.getId()+";firstname="+profile.getGivenName()+";lastname="+profile.getFamilyName()+";imageURL="+profile.getImageUrl()+";email="+profile.getEmail()+";";
+         Cookies.set("gid",profile.getId());
+         Cookies.set("firstname",profile.getGivenName());
+         Cookies.set("lastname",profile.getFamilyName());
+         Cookies.set("email",profile.getEmail());
+         Cookies.set("imageURL",profile.getImageUrl());
+
+         // alert(document.cookie);
+         // document.cookie = string;
+          alert(document.cookie);
           //document.cookie="";
           //alert(document.cookie);
 alert("here");
@@ -37,15 +44,6 @@ alert("here");
     });
   }
 
-  function google_plus_signin_callback(authResult){
-    if(authResult.status.method == 'AUTO'){
-        //
-    }else if(authResult.status.method == 'PROMPT') {
-        alert("here");
-        document.cookie = "gid="+profile.getId()+";firstname="+profile.getGivenName()+";lastname="+profile.getFamilyName()+";imageURL="+profile.getImageUrl()+";email="+profile.getEmail()+";";
-        window.location="/start";
-    }
-}
 </script>
   </body>
 </html>
