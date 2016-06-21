@@ -185,47 +185,42 @@ def sign_out(request):
 
 
 
+@csrf_exempt
+def mobile_sign_in(request):
+	if request.method == "POST":
+		data = json.loads(request.body)
+		gprofileId = data["gprofileId"]
+		try:
+			user = User.objects.get(gprofileId=gprofileId)
+			if user.profileId!="":
+				return HttpResponse(user.profileId)
+			return HttpResponse("0")
+		except:
+			return HttpResponse("0")
+
+
+@csrf_exempt
+def mobile_sign_up(request):
+	if request.method == "POST":
+		data = json.loads(request.body)
+		gprofile_id = data["gprofileId"]
+		profile_id = data["profileId"]
+		profileName = data["profileName"]
+		firstname,lastname = profileName.split(" ")[0],profileName.split(" ")[1]
+		email = data["email"]
+		image_url = data["imageUrl"]
+		User.objects.create(gprofileId=gprofile_id,profileId=profile_id,firstname=firstname,lastname=lastname,email=email,image_url=image_url)
+		return HttpResponse("Success")
 
 
 
-# gId = "test"
-# @csrf_exempt
-# def test(request):
-# 	template = loader.get_template("uploads.html")
-# 	return HttpResponse(template.render())
-# @csrf_exempt
-# def index(request):
-# 	gId=None
-# 	if(request.method=="POST"):
-# 		gId = request.POST["gId"]
 
 
-# 	# print(data)
-# 	# template = loader.get_template("index.html")
-# 	# request.session["sid"] = "123"
-# 	# a = HttpResponse(template.render())
-# 	# print request.COOKIES
-# 	# User.objects.create(profileId=123)
-# 	if(gId==None):
-# 		return HttpResponseRedirect("/signin")
 
-# 	try:
-# 		User.objects.get(gprofileId=gId)
-# 		template = loader.get_template("secondpage.html") #home
-# 		return HttpResponse(template.render())
-# 	except:
-# 		User.objects.create(gprofileId=gId)
-# 		template = loader.get_template("index.html") #signup
-# 		return HttpResponse(template.render())
 
-# @csrf_exempt
-# def redirect(request):
-# 	a=request.META['QUERY_STRING']
-# 	print(request.COOKIES)
-# 	Q = QueryDict(a)
-# 	id = request.COOKIES["profileId"]
-# 	if(validate.validate(profileId=id,sessionId=request.session)):
-# 		template = loader.get_template("secondpage.html")
-# 		return HttpResponse(template.render())
-# 	else:
-# 		return HttpResponse("Fuck Off")
+
+
+
+
+
+

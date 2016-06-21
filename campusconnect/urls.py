@@ -20,7 +20,6 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^oauth2/', include('provider.oauth2.urls', namespace = 'oauth2')),
     url(r'^signin', 'app.views.signin'),
     url(r'^start', 'app.views.start'),
     url(r'^home', 'app.views.home'),
@@ -35,8 +34,8 @@ urlpatterns = [
     url(r'^upload', 'app.views.upload'),
     url(r'^sign_up', 'app.views.sign_up'),
     url(r'^register_api','app.views.sign_up_api'),
-    url(r'^signout','app.views.sign_out')
-
-
+    url(r'^signout','app.views.sign_out'),
+    url(r'^mobile_sign_in','app.views.mobile_sign_in'),
+    url(r'^mobile_sign_up','app.views.mobile_sign_up')
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
