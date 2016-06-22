@@ -9,6 +9,8 @@
 	<link href="/static/style/styles.css" type="text/css" rel="stylesheet" />
 	
 	<link href="/static/style/photoswipe.css" type="text/css" rel="stylesheet" />
+      <script src="/static/js/cookie-js.js"></script>
+
 	
 	<script type="text/javascript" src="/static/js/klass.min.js"></script>
 	<script type="text/javascript" src="/static/js/code.photoswipe-2.1.6.min.js"></script>
@@ -154,6 +156,7 @@ $(document).ready(function(){
     type=url[0].split('/');
     data={};
     pId=Cookies.get("profileId");
+    pId = "ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgJuQxAgM";
     if(window.location.pathname=="/notebook")
         {
             URL="https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/getNoteBook";
