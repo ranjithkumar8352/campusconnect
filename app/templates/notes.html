@@ -9,8 +9,6 @@
 	<link href="/static/style/styles.css" type="text/css" rel="stylesheet" />
 	
 	<link href="/static/style/photoswipe.css" type="text/css" rel="stylesheet" />
-      <script src="/static/js/cookie-js.js"></script>
-
 	
 	<script type="text/javascript" src="/static/js/klass.min.js"></script>
 	<script type="text/javascript" src="/static/js/code.photoswipe-2.1.6.min.js"></script>
@@ -20,6 +18,7 @@
    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />
     <script src="/static/js/sidebar.js"></script>
+	 <script src="/static/js/cookie-js.js"></script>
     <link rel="stylesheet" href="/static/style/style-sidebar.css" />
     <link rel="stylesheet" href="/static/style/sidebar.css"/>
 	    <link rel="stylesheet" href="/static/style/index.css"/>
@@ -156,7 +155,6 @@ $(document).ready(function(){
     type=url[0].split('/');
     data={};
     pId=Cookies.get("profileId");
-    pId = "ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgJuQxAgM";
     if(window.location.pathname=="/notebook")
         {
             URL="https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/getNoteBook";
@@ -173,7 +171,7 @@ $(document).ready(function(){
   success: function (data) {
       console.log(data);
      // console.log(data);
-      $('img[src="/static/style/profile.png"]').attr('src', data.photoUrl);
+	  $('img[src="/static/style/profile.png"]').attr('src', data.photoUrl);
      //$("#image").src()
       // alert(data.subscribedCourseList[i].points);
      $('#pts').text(data.points);
@@ -197,12 +195,13 @@ $(document).ready(function(){
       images=data.notes
       //alert(images.urlList.length+'s');
       index=0;
-      for(i=1;i<images.length;i++)
+      for(i=0;i<images.length;i++)
                    { 
                     s='Class:'+images[i].classNumber+' '+images[i].date;
                     //alert(s);
                     for(j=0;j<images[i].urlList.length;j++)
-                    {console.log(images[i].urlList[j]);
+                    {
+					console.log(images[i].urlList[j]);
                         $('<div class="item"><a href="'+images[i].urlList[j]+'"><img id="img-'+index+'" src="'+images[i].urlList[j]+'" alt="'+s+'" descp="'+images[i].description+'"></a></div>').appendTo('.carousel-inner');
                     index++;
                     }
@@ -541,7 +540,7 @@ function image1(images)
     <div class="row">
       <div class="col-xs-6 col-md-2 sidebar sidebar-left sidebar-animate sidebar-md-show" >
         <ul class="nav navbar-stacked">
-		<li><center><a href="#" width="50%" height="50%" class="profile.png"><img src="profile.png" class="img-circle" width="50%" height="50%"></a></center></li>
+		<li><center><a href="#" width="50%" height="50%" class="profile.png"><img src="profile.png" alt="" class="img-circle" width="50%" height="50%"></a></center></li>
 		 <li><center><span id="pname">Name</span></center></li>
         
         <li><center>Points: &nbsp <span id="pts">0</span></center></li>

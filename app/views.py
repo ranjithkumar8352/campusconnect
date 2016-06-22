@@ -8,7 +8,7 @@ from django.conf.urls.static import static
 import app.validate
 from app.models import User
 import json
-import sign_up_api as register_api
+import app.sign_up_api as register_api
 # Create your views here.
 
 
@@ -21,7 +21,6 @@ def signin(request):
 def start(request):
 	gId = None
 	cookies = request.COOKIES
-	print cookies
 	if "gid" in cookies:
 		gId = cookies["gid"]
 		firstname = cookies["firstname"]
@@ -48,14 +47,12 @@ def start(request):
 
 @csrf_exempt
 def sign_up(request):
-	print "here"
 	template = loader.get_template("login.html")
 	return HttpResponse(template.render())
 
 
 @csrf_exempt
 def sign_up_api(request):
-	print request.body
 	if request.method == "POST":
 		form_data = request.POST
 		gid = request.COOKIES["gid"]
@@ -96,7 +93,7 @@ def course_page(request):
 			template = loader.get_template("Courses.html")
 			response = HttpResponse(template.render())
 	    	# response.set_cookie()
-	    	return response
+			return response
 	else:
 		return HttpResponseRedirect("/signin")
 
@@ -141,15 +138,25 @@ def exam(request):
 	else:
 		return HttpResponseRedirect("/signin")
 
-
+@csrf_exempt
+def upload(request):
+	if "active" in request.session:
+		if request.session["active"]:
+    		# note_id = QueryDict(request.META['QUERY_STRING'])["course_id"]
+			template = loader.get_template("upload.html")
+			response = HttpResponse(template.render())
+    		# response.set_cookie()
+			return HttpResponse(template.render())
+	else:
+		return HttpResponseRedirect("/signin")
 @csrf_exempt
 def profile(request):
 	if "active" in request.session:
 		if request.session["active"]:
 			template = loader.get_template("profile.html")
-    		return HttpResponse(template.render())
-    	else:
-    		return HttpResponseRedirect("/signin")
+			return HttpResponse(template.render())
+		else:
+			return HttpResponseRedirect("/signin")
 
 
 @csrf_exempt
