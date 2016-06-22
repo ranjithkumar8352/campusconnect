@@ -22,18 +22,19 @@ function f()
 <body>
   <div class="wrapper">
     <div class="login">
-      <p>Log In</p>
+      <p><b>Hi </b><span id="user-name"> <b>User</b></span><b>!</b> &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  <!-- class="img-responsive"--><img src="/static/style/profile.png" style="width:40%;height:20%"></p>
 	  	  <form role="form" action = "/register_api" method ="post" >
 		<b>Which College do you go To?</b>
 		<br>
       <select id="college" type="text" value=""  name="college" placeholder="I'm in College/University" style="width:80%"/>
-	   <option value="ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB0NvbGxlZ2UYgICAgPiWlQoM" style="color:#ccc">College</option>
+	   <option value="Year" style="color:#ccc">College</option>
 	  </select>
 	  <br>
 	  <br>
 	  <b>Which Batch are you in?</b><br>
       <select value=""  name="batch" placeholder="year" class="year" style="width:80%">
 	  <option value="Year" style="color:#ccc">Year</option>
+	  <option value= "2014">2014</option>
 	  <option value= "2016">2016</option>
 	  <option value="2017">2017</option>
 	  <option value="2017">2018</option>
@@ -46,7 +47,7 @@ function f()
 	  <b>Which Branch are you in?</b><br>
 	  <select value=""  name="branch" placeholder="Branch" class="branch" style="width:80%">
 	  <option value="Branch" style="color:#ccc">Branch</option>
-	  <option value="CS" id="branch"><center>CS</center></option>
+	  <option value="CSE" id="branch"><center>CS</center></option>
 	  <option value="ECE" id="branch">ECE</option>
 	  <option value="MECH" id="branch">MECH</option>
 	  <option value="CIVIL" id="branch">CIVIL</option>
@@ -65,7 +66,7 @@ function f()
 	  <option value="F" id="branch">BIOTECH</option>
 	  </select>
 	  <br><br>
-      <button id="submitBtn" type="submit" name="submit" style="background-color:orange">Submit</button>
+      <button id="submitBtn" type="submit" name="submit" style="background-color:#f7971d">Submit</button>
       <p id="error" style="color:red;display:none; ">*Enter valid branch and year</p>
     </div>
     </form>

@@ -35,6 +35,7 @@ urlpatterns = [
     url(r'^sign_up', 'app.views.sign_up'),
     url(r'^register_api','app.views.sign_up_api'),
     url(r'^signout','app.views.sign_out'),
+    url(r'select_courses','app.views.select_courses'),
     url(r'^mobile_sign_in','app.views.mobile_sign_in'),
     url(r'^mobile_sign_up','app.views.mobile_sign_up')
 

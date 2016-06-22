@@ -113,14 +113,7 @@ function SignOut() {
     });
   }
 $(document).ready(function(){
-   
-
-
-  cookie = document.cookie;
-  alert(cookie);
-  c = cookie.split(";");
-  pId = c[0].split("=")[1];
-  alert(pId);
+   pId=Cookies.get("profileId");
   alert('https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/feed/ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgLyhggoM?profileId='+pId);
 data={};
     

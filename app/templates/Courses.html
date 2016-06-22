@@ -6,6 +6,7 @@
       <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+   <script src="/static/js/cookie-js.js"></script>
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />
     <script src="/static/js/sidebar.js"></script>
     <link rel="stylesheet" href="/static/style/style-sidebar.css" />
@@ -140,7 +141,7 @@ background-color:blue;
 </style>
 <script>
 $(document).ready(function(){
-    pId = document.cookie.split(";")[1].split("=")[1]
+    pId = Cookies.get("profileId");
     var noteBookId=[];
     courseList=[];
     notesPressed=0;
@@ -187,7 +188,7 @@ $.ajax({
   },
   success: function (data) {
      // console.log(data);
-   //   $('img[src="/static/style/profile.png"]').attr('src', data.photoUrl);
+      $('img[src="/static/style/profile.png"]').attr('src', data.photoUrl);
      //$("#image").src()
       // alert(data.subscribedCourseList[i].points);
      $('#pts').text(data.points);

@@ -35,8 +35,9 @@ def start(request):
 		if user.profileId != "":
 		# template = loader.get_template("home.html") #home
 			temp = HttpResponseRedirect("/home")
+			temp.set_cookie("profileId", user.profileId)
 			request.session["active"] = True
-			return HttpResponseRedirect("/home")
+			return temp
 		else:
 			return HttpResponseRedirect("/sign_up")
 	except:
@@ -67,7 +68,7 @@ def sign_up_api(request):
     		# template = loader.get_template("home.html")
 			user.profileId = profileId
 			user.save()
-			response = HttpResponseRedirect("/home")
+			response = HttpResponseRedirect("/select_courses")
 			response.set_cookie("profileId", profileId)
 			request.session["active"] = True
 			return response
@@ -98,6 +99,12 @@ def course_page(request):
 	    	return response
 	else:
 		return HttpResponseRedirect("/signin")
+
+
+@csrf_exempt
+def select_courses(request):
+	template = loader.get_template("courseSelection.html")
+	return HttpResponse(template.render())
 
 
 @csrf_exempt

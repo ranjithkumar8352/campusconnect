@@ -1,0 +1,258 @@
+<html>
+
+  <head>
+    <meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id" content="22051677189-1f55k773ct0qnlb5dkr83surcfk6565t.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="/static/js/cookie-js.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+      <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+   
+	<!--Nav bar and side bar-->
+	  <script src="/static/js/sidebar.js"></script>
+    <link rel="stylesheet" href="/static/style/style-sidebar.css" />
+    <link rel="stylesheet" href="/static/style/sidebar.css"/>
+	    <link rel="stylesheet" href="/static/style/index.css"/>
+	<!--Nav bar and side bar-->	
+	
+	<!--grid layout-->
+   <script src="/static/js/brick-by-brick.js"></script>
+   <link rel="stylesheet" href="/static/style/brick-by-brick.css" />
+<!--grid layout-->
+
+ <!--tabs-->
+    <link href="/static/style/generic-notForTabs.css" rel="stylesheet" type="text/css" />
+    <link href="/static/style/responsive-tabs.css" rel="stylesheet" type="text/css" />
+    <script src="/static/js/responsive-tabs.js" type="text/javascript"></script>
+	</head>
+<style>
+
+.img-circle {
+    border-radius: 50%;
+}
+.profile:hover{
+background-color:transparent;
+}
+.navbar-stacked{
+background-color:#f5f5f5;
+border:1px solid #f5f5f5;
+}
+  .nav-tabs{
+  width:1095px;
+  }
+  
+ div.panel-container {
+    border: 0px solid #f5f5f5;
+    background-color: #f5f5f5;
+   
+} 
+
+@media only screen and (min-width: 550px) {
+    .tabs1{
+	width:49%;
+	}
+	.tabs2{
+	width:49%;
+	}
+}
+
+body{
+background-color:#f5f5f5;
+//overflow-x: hidden;
+}
+//grid
+   .single-column .b-by-b-item {
+       width: 100%!important;
+    }
+
+    @media (min-width: 0px) and (max-width: 480px) {
+       #layout .b-by-b-item {
+           width: 100%;
+        }
+    }
+
+    @media (min-width: 481px) and (max-width: 1024px) {
+        #layout .b-by-b-item {
+          width: 50%;
+        }
+    }
+
+    @media (min-width: 1025px) {
+       #layout .b-by-b-item {
+         width: 33.33%;
+      } 
+    }
+	.img-circle {
+    border-radius: 50%;
+	margin-left:20px;
+}
+//grid
+
+.profile:hover{
+background-color:transparent;
+}
+
+@media (max-width: @screen-xs) {
+    body{font-size: 0px;}
+}
+.nav{
+margin-top:-55px;
+background-color:#f7971d;
+color:white;
+}
+.well{
+min-height:50%;
+border-color:#ccc;
+max-height:80%;
+
+
+}
+.column{
+padding-right:40px;
+padding-left:40px;
+}
+#c-text{
+margin-top:10px;
+font-size:20px;
+}
+.btn-default{
+color:white;
+background-color:#f7971d;
+border-radius:1px;
+}
+</style>
+<script>
+$(document).ready(function(){
+
+//pid="ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAwMjFzAsM";
+pId=Cookies.get("profileId");
+
+data={
+"profileId":pId
+};
+ID=[];
+$('#layout').layout({
+ itemMargin: 20,
+ itemPadding: 20
+ }
+ );
+    
+  $.ajax({
+  type:'POST',
+  dataType: 'json',
+  contentType: 'application/json',
+  url: "https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/courseList/1",
+  data: JSON.stringify(data),
+  success: function (data) {
+      console.log(data);
+	  
+	for(i=0;i<data.courseList.length;i++)
+		{
+		 var section="";
+		var batch="";
+		var branch="";
+	
+		for(j=0;j<data.courseList[i].batchNames.length;j++)
+		{
+		batch+=data.courseList[i].batchNames[j];
+	
+		}
+		for(j=0;j<data.courseList[i].branchNames.length;j++)
+		{
+		branch+=data.courseList[i].branchNames[j];
+		}
+		for(j=0;j<data.courseList[i].sectionNames.length;j++)
+		{
+		section+=data.courseList[i].sectionNames[j];
+		}    
+               var card=['<div class="ui card bottom " style="background-color:white;border:1px solid #ccc;height:160px;;color:black;width:440px;" id = "card">\
+				<div class="row" >\
+				<div class="col-xs-6">\
+                <div class="course-name"  style="font-size:20px;"> '+data.courseList[i].courseName+'</div>\
+				<br>\
+				<div>  '+data.courseList[i].professorName+'</div>\
+				<div>   Semester</div>\
+				</div>\
+				<div class="col-xs-6">\
+				<center><div class="course-year">'+batch+'</div></center>\
+				<center><div class="">'+branch+'</div></center>\
+				<center><div class="">'+section+'</div></center>\
+                </div>\
+				</div>\
+				<div class="btn-group" data-toggle="buttons">\
+				<label  id="'+data.courseList[i].courseId+'" class="btn " style="width:414px;height:30px;margin-top:20px;background-color:#ccc;margin-left:-20px;";border-color:#ccc;>\
+				<input type="checkbox" autocomplete="off" > Subscribe\
+				</label>\
+                </div>\
+				</div>'
+				];
+                
+	           $('#layout').layout('addBefore', card);
+			   
+			   document.getElementById(data.courseList[i].courseId).addEventListener('click',function(){
+			  
+			   //s=this.style.backgroundColor;
+			  
+			   s="rgb(247,151,29)"
+			    //alert(s.match(this.style.backgroundColor))
+			    console.log(this.style.backgroundColor)
+			   
+			   if(this.style.backgroundColor == "rgb(247, 151, 29)") {
+			   ID.pop(this.id);
+			   this.style.backgroundColor="#ccc";
+			   }
+			   else
+			   {
+			   ID.push(this.id);
+			   this.style.backgroundColor="#f7971d";
+			   }
+			   });
+		}
+		$('.done').on('click',function(){
+				data={
+				profileId:pId,
+				courseIds:ID
+				}
+				//alert(JSON.stringify(data));
+		$.ajax({
+			type:'POST',
+			dataType: 'json',
+			contentType: 'application/json',
+			url: "https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/subscribeCourse",
+			data: JSON.stringify(data),
+			success: function (data) {
+				console.log(data);
+				
+		
+		
+				window.location="/home";
+		
+		
+				}
+				});
+		
+		
+		
+		});
+  }
+});
+});
+
+</script>
+<body>
+    <!-- Fixed navbar -->
+	<nav class="navbar navbar-default nav">
+	<div id="c-text"><center>Choose your courses</center></div>
+	</nav>
+	<div class="col-xs-12 column" >
+	<div class="well">
+	<div id="layout">
+	
+	</div>
+	</div>
+	<center><div class="btn btn-default done" >Done</div></center>
+	</div>
+</body>
+</html>

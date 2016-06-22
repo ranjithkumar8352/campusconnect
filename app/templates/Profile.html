@@ -8,6 +8,7 @@
    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />
     <script src="/static/js/sidebar.js"></script>
+    <script src="/static/js/cookie-js.js"></script>
     <link rel="stylesheet" href="/static/style/style-sidebar.css" />
     <link rel="stylesheet" href="/static/style/sidebar.css"/>
 	    <link rel="stylesheet" href="/static/style/index.css"/>
@@ -121,7 +122,7 @@ background-color:blue;
 </style>
 <script>
 $(document).ready(function(){
-  pId = document.cookie.split(";")[1].split("=")[1]
+  pId=Cookies.get("profileId");
     bList=[];
     uList=[];
      data={"profileId":pId};
