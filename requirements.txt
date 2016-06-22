@@ -1,2 +1,1 @@
-Django==1.9.7
-django-oauth2-provider
+Django==1.5
