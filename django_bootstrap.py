@@ -39,7 +39,7 @@ logging.getLogger().setLevel(logging.INFO)
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 
 # Must set this env var *before* importing any part of Django.
-os.environ['DJANGO_SETTINGS_MODULE'] = 'codefish.settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'campusconnect.settings'
 
 # Make sure we can import Django.  We may end up needing to do this
 # little dance, courtesy of Google third-party versioning hacks.  Note

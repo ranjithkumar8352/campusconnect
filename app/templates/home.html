@@ -103,18 +103,18 @@ background-color:transparent;
 </style>
 <script>
 function SignOut() {
-    alert("hello");
     var auth2 = gapi.auth2.getAuthInstance();
     auth2.signOut().then(function () {
-          alert("hello");
 
       console.log('User signed out.');
       window.location="/signout"
     });
   }
+  function profile(){
+      window.location="/profile"
+  }
 $(document).ready(function(){
    pId=Cookies.get("profileId");
-  alert('https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/feed/ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgLyhggoM?profileId='+pId);
 data={};
     
      var append=['<div class="ui card bottom" style="background-color:white;border:1px solid #ccc;height:220px;margin-bottom:1px;margin-color:#ccc;width:400px;" id = "card"><center><button id="b1"> +CLICK ME</buton></canter></div>'];
@@ -208,12 +208,10 @@ data={};
 	
 	});
     $('#cid-0').on('click',function(){
-    alert('ff')
 	 window.location="/course";
 	});
     function  f(e,id)
     {
-        alert(id);
         v=id;
             if(v!=0)
             {
@@ -303,7 +301,7 @@ data={};
     <div class="row">
       <div class="col-xs-6 col-md-2 sidebar sidebar-left sidebar-animate sidebar-md-show" >
         <ul class="nav navbar-stacked">
-		<li><center><a href="#" width="50%" height="50%" class="profile.png"><img src="profile.png" class="img-circle" width="50%" height="50%"></a></center></li>
+		<li><center><a onclick="profile()" href="#" width="50%" height="50%" class="profile.png"><img src="profile.png" class="img-circle" width="50%" height="50%"></a></center></li>
 		 <li><center><span id="pname">Name</span></center></li>
         
         <li><center>Points: &nbsp <span id="pts">0</span></center></li>
