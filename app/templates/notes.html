@@ -151,12 +151,25 @@ display:none !important;
         
 $(document).ready(function(){
       url2= $(location).attr('href'); 
-      url=url2.split('=');
+	  //split into cId and Id
+	  splitId=url2.split('&');
+	  url=splitId[0].split('=');
     type=url[0].split('/');
+	//alert(type[1]);
+	  //getting cId
+	  cId=splitId[1].split('=');
+	  $("#course-name").attr("href","/course?id="+cId[1]+"-notes#view1");
+      
+	  //onchange for modal upload
+	$('#course').on('change',function(){
+	$('#upload').attr('href','/upload?id='+this.value);
+	});
+	  
     data={};
     pId=Cookies.get("profileId");
     if(window.location.pathname=="/notebook")
         {
+		$("#type").text('Notebook');
             URL="https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/getNoteBook";
              data={
            "profileId":pId,
@@ -179,6 +192,7 @@ $(document).ready(function(){
       $('#views').text(data.views);
       $("#description").text(data.description);
       $("#course-name-main").text(data.courseName);
+	  $("#course-name").text(data.courseName);
       $("#date-mod").text(data.lastUpdated);
       $("#prof").text("By "+data.uploaderName);
       //alert(data.rated);
@@ -202,7 +216,7 @@ $(document).ready(function(){
                     for(j=0;j<images[i].urlList.length;j++)
                     {
 					console.log(images[i].urlList[j]);
-                        $('<div class="item"><a href="'+images[i].urlList[j]+'"><img id="img-'+index+'" src="'+images[i].urlList[j]+'" alt="'+s+'" descp="'+images[i].description+'"></a></div>').appendTo('.carousel-inner');
+                        $('<div class="item"><center><a href="'+images[i].urlList[j]+'"><img id="img-'+index+'" src="'+images[i].urlList[j]+'" alt="'+s+'" descp="'+images[i].description+'"></a></center></div>').appendTo('.carousel-inner');
                     index++;
                     }
                    }
@@ -309,7 +323,9 @@ $(document).ready(function(){
         }
     else if(window.location.pathname=="/assignment")
         { 
-            alert(url[1]);
+			$("#type").text('Assignment');
+			//alert($("#type").text());
+            //alert(url[1]);
             URL=" https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/getAssignment";
              data={
            "profileId":pId,
@@ -319,11 +335,12 @@ $(document).ready(function(){
         }
     else
         {
-            URL="https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/getTest";
+            URL="https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/getExam";
              data={
            "profileId":pId,
-           "testId" :url[1]
+           "examId" :url[1]
             } 
+			$("#type").text('Exam');
              ajaxRetrieve();
         }
      data1={"profileId":pId};
@@ -346,6 +363,9 @@ $(document).ready(function(){
      $('#pts').text(data.points);
      $('#pname').text(data.profileName);
       
+	 for(i=0;i<data.subscribedCourseList.length;i++)
+          {//420  
+           $('<option value= "'+data.subscribedCourseList[i].courseId+'">'+data.subscribedCourseList[i].courseName+'</option>').appendTo("#course");}
   }
 });
     
@@ -373,6 +393,7 @@ $(document).ready(function(){
       $('#views').text(data.views);
       $("#description").text(data.assignmentDesc);
       $("#course-name-main").text(data.courseName);
+	   $("#course-name").text(data.courseName);
       $("#date-mod").text(data.lastUpdated);
       $("#prof").text("By "+data.uploaderName);
       //alert(data.rated);
@@ -387,7 +408,7 @@ $(document).ready(function(){
            $('#rating-input').rating('update', data.rated);
       s='notes'
       images=data.urlList;
-      alert(images);
+      //alert(images);
       //alert(images.urlList.length+'s');
      image1(images)
   }
@@ -400,7 +421,7 @@ function image1(images)
      index=0;
       for(i=0;i<images.length;i++)
                     {//console.log(images[i].urlList[j]);
-                        $('<div class="item"><a href="'+images[i]+'"><img id="img-'+index+'" src="'+images[i]+'" ></a></div>').appendTo('.carousel-inner');
+                        $('<div class="item"><center><a href="'+images[i]+'"><img id="img-'+index+'" src="'+images[i]+'" ></a></center></div>').appendTo('.carousel-inner');
                     index++;
                     }
                    
@@ -489,7 +510,8 @@ function image1(images)
       <form class="navbar-form navbar-left hidden-xs" role="search">
         <div class="form-group">
 			<button type="submit" class="btn btn-default sub " ><span class="glyphicon glyphicon-search" style="width:10px;"></button>
-          <input type="text" class="form-control search "  id="search" style="width:700px;">
+          <input type="text" class="form-control search hidden-sm"  id="search" style="width:700px;" >
+		  <input type="text" class="form-control search hidden-lg"  id="search" style="width:300px;" >
        <div style="background-color:#5cb85c;color:white;" class="btn btn-default btn-success  center"  data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span>Upload</div>
                 
 		 
@@ -511,7 +533,7 @@ function image1(images)
             <li><a href="#">Another action</a></li>
             <li><a href="#">Something else here</a></li>
             <li role="separator" class="divider"></li>
-            <li><a href="#">Separated link</a></li>
+            <li  ><div class ="g-signin2" onclick="SignOut()"> &nbsp; Sign out</div></li>
           </ul>
         </li>
           
@@ -520,49 +542,34 @@ function image1(images)
           
   </div><!-- /.container-fluid -->
 </nav>
-<!--
-  <div class="navbar navbar-static navbar-default navbar-fixed-top">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle toggle-left hidden-md hidden-lg" data-toggle="sidebar" data-target=".sidebar-left">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="#">Project name</a>
-      </div>
-
-    </div>
-  </div>-->
-  
-  <!-- Begin page content -->
   <div class="container-fluid">
     <div class="row">
       <div class="col-xs-6 col-md-2 sidebar sidebar-left sidebar-animate sidebar-md-show" >
         <ul class="nav navbar-stacked">
-		<li><center><a href="#" width="50%" height="50%" class="profile.png"><img src="profile.png" alt="" class="img-circle" width="50%" height="50%"></a></center></li>
+		<li><center><a  href="/profile" width="50%" height="50%" class="profile.png"><img src="/static/style/profile.png" class="img-circle" width="50%" height="50%"></a></center></li>
 		 <li><center><span id="pname">Name</span></center></li>
         
         <li><center>Points: &nbsp <span id="pts">0</span></center></li>
 		<br>
-		<div style="border:1px solid #ccc;border-bottom:1px"></div>
+		<div class="line"></div>
             
-            <li class="visible-xs"><div style="margin-top:5px;margin-left:10px;background-color:#5cb85c;color:white;" class="btn btn-default btn-success  center"  data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span>Upload</div>
-            <div style="border:1px solid #ccc;border-bottom:1px;margin-top:5px;"></div>
+            <li class="visible-xs"><div style="" class="btn btn-default btn-success  center-1"  data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span>Upload</div>
+            <div class="line" ></div>
             </li>
-          <li class="active"><a href="#">Home</a></li>
-          <li><a href="#about">My Bookmarks</a></li>
-		   <li><a href="#about">My Uploads</a></li>
-		   <div style="border:1px solid #ccc;border-bottom:1px"></div>
-		    <li><a href="#about">Add Course</a></li>
-			<div style="border:1px solid #ccc;border-bottom:1px"></div>
-          <li><a href="#contact">Offers</a></li>
-		  <li><a href="#contact">How to get points</a></li>
-		  <li><a href="#contact">Invite</a></li>
+          <li class="active"><a href="/home"><i class="fa fa-home" aria-hidden="true"></i> &nbsp;Home</a></li>
+          <li><a href="/add_course"><i class="fa fa-plus-square" aria-hidden="true"></i> &nbsp; Add Course</a></li>
+		   <li><a href="#about"><i class="fa fa-gift" aria-hidden="true"></i> &nbsp; Gifts</a></li>
+		   <div class="line"></div>
+		    <li><a href="#about"><i class="fa fa-question-circle-o" aria-hidden="true"></i> &nbsp; How to Get Points</a></li>
+          <li><a href="#contact"><i class="fa fa-share-alt" aria-hidden="true"></i> &nbsp; Invite</a></li>
+		  <li><a href="#contact"><i class="fa fa-info-circle" aria-hidden="true"></i> &nbsp; About</a></li>
+		  <li><a href="#contact"><i class="fa fa-star-o" aria-hidden="true"></i> &nbsp; Rate</a></li>
+		  <li><a href="#contact"><i class="fa fa-cog" aria-hidden="true"></i> &nbsp; Settings</a></li>
+		  <li><a href="#contact"><i class="fa fa-power-off" aria-hidden="true"></i> &nbsp; Logout</a></li>
         </ul>
       </div>
       <div class="main col-xs-12 col-md-10 col-md-offset-2 " style="padding-left:20px;">
-          <div style="font-size:20px;">Courses > <span id="course-name"> Math</span><span> > Note</span></div>
+          <div style="font-size:20px;"><a href="/home">Courses</a> > <a href="/course"id="course-name">Math</a> > <span id="type"> > </span></div>
              <div class="row">
 		<div class="col-xs-12 col-sm-9 col-md-9" style=" padding-right: 0px;">
 		  <div class="ui card bottom " style="background-color:white;border:1px solid #ccc;margin-bottom:1px;color:black;height:230px;width:100%;" id = "card">
@@ -659,4 +666,29 @@ function image1(images)
       
       
       </div>
+	  
+	  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" >
+  <div class="modal-dialog" role="document">
+    <div class="modal-content upload-select-title" >
+      
+        <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+		<br><br>
+        <h4 class="modal-title " id="myModalLabel" ><center><b>&nbsp Choose Course</b></center></h4>
+      <br>
+      <div class="modal-body">
+	  <div class="row">
+	   <div class="col-xs-3 col-xs-offset-2 ">
+        <select id="course" value=""  name="year" placeholder="year" style="width:310px;"class="year form-control">
+	  <option value="My" style="color:#ccc">My Courses</option>
+	  </select>
+      </div>
+	  </div>
+	  <br>
+       <a href="/upload" id="upload"><button type="button" class="btn btn-file continue" style="background-color:#37BC61;border-color:#37BC61;margin-left: 82px;width:310px;color:white;">Continue</button></a>
+	  <br><br>
+	  <a href="/add_course" class="course"> Add a new course</a>
+      </div>
+    </div>
+  </div>
+</div>
         </body>

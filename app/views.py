@@ -83,7 +83,14 @@ def home(request):
 			return HttpResponse(template.render())
 		else:
 			return HttpResponseRedirect("/signin")
-
+@csrf_exempt
+def add_course(request):
+	if "active" in request.session:
+		if request.session["active"]:
+			template = loader.get_template("addCourse.html")  # home
+			return HttpResponse(template.render())
+		else:
+			return HttpResponseRedirect("/signin")
 
 @csrf_exempt
 def course_page(request):

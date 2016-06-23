@@ -152,7 +152,18 @@ min-height:200px;
 </style>
 <script>
 $(document).on('ready',function(){
+url1= $(location).attr('href'); 
+url=url1.split('=');
+//alert(url[1]);
 	pId=Cookies.get("profileId");
+		
+		//onchange for modal upload
+	$('#course').on('change',function(){
+	//alert('dfd');
+	$('#upload').attr('href','/upload?id='+this.value);
+	//alert($('#upload').attr('href'));
+	});
+		
 		data={"profileId":pId};
         
 			  $.ajax({
@@ -174,6 +185,10 @@ $(document).on('ready',function(){
 					$('#pname').text(data.profileName);
 					$('#profile-name').text(data.profileName);
 					$('#profile-pts').text(data.points);
+					
+	 for(i=0;i<data.subscribedCourseList.length;i++)
+          {//420  
+           $('<option value= "'+data.subscribedCourseList[i].courseId+'">'+data.subscribedCourseList[i].courseName+'</option>').appendTo("#course");}
 				}
 				});
 		$("#type-select").on('change',function(){
@@ -312,7 +327,7 @@ $(document).on('ready',function(){
 		$('#upload').submit(function(eventObj) {
 			//ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgJuQxAgM
 			$(this).append('<input type="text" name="profileId" value="'+pId+'" style="display:none"/> ');
-			$(this).append('<input type="text" name="courseId" value="ahJzfnVwbG9hZG5vdGVzLTIwMTZyEwsSBkNvdXJzZRiAgICAnYrWCAw" style="display:none"/> ');
+			$(this).append('<input type="text" name="courseId" value="'+url[1]+'" style="display:none"/> ');
 			$(this).append('<input type="text" name="title" value="title"  style="display:none"/> ');
 			return true;
 								});
@@ -320,7 +335,7 @@ $(document).on('ready',function(){
 </script>
 <body>
     <!-- Fixed navbar -->
-		<nav class="navbar navbar-default nav" style="margin-top:-55px;">
+<nav class="navbar navbar-default nav" style="margin-top:-55px;">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -348,7 +363,8 @@ $(document).on('ready',function(){
       <form class="navbar-form navbar-left hidden-xs" role="search">
         <div class="form-group">
 			<button type="submit" class="btn btn-default sub " ><span class="glyphicon glyphicon-search" style="width:10px;"></button>
-          <input type="text" class="form-control search "  id="search" style="width:700px;">
+          <input type="text" class="form-control search hidden-sm"  id="search" style="width:700px;" >
+		  <input type="text" class="form-control search hidden-lg"  id="search" style="width:300px;" >
        <div style="background-color:#5cb85c;color:white;" class="btn btn-default btn-success  center"  data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span>Upload</div>
                 
 		 
@@ -370,7 +386,7 @@ $(document).on('ready',function(){
             <li><a href="#">Another action</a></li>
             <li><a href="#">Something else here</a></li>
             <li role="separator" class="divider"></li>
-            <li><a href="#">Separated link</a></li>
+            <li  ><div class ="g-signin2" onclick="SignOut()"> &nbsp; Sign out</div></li>
           </ul>
         </li>
           
@@ -379,29 +395,30 @@ $(document).on('ready',function(){
           
   </div><!-- /.container-fluid -->
 </nav>
- <div class="container-fluid">
+  <div class="container-fluid">
     <div class="row">
       <div class="col-xs-6 col-md-2 sidebar sidebar-left sidebar-animate sidebar-md-show" >
         <ul class="nav navbar-stacked">
-		<li><center><a href="#" width="50%" height="50%" class="profile.png"><img src="profile.png" class="img-circle" width="50%" height="50%"></a></center></li>
+		<li><center><a  href="/profile" width="50%" height="50%" class="profile.png"><img src="/static/style/profile.png" class="img-circle" width="50%" height="50%"></a></center></li>
 		 <li><center><span id="pname">Name</span></center></li>
         
         <li><center>Points: &nbsp <span id="pts">0</span></center></li>
 		<br>
-		<div style="border:1px solid #ccc;border-bottom:1px"></div>
+		<div class="line"></div>
             
-            <li class="visible-xs"><div style="margin-top:5px;margin-left:10px;background-color:#5cb85c;color:white;" class="btn btn-default btn-success  center"  data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span>Upload</div>
-            <div style="border:1px solid #ccc;border-bottom:1px;margin-top:5px;"></div>
+            <li class="visible-xs"><div style="" class="btn btn-default btn-success  center-1"  data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span>Upload</div>
+            <div class="line" ></div>
             </li>
-          <li class="active"><a href="#">Home</a></li>
-          <li><a href="#about">My Bookmarks</a></li>
-		   <li><a href="#about">My Uploads</a></li>
-		   <div style="border:1px solid #ccc;border-bottom:1px"></div>
-		    <li><a href="#about">Add Course</a></li>
-			<div style="border:1px solid #ccc;border-bottom:1px"></div>
-          <li><a href="#contact">Offers</a></li>
-		  <li><a href="#contact">How to get points</a></li>
-		  <li><a href="#contact">Invite</a></li>
+          <li class="active"><a href="/home"><i class="fa fa-home" aria-hidden="true"></i> &nbsp;Home</a></li>
+          <li><a href="/add_course"><i class="fa fa-plus-square" aria-hidden="true"></i> &nbsp; Add Course</a></li>
+		   <li><a href="#about"><i class="fa fa-gift" aria-hidden="true"></i> &nbsp; Gifts</a></li>
+		   <div class="line"></div>
+		    <li><a href="#about"><i class="fa fa-question-circle-o" aria-hidden="true"></i> &nbsp; How to Get Points</a></li>
+          <li><a href="#contact"><i class="fa fa-share-alt" aria-hidden="true"></i> &nbsp; Invite</a></li>
+		  <li><a href="#contact"><i class="fa fa-info-circle" aria-hidden="true"></i> &nbsp; About</a></li>
+		  <li><a href="#contact"><i class="fa fa-star-o" aria-hidden="true"></i> &nbsp; Rate</a></li>
+		  <li><a href="#contact"><i class="fa fa-cog" aria-hidden="true"></i> &nbsp; Settings</a></li>
+		  <li><a href="#contact"><i class="fa fa-power-off" aria-hidden="true"></i> &nbsp; Logout</a></li>
         </ul>
       </div>
 	  
@@ -467,5 +484,30 @@ $(document).on('ready',function(){
 	   </textarea>
 	 </div>
 	  </div>
+	  
+	  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" >
+  <div class="modal-dialog" role="document">
+    <div class="modal-content upload-select-title" >
+      
+        <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+		<br><br>
+        <h4 class="modal-title " id="myModalLabel" ><center><b>&nbsp Choose Course</b></center></h4>
+      <br>
+      <div class="modal-body">
+	  <div class="row">
+	   <div class="col-xs-3 col-xs-offset-2 ">
+        <select id="course" value=""  name="year" placeholder="year" style="width:310px;"class="year form-control">
+	  <option value="My" style="color:#ccc">My Courses</option>
+	  </select>
+      </div>
+	  </div>
+	  <br>
+       <a href="/upload" id="upload"><button type="button" class="btn btn-file continue" style="background-color:#37BC61;border-color:#37BC61;margin-left: 82px;width:310px;color:white;">Continue</button></a>
+	  <br><br>
+	  <a href="/add_course" class="course"> Add a new course</a>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 </html>

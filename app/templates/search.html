@@ -61,81 +61,86 @@ $(document).ready(function(){
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
-	  <button type="button" class="navbar-toggle toggle-left hidden-md hidden-lg" data-toggle="sidebar" data-target=".sidebar-left">
         
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false" >
+	  <button type="button" class="navbar-toggle toggle-left hidden-md hidden-lg" data-toggle="sidebar" data-target=".sidebar-left">
         <span class="sr-only">Toggle navigation</span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
+         
+   
+         <button class="btn btn-default sub5 navbar-toggle visible-xs" ><span class="glyphicon glyphicon-bell" ></span></button>
+      <button  class="navbar-toggle collapsed"  aria-expanded="false" style="border:0px solid white;">
+          
+             <a href="#">
+                 <span class="glyphicon glyphicon-search" style="border:0px solid white;"></a><span>
+      </button>
+        
       <a class="navbar-brand" href="#">Brand</a>
+        
     </div>
 
      
-      <form class="navbar-form navbar-left" role="search">
+      <form class="navbar-form navbar-left hidden-xs" role="search">
         <div class="form-group">
-			<button type="submit" class="btn btn-default sub" ><span class="glyphicon glyphicon-search"></button>
-          <input type="text" class="form-control search"  id="search" style="width:700px;">
-		  
-		<span style="background-color:#5cb85c;color:white;" class="btn btn-default btn-success  center"  data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span>Upload
-     
+			<button type="submit" class="btn btn-default sub " ><span class="glyphicon glyphicon-search" style="width:10px;"></button>
+          <input type="text" class="form-control search hidden-sm"  id="search" style="width:700px;" >
+		  <input type="text" class="form-control search hidden-lg"  id="search" style="width:300px;" >
+       <div style="background-color:#5cb85c;color:white;" class="btn btn-default btn-success  center"  data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span>Upload</div>
+                
 		 
 	   </div>
-		
+		 
 		<!--  <input type="file"  class="btn btn-primary btn-success upload"><span class="glyphicon glyphicon-plus"></span> Upload  <span style="background-color:#5cb85c;color:white;" class="btn btn-default btn-success  center" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span>Upload
         <input type="file"/></span>-->
 	</form>
 	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+       
       <ul class="nav navbar-nav navbar-right">
-        
-        <li><a href="#"><span class="glyphicon glyphicon-bell" ></span></a></li>
+          <li><a href="#"><span class="glyphicon glyphicon-bell" ></span></a></li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user" ></span> </a>
+           
+        
           <ul class="dropdown-menu">
             <li><a href="#">Action</a></li>
             <li><a href="#">Another action</a></li>
             <li><a href="#">Something else here</a></li>
             <li role="separator" class="divider"></li>
-            <li><a href="#">Separated link</a></li>
+            <li  ><div class ="g-signin2" onclick="SignOut()"> &nbsp; Sign out</div></li>
           </ul>
         </li>
+          
       </ul>
     </div><!-- /.navbar-collapse -->
+          
   </div><!-- /.container-fluid -->
 </nav>
-<!--
-  <div class="navbar navbar-static navbar-default navbar-fixed-top">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle toggle-left hidden-md hidden-lg" data-toggle="sidebar" data-target=".sidebar-left">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="#">Project name</a>
-      </div>
-
-    </div>
-  </div>-->
-  
-  <!-- Begin page content -->
   <div class="container-fluid">
     <div class="row">
-      <div class="col-xs-6 col-md-2 sidebar sidebar-left sidebar-animate sidebar-md-show">
+      <div class="col-xs-6 col-md-2 sidebar sidebar-left sidebar-animate sidebar-md-show" >
         <ul class="nav navbar-stacked">
-		<li><center><a href="#" width="50%" height="50%" class="profile.png"><img src="profile.png" class="img-circle" width="50%" height="50%"></a></center></li>
+		<li><center><a  href="/profile" width="50%" height="50%" class="profile.png"><img src="/static/style/profile.png" class="img-circle" width="50%" height="50%"></a></center></li>
+		 <li><center><span id="pname">Name</span></center></li>
+        
+        <li><center>Points: &nbsp <span id="pts">0</span></center></li>
 		<br>
-		<div style="border:1px solid #ccc;border-bottom:1px"></div>
-          <li class="active"><a href="#">Home</a></li>
-          <li><a href="#about">My Bookmarks</a></li>
-		   <li><a href="#about">My Uploads</a></li>
-		   <div style="border:1px solid #ccc;border-bottom:1px"></div>
-		    <li><a href="#about">Add Course</a></li>
-			<div style="border:1px solid #ccc;border-bottom:1px"></div>
-          <li><a href="#contact">Offers</a></li>
-		  <li><a href="#contact">How to get points</a></li>
-		  <li><a href="#contact">Invite</a></li>
+		<div class="line"></div>
+            
+            <li class="visible-xs"><div style="" class="btn btn-default btn-success  center-1"  data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span>Upload</div>
+            <div class="line" ></div>
+            </li>
+          <li class="active"><a href="/home"><i class="fa fa-home" aria-hidden="true"></i> &nbsp;Home</a></li>
+          <li><a href="/add_course"><i class="fa fa-plus-square" aria-hidden="true"></i> &nbsp; Add Course</a></li>
+		   <li><a href="#about"><i class="fa fa-gift" aria-hidden="true"></i> &nbsp; Gifts</a></li>
+		   <div class="line"></div>
+		    <li><a href="#about"><i class="fa fa-question-circle-o" aria-hidden="true"></i> &nbsp; How to Get Points</a></li>
+          <li><a href="#contact"><i class="fa fa-share-alt" aria-hidden="true"></i> &nbsp; Invite</a></li>
+		  <li><a href="#contact"><i class="fa fa-info-circle" aria-hidden="true"></i> &nbsp; About</a></li>
+		  <li><a href="#contact"><i class="fa fa-star-o" aria-hidden="true"></i> &nbsp; Rate</a></li>
+		  <li><a href="#contact"><i class="fa fa-cog" aria-hidden="true"></i> &nbsp; Settings</a></li>
+		  <li><a href="#contact"><i class="fa fa-power-off" aria-hidden="true"></i> &nbsp; Logout</a></li>
         </ul>
       </div>
       <div class="main col-xs-8 col-md-10 col-md-offset-2 ">
@@ -149,6 +154,31 @@ $(document).ready(function(){
     
     </div>
   </div>
+  
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" >
+  <div class="modal-dialog" role="document">
+    <div class="modal-content upload-select-title" >
+      
+        <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+		<br><br>
+        <h4 class="modal-title " id="myModalLabel" ><center><b>&nbsp Choose Course</b></center></h4>
+      <br>
+      <div class="modal-body">
+	  <div class="row">
+	   <div class="col-xs-3 col-xs-offset-2 ">
+        <select id="course" value=""  name="year" placeholder="year" style="width:310px;"class="year form-control">
+	  <option value="My" style="color:#ccc">My Courses</option>
+	  </select>
+      </div>
+	  </div>
+	  <br>
+       <a href="/upload" id="upload"><button type="button" class="btn btn-file continue" style="background-color:#37BC61;border-color:#37BC61;margin-left: 82px;width:310px;color:white;">Continue</button></a>
+	  <br><br>
+	  <a href="/add_course" class="course"> Add a new course</a>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
 
 </html>

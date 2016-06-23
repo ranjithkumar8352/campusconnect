@@ -1,0 +1,448 @@
+<html>
+
+  <head>
+    <meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id" content="22051677189-1f55k773ct0qnlb5dkr83surcfk6565t.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="/static/js/cookie-js.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+      <script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+   <link rel="stylesheet" type="text/css" href="static/style/DateTimePicker.css" />
+	<script type="text/javascript" src="static/js/DateTimePicker.js"></script>
+	<!--Nav bar and side bar-->
+	  <script src="/static/js/sidebar.js"></script>
+    <link rel="stylesheet" href="/static/style/style-sidebar.css" />
+    <link rel="stylesheet" href="/static/style/sidebar.css"/>
+	    <link rel="stylesheet" href="/static/style/index.css"/>
+	<!--Nav bar and side bar-->	
+	<!--grid layout-->
+   <script src="/static/js/brick-by-brick.js"></script>
+   <link rel="stylesheet" href="/static/style/brick-by-brick.css" />
+<!--grid layout-->
+
+ <!--tabs-->
+    <link href="/static/style/generic-notForTabs.css" rel="stylesheet" type="text/css" />
+    <link href="/static/style/responsive-tabs.css" rel="stylesheet" type="text/css" />
+    <script src="/static/js/responsive-tabs.js" type="text/javascript"></script>
+<!--tabs-->
+
+  </head>
+<style>
+
+.img-circle {
+    border-radius: 50%;
+}
+.profile:hover{
+background-color:transparent;
+}
+.navbar-stacked{
+background-color:#f5f5f5;
+border:1px solid #f5f5f5;
+}
+  .nav-tabs{
+  width:1095px;
+  }
+  
+ div.panel-container {
+    border: 0px solid #f5f5f5;
+    background-color: #f5f5f5;
+   
+} 
+
+@media only screen and (min-width: 550px) {
+    .tabs1{
+	width:49%;
+	}
+	.tabs2{
+	width:49%;
+	}
+}
+
+body{
+background-color:#f5f5f5;
+//overflow-x: hidden;
+}
+//grid
+   .single-column .b-by-b-item {
+       width: 100%!important;
+    }
+
+    @media (min-width: 0px) and (max-width: 480px) {
+       #layout .b-by-b-item {
+           width: 100%;
+        }
+    }
+
+    @media (min-width: 481px) and (max-width: 1024px) {
+        #layout .b-by-b-item {
+          width: 50%;
+        }
+    }
+
+    @media (min-width: 1025px) {
+       #layout .b-by-b-item {
+         width: 33.33%;
+      } 
+    }
+	.img-circle {
+    border-radius: 50%;
+	margin-left:20px;
+}
+//grid
+
+.profile:hover{
+background-color:transparent;
+}
+
+@media (max-width: @screen-xs) {
+    body{font-size: 0px;}
+}
+
+ input[type="checkbox"]{
+   font-family:20px;
+   }
+   .days{
+   margin-top:-1px;
+
+   }
+   .col-xs-2{
+      padding:0px !important;
+   }
+</style>
+<script>
+days=[];
+   startTime=[];
+   endTime=[]
+function start(day){
+  // alert(e.target.id);
+ // alert("#startTime-"+day);
+ //alert(day);
+ for(i=0;i<days.length;i++)
+ if(days[i]==day)
+ {
+ index=i;
+ }
+ 
+ //alert(index);
+ startTime[index]=$("#startTime-"+day).val();
+ 
+ //alert(startTime[day]);
+   }
+   
+ function end(day){
+  // alert(e.target.id);
+  for(i=0;i<days.length;i++)
+ if(days[i]==day)
+ {
+ index=i;
+ }
+ 
+ endTime[index]=$("#endTime-"+day).val();
+ //alert(endTime[day]);
+   }
+
+$(document).ready(function(){
+    pId = Cookies.get("profileId");
+	cId="";
+	//onchange for modal upload
+	$('#course').on('change',function(){
+	$('#upload').attr('href','/upload?id='+this.value);
+	});
+data={"profileId":pId};        
+$.ajax({
+  type:'GET',
+  dataType: 'json',
+  url: 'https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/feed/ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgLyhggoM',
+  data: data,
+  beforeSend: function (xhr) {
+    if (xhr && xhr.overrideMimeType) {
+      xhr.overrideMimeType('application/json;charset=utf-8');
+    }
+  },
+  success: function (data) {
+     // console.log(data);
+	 if(data.photoUrl!="undefined")
+      $('img[src="/static/style/profile.png"]').attr('src', data.photoUrl);
+     //$("#image").src()
+      // alert(data.subscribedCourseList[i].points);
+     $('#pts').text(data.points);
+     $('#pname').text(data.profileName);
+	 cId=data.collegeId;
+	 for(i=0;i<data.subscribedCourseList.length;i++)
+          {//420  
+           $('<option value= "'+data.subscribedCourseList[i].courseId+'">'+data.subscribedCourseList[i].courseName+'</option>').appendTo("#course");}       
+      
+  }
+});
+
+$("#dtBox").DateTimePicker();
+        $('input[type="checkbox"]').click(function(){
+            if($(this).prop("checked") == true)
+			{
+			if(this.value!="elective")
+				{days.push(this.value);
+				//alert('h');
+				$('<div id="time-'+this.value+'">Time:\
+				  <div><input type="text"  id="startTime-'+this.value+'"  value="8:00" data-field="time" placeholder="Start" style="width:60%" onchange="start('+this.value+')"></div>\
+				<div><input type="text"  id="endTime-'+this.value+'" value="9:00" data-field="time" placeholder="End" style="width:60%;margin-top:3px;" onchange="end('+this.value+')"></div>\
+				</div>').appendTo('.day-'+this.value);
+				startTime.push("8:00");
+				endTime.push("8:00");
+				}
+            }
+            else if($(this).prop("checked") == false)
+			{
+				if(this.value!="elective")
+                {
+				//alert(this.value);
+				//alert('h');
+				for(i=0;i<days.length;i++)
+					 if(days[i]==this.value)
+					 {
+					 index=i;
+					 }
+				
+				days.pop(this.value);
+				startTime.splice(index,1);
+				endTime.splice(index,1);
+				$('#time-'+this.value).remove();
+				}
+			
+			}
+          
+        });
+		
+		
+		$('#done').on('click',function(){
+		
+		
+		pId="ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgMDhigkM";
+		
+		 alert(cId);
+		var courseName=$('#course-name').val();
+		 var courseCode=$('#course-code').val();
+		 var proff=$('#proff').val();
+		 var sem=$('#sem').val();
+		 batch=[],section=[],branch=[];
+		 batch.push($('#batch').val()); 
+		 section.push($('#section').val());
+		 branch.push($('#branch').val());
+		
+		data={
+			"batchNames": batch,
+			"branchNames": branch,
+			"collegeId": cId,
+			"colour": "ANY",
+			"courseCode": courseCode,
+			"courseName": courseName,
+			"date": days,
+			"endTime": endTime,
+			"professorName": proff,
+			"profileId": pId,
+			"sectionNames": section,
+			"semester": sem,
+			"startTime": startTime
+
+        };
+		
+		 
+		
+		 console.log(JSON.stringify(data));
+		$.ajax({
+				  type:'POST',
+				  dataType: 'json',
+				  contentType: 'application/json',
+				  url: 'https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/addCourse',
+				  data: JSON.stringify(data),
+				  success: function (data) {
+				  console.log(data);
+				  //(data.key);
+				  window.location="/course?id="+data.key;
+					}
+				});
+		/* 
+		 data={
+			"batchNames": ["2014"],
+			"branchNames": ["CSE"],
+			"collegeId": "ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB0NvbGxlZ2UYgICAgMCcggkM",
+			"colour": "ANY",
+			"courseCode": "DCS2",
+			"courseName": "Digital circuits2",
+			"date": ["1"],
+			"endTime": ["22:10"],
+			"professorName": "ME",
+			"profileId": "ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgMDhigkM",
+			"sectionNames": ["A"],
+			"semester": "Odd",
+			"startTime": ["21:00"]
+
+        };*/
+  
+		
+		});
+});
+</script>	
+<body>
+    <!-- Fixed navbar -->
+	<nav class="navbar navbar-default nav" style="margin-top:-55px;">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+        
+	  <button type="button" class="navbar-toggle toggle-left hidden-md hidden-lg" data-toggle="sidebar" data-target=".sidebar-left">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+         
+   
+         <button class="btn btn-default sub5 navbar-toggle visible-xs" ><span class="glyphicon glyphicon-bell" ></span></button>
+      <button  class="navbar-toggle collapsed"  aria-expanded="false" style="border:0px solid white;">
+          
+             <a href="#">
+                 <span class="glyphicon glyphicon-search" style="border:0px solid white;"></a><span>
+      </button>
+        
+      <a class="navbar-brand" href="#">Brand</a>
+        
+    </div>
+
+     
+      <form class="navbar-form navbar-left hidden-xs" role="search">
+        <div class="form-group">
+			<button type="submit" class="btn btn-default sub " ><span class="glyphicon glyphicon-search" style="width:10px;"></button>
+          <input type="text" class="form-control search hidden-sm"  id="search" style="width:700px;" >
+		  <input type="text" class="form-control search hidden-lg"  id="search" style="width:300px;" >
+       <div style="background-color:#5cb85c;color:white;" class="btn btn-default btn-success  center"  data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span>Upload</div>
+                
+		 
+	   </div>
+		 
+		<!--  <input type="file"  class="btn btn-primary btn-success upload"><span class="glyphicon glyphicon-plus"></span> Upload  <span style="background-color:#5cb85c;color:white;" class="btn btn-default btn-success  center" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span>Upload
+        <input type="file"/></span>-->
+	</form>
+	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+       
+      <ul class="nav navbar-nav navbar-right">
+          <li><a href="#"><span class="glyphicon glyphicon-bell" ></span></a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user" ></span> </a>
+           
+        
+          <ul class="dropdown-menu">
+            <li><a href="#">Action</a></li>
+            <li><a href="#">Another action</a></li>
+            <li><a href="#">Something else here</a></li>
+            <li role="separator" class="divider"></li>
+            <li  ><div class ="g-signin2" onclick="SignOut()"> &nbsp; Sign out</div></li>
+          </ul>
+        </li>
+          
+      </ul>
+    </div><!-- /.navbar-collapse -->
+          
+  </div><!-- /.container-fluid -->
+</nav>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-6 col-md-2 sidebar sidebar-left sidebar-animate sidebar-md-show" >
+        <ul class="nav navbar-stacked">
+		<li><center><a  href="/profile" width="50%" height="50%" class="profile.png"><img src="/static/style/profile.png" class="img-circle" width="50%" height="20%"></a></center></li>
+		 <li><center><span id="pname">Name</span></center></li>
+        
+        <li><center>Points: &nbsp <span id="pts">0</span></center></li>
+		<br>
+		<div class="line"></div>
+            
+            <li class="visible-xs"><div style="" class="btn btn-default btn-success  center-1"  data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span>Upload</div>
+            <div class="line" ></div>
+            </li>
+          <li class="active"><a href="/home"><i class="fa fa-home" aria-hidden="true"></i> &nbsp;Home</a></li>
+          <li><a href="/add_course"><i class="fa fa-plus-square" aria-hidden="true"></i> &nbsp; Add Course</a></li>
+		   <li><a href="#about"><i class="fa fa-gift" aria-hidden="true"></i> &nbsp; Gifts</a></li>
+		   <div class="line"></div>
+		    <li><a href="#about"><i class="fa fa-question-circle-o" aria-hidden="true"></i> &nbsp; How to Get Points</a></li>
+          <li><a href="#contact"><i class="fa fa-share-alt" aria-hidden="true"></i> &nbsp; Invite</a></li>
+		  <li><a href="#contact"><i class="fa fa-info-circle" aria-hidden="true"></i> &nbsp; About</a></li>
+		  <li><a href="#contact"><i class="fa fa-star-o" aria-hidden="true"></i> &nbsp; Rate</a></li>
+		  <li><a href="#contact"><i class="fa fa-cog" aria-hidden="true"></i> &nbsp; Settings</a></li>
+		  <li><a href="#contact"><i class="fa fa-power-off" aria-hidden="true"></i> &nbsp; Logout</a></li>
+        </ul>
+      </div>
+	  <div class="main col-xs-12 col-md-10 col-md-offset-2 " style="padding-left:20px;">
+	  <div title="" style="font-size:30px;">Add Course</div>
+	  <br>
+	    <div class="row">
+      <div class="col-xs-12" >
+        <p><input class="form" type="text" id="course-name"style="width:80%" placeholder="  Course Name" required></p>
+        <p><input class="form-control" id="course-code" type="text" placeholder="Course Code.. e.g..,CHE402" required></p>
+        <p><input class="form-control" id="proff" type="text" placeholder="Professor" required></p>
+		<p><input class="form-control" id="sem" type="text" placeholder="Semester..Odd/Even" required></p>
+		<p><input type="checkbox"  id="elective" name="elective" value="elective" style="margin-top:-1px;" placeholder="" required><span>Elective</span></p>
+		<div style="border:1px solid #ccc;" placeholder="Semester" required></div><br>
+        <p><input class="form-control" id="batch" type="text" placeholder="Batch" required></p>
+        <p><input class="form-control" id="section" type="text" placeholder="Section" required></p>
+        <p><input class="form-control" id="branch" type="text" placeholder="Branch" required></p>
+       <div style="border:1px solid #ccc;" ></div><br>
+	   <b>Timetable</b><br>
+	   <div class="col-xs-2 day-1">
+	   <div><input type="checkbox" name="Mon" value="1" class="days" > Mon
+	   </div>
+	   <div id="dtBox"></div>
+	   
+	   </div>
+	   <div class="col-xs-2 day-2">
+	   <div><input type="checkbox" name="Tue" value="2" class="days">Tue</div>
+	   </div>
+	  <div class="col-xs-2 day-3">
+	   <div><input type="checkbox" name="Wed" value="3" class="days"> Wed</div>
+	   </div>
+	   <div class="col-xs-2 day-4" >
+	   <div><input type="checkbox" name="Thur" value="4" class="days"> Thur</div>
+	   </div>
+	   <div class="col-xs-2 day-5" >
+	   <div><input type="checkbox" name="Fri" value="5" class="days"> Fri</div>
+	   </div>
+	   <div class="col-xs-2 day-6" >
+	   <div><input type="checkbox" name="Sat" value="6" class="days"> Sat</div>
+	    </div>
+	   <br>
+	   <br>
+	   <br>
+	   <br>
+	   <br>
+	  <center> <button value="create" id="done" style="background-color:#f7971d;border-color:#f7971d;color:white">Create</button></center>
+      </div>
+	  </div>
+	  </div>
+	  
+	  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" >
+  <div class="modal-dialog" role="document">
+    <div class="modal-content upload-select-title" >
+      
+        <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+		<br><br>
+        <h4 class="modal-title " id="myModalLabel" ><center><b>&nbsp Choose Course</b></center></h4>
+      <br>
+      <div class="modal-body">
+	  <div class="row">
+	   <div class="col-xs-3 col-xs-offset-2 ">
+        <select id="course" value=""  name="year" placeholder="year" style="width:310px;"class="year form-control">
+	  <option value="My" style="color:#ccc">My Courses</option>
+	  </select>
+      </div>
+	  </div>
+	  <br>
+       <a href="/upload" id="upload"><button type="button" class="btn btn-file continue" style="background-color:#37BC61;border-color:#37BC61;margin-left: 82px;width:310px;color:white;">Continue</button></a>
+	  <br><br>
+	  <a href="/add_course" class="course"> Add a new course</a>
+      </div>
+    </div>
+  </div>
+</div>
+	</body>

@@ -3,21 +3,21 @@ background-color:#f5f5f5;
 }
 
 .nav{
-background-color:white;
-   border: 1px  solid white;
-   border-radius:0;>
+background-color:#f7971d;
+   border: 1px  solid #f7971d;
+   border-radius:0;
 }
 .sub{
-border:0px solid white ;
+border:0px solid #f7971d ;
 border-left:1px solid #ccc;
 border-radius:0;
-background-color:white;
+background-color:#f7971d;
 }
  
 .sub1{
-border:0px solid white ;
+border:0px solid #f7971d ;
 border-radius:0;
-background-color:white;
+background-color:#f7971d;
 margin-top:10px;
 margin-left:-50px;
 }
@@ -28,19 +28,30 @@ margin-left:-50px;
   border-right:1px solid #ccc;
 }
 .search{
-width:700px;
-border:0px solid white;
+border:0px solid #f7971d;
  border-color: inherit;
+ background-color:#f7971d;
   -webkit-box-shadow: none;
   box-shadow: none;
 border-right:1px solid #ccc;
 border-radius:0;
 }
-
+.center-1{
+	
+	margin-top:5px;margin-left:10px;background-color:#f7971d;color:white;
+	
+}
+.ul.rtabs li a{
+	background-color:#f7971d !important;
+	
+}
+.line{
+border:1px solid #f7971d;border-bottom:1px;	
+}
 button:focus {outline:0 !important;}
-.sub:hover{background-color:white;}
-.sub1:hover{background-color:white;}
-.user:hover{background-color:white;}
+.sub:hover{background-color:#f7971d;}
+.sub1:hover{background-color:#f7971d;}
+.user:hover{background-color:#f7971d;}
 
 .btn-file{
 width:100px;border-radius:2px;
@@ -74,10 +85,10 @@ background-color:#37BC61;
 border-color:#37BC61;
 margin-left: 82px;
 width:310px;
-color:white;
+color:#f7971d;
 }
 .continue:hover{
-color:white;
+color:#f7971d;
 }
 .btn-file {
     position: relative;
@@ -110,7 +121,7 @@ background-color:#37BC61;
 border-color:#37BC61;
 margin-left: 82px;
 width:210px;
-color:white;
+color:#f7971d;
 }
 #dept-select{
 width:100px;

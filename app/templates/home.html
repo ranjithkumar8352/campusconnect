@@ -10,7 +10,7 @@
       <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-   
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
 	<!--Nav bar and side bar-->
 	  <script src="/static/js/sidebar.js"></script>
     <link rel="stylesheet" href="/static/style/style-sidebar.css" />
@@ -116,6 +116,7 @@ function SignOut() {
 $(document).ready(function(){
    pId=Cookies.get("profileId");
 data={};
+course=[];
     
      var append=['<div class="ui card bottom" style="background-color:white;border:1px solid #ccc;height:220px;margin-bottom:1px;margin-color:#ccc;width:400px;" id = "card"><center><button id="b1"> +CLICK ME</buton></canter></div>'];
  //var append=['<div class="ui card bottom" style="background-color:white;border:1px solid #ccc;height:220px;margin-bottom:1px;margin-color:#ccc;width:400px;" id = "card">ssssdcsd</div>'];
@@ -127,7 +128,12 @@ data={};
  }
  
  );
-    
+    //onchange for modal upload
+	$('#course').on('change',function(){
+	$('#upload').attr('href','/upload?id='+this.value);
+	});
+	
+	
     $.ajax({
   type:'GET',
   dataType: 'json',
@@ -148,26 +154,26 @@ data={};
      $('#pname').text(data.profileName);
       for(i=0;i<data.subscribedCourseList.length;i++)
           {//420  
-           
+           $('<option value= "'+data.subscribedCourseList[i].courseId+'">'+data.subscribedCourseList[i].courseName+'</option>').appendTo("#course");
               
              s="/course";
-                var card=['<div class="ui card bottom " style="background-color:white;border:1px solid #ccc;height:160px;;color:black;width:440px;" id = "card">\<div class="row" >\
+                var card=['<div class="ui card bottom " style="background-color:white;border:1px solid #ccc;height:160px;;color:black;width:340px;" id = "card">\<div class="row" >\
                 <div class="course-name" id="'+data.subscribedCourseList[i].courseId+'" style="cursor:pointer;font-size:20px;"> &nbsp\ <u>'+data.subscribedCourseList[i].courseName+'</u></div>\
                 </div>\
                 <div class="row" style="margin-top:20px;">\
-                <div class="col-xs-3 notes"  id="'+data.subscribedCourseList[i].courseId+'-notes" style="cursor:pointer;padding-right:0px;">\
+                <div class="col-xs-3 notes"  id="'+data.subscribedCourseList[i].courseId+'-notes" style="cursor:pointer;padding-right:0px;border-right:1px solid #ccc">\
                 <div style="">NOTES</div>\
                 <br>\
-                <div class="notes-no" style="margin-left:20px;">'+data.subscribedCourseList[i].recentNotes+'</div>\
+                <div class="notes-no" style="margin-left:20px;">+ '+data.subscribedCourseList[i].recentNotes+'</div>\
                 </div>\
-                <div class="col-xs-5 col-xs-offset-1 ass"  id="'+data.subscribedCourseList[i].courseId+'-assignments" style="cursor:pointer;padding:0px;">\
+                <div class="col-xs-5 col-xs-offset-1 ass"  id="'+data.subscribedCourseList[i].courseId+'-assignments" style="cursor:pointer;padding:0px;border-right:1px solid #ccc"">\
                 <div>  ASSIGNMENTS</div>\
                 <br>\
                 <div class="ass-no" style="margin-left:40px;">'+data.subscribedCourseList[i].dueAssignments+'</div>\
                 </div>\
                 <div class="col-xs-3  exam"  id="'+data.subscribedCourseList[i].courseId+'-exams" style="cursor:pointer;padding:0px"><div> &nbsp &nbsp EXAMS</div>\
                 <br>\
-                <div class="date-no" style="margin-left:35px;">'+data.subscribedCourseList[i].dueTests+'</div>\
+                <div class="date-no" style="margin-left:35px;">'+data.subscribedCourseList[i].dueExams+'</div>\
                 </div>\
                 </div>\
                 </div>'];
@@ -176,7 +182,8 @@ data={};
 	          
                 document.getElementById(data.subscribedCourseList[i].courseId).addEventListener('click',function(e){ 
                  // id=document.getElementById(e.id).cid;
-                window.location="/course?id="+this.id;
+				 //alert("hi");
+                window.location="/course?id="+this.id+"-notes#view1";
                 });
               
               s=
@@ -251,7 +258,8 @@ data={};
       <form class="navbar-form navbar-left hidden-xs" role="search">
         <div class="form-group">
 			<button type="submit" class="btn btn-default sub " ><span class="glyphicon glyphicon-search" style="width:10px;"></button>
-          <input type="text" class="form-control search "  id="search" style="width:700px;">
+          <input type="text" class="form-control search hidden-sm"  id="search" style="width:700px;" >
+		  <input type="text" class="form-control search hidden-lg"  id="search" style="width:300px;" >
        <div style="background-color:#5cb85c;color:white;" class="btn btn-default btn-success  center"  data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span>Upload</div>
                 
 		 
@@ -282,52 +290,37 @@ data={};
           
   </div><!-- /.container-fluid -->
 </nav>
-<!--
-  <div class="navbar navbar-static navbar-default navbar-fixed-top">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle toggle-left hidden-md hidden-lg" data-toggle="sidebar" data-target=".sidebar-left">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="#">Project name</a>
-      </div>
-
-    </div>
-  </div>-->
-  
-  <!-- Begin page content -->
   <div class="container-fluid">
     <div class="row">
       <div class="col-xs-6 col-md-2 sidebar sidebar-left sidebar-animate sidebar-md-show" >
         <ul class="nav navbar-stacked">
-		<li><center><a onclick="profile()" href="#" width="50%" height="50%" class="profile.png"><img src="profile.png" class="img-circle" width="50%" height="50%"></a></center></li>
+		<li><center><a  href="/profile" width="50%" height="50%" class="profile.png"><img src="/static/style/profile.png" class="img-circle" width="50%" height="50%"></a></center></li>
 		 <li><center><span id="pname">Name</span></center></li>
         
         <li><center>Points: &nbsp <span id="pts">0</span></center></li>
 		<br>
-		<div style="border:1px solid #ccc;border-bottom:1px"></div>
+		<div class="line"></div>
             
-            <li class="visible-xs"><div style="margin-top:5px;margin-left:10px;background-color:#5cb85c;color:white;" class="btn btn-default btn-success  center"  data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span>Upload</div>
-            <div style="border:1px solid #ccc;border-bottom:1px;margin-top:5px;"></div>
+            <li class="visible-xs"><div style="" class="btn btn-default btn-success  center-1"  data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span>Upload</div>
+            <div class="line" ></div>
             </li>
-          <li class="active"><a href="#">Home</a></li>
-          <li><a href="#about">My Bookmarks</a></li>
-		   <li><a href="#about">My Uploads</a></li>
-		   <div style="border:1px solid #ccc;border-bottom:1px"></div>
-		    <li><a href="#about">Add Course</a></li>
-			<div style="border:1px solid #ccc;border-bottom:1px"></div>
-          <li><a href="#contact">Offers</a></li>
-		  <li><a href="#contact">How to get points</a></li>
-		  <li><a href="#contact">Invite</a></li>
+          <li class="active"><a href="/home"><i class="fa fa-home" aria-hidden="true"></i> &nbsp;Home</a></li>
+          <li><a href="/add_course"><i class="fa fa-plus-square" aria-hidden="true"></i> &nbsp; Add Course</a></li>
+		   <li><a href="#about"><i class="fa fa-gift" aria-hidden="true"></i> &nbsp; Gifts</a></li>
+		   <div class="line"></div>
+		    <li><a href="#about"><i class="fa fa-question-circle-o" aria-hidden="true"></i> &nbsp; How to Get Points</a></li>
+          <li><a href="#contact"><i class="fa fa-share-alt" aria-hidden="true"></i> &nbsp; Invite</a></li>
+		  <li><a href="#contact"><i class="fa fa-info-circle" aria-hidden="true"></i> &nbsp; About</a></li>
+		  <li><a href="#contact"><i class="fa fa-star-o" aria-hidden="true"></i> &nbsp; Rate</a></li>
+		  <li><a href="#contact"><i class="fa fa-cog" aria-hidden="true"></i> &nbsp; Settings</a></li>
+		  <li><a href="#contact"><i class="fa fa-power-off" aria-hidden="true"></i> &nbsp; Logout</a></li>
         </ul>
       </div>
       <div class="main col-xs-12 col-md-10 col-md-offset-2 ">
         <div class="container1">
             <ul class="rtabs" style="margin-left:30px;">
-                <li><a class="tabs1" href="#view1">Courses</a></li>
-                <li><a class="tabs2" href="#view2" >Calendar</a></li>
+                <li><a class="tabs1" href="#view1"><center><b>Courses</b></center></a></li>
+                <li><a class="tabs2" href="#view2" style="margin-left:-5px;"><center><b>Calendar</b></center></a></li>
             </ul>
             <div class="panel-container">
                 <div id="view1">
@@ -336,10 +329,7 @@ data={};
 					</div>
                 </div>
 				 <div id="view2">
-                    <h2>Responsive Tabs</h2>
-                    <p>&nbsp;</p>
-                    <p>Resize window to smaller size and you will see the tabs layout in smaller devices.</p>
-    
+                    <h2>Calendar to be done</h2>
                 </div>
                
             </div>
@@ -350,82 +340,6 @@ data={};
      
     
     </div>
-
-	
-	<div class="modal fade" id="courses" tabindex="-1" role="dialog" aria-labelledby="course" >
-  <div class="modal-dialog" role="document">
-    <div class="modal-content course-content" >
-		<div class="row" style="margin-top:15px;">
-		   <div class="col-xs-6 col-xs-offset-5">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-left:10px;"><span aria-hidden="true">X</span></button>
-        <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
-			</div>
-		</div>	
-		<br>
-        <h4 class="modal-title" id="course" ><center><b>&nbsp Add Course</b></center></h4>
-      <br>
-      <div class="modal-body">
-	  <div class="row">
-	    <div class="col-xs-1"></div>
-	   <div class="col-xs-2">
-        <select id="dept-select" value=""  name="year" placeholder="year" class="year">
-	  <option value="My" style="color:#ccc">Department</option>
-	   <option value="CS" id="branch"><center>CS</center></option>
-	  <option value="ECE" id="branch">ECE</option>
-	  <option value="MECH" id="branch">MECH</option>
-	  <option value="CIVIL" id="branch">CIVIL</option>
-	  <option value="EEE" id="branch">EEE</option>
-	  <option value="BIOTECH" id="branch">BIOTECH</option>
-	  </select>
-      </div>
-	  
-	   <div class="col-xs-2">
-        <select id="course-select" value=""  name="year" placeholder="year" class="year">
-	  <option value="My" style="color:#ccc">Course</option>
-	  <option value= "CHEMISTRY-101">CHEMISTRY-101</option>
-	  <option value="PHYSICS-101">PHYSICS-101</option>
-	  <option value="ALGORITHIMS-101">ALGORITHIMS-101</option>
-	  <option value="DATA STRUCTURES">DATA STRUCTURES</option>
-	  </select>
-      </div>
-	  
-	   <div class="col-xs-2">
-        <select id="year1-select" value=""  name="year" placeholder="year" class="year">
-	  <option value="My" style="color:#ccc">Year</option>
-	  <option value= "2016">2016</option>
-	  <option value="2017">2017</option>
-	  <option value="2017">2018</option>
-	  <option value="2017">2019</option>
-	  <option value="2017">2020</option>
-	  <option value="2017">2021</option>
-	  </select>
-      </div>
-	  
-	   <div class="col-xs-2">
-        <select id="sem-select" value=""  name="year" placeholder="year" class="year">
-	  <option value="My" style="color:#ccc">Sem</option>
-	  <option value= "odd">ODD</option>
-	  <option value="even">EVEN</option>
-	  </select>
-      </div>
-	  
-	   <div class="col-xs-2">
-        <input type="text" id="prof-select" value=""  name="year" placeholder="Professor" class="year">
-	 
-      </div>
-	  </div>
-	  <br><br>
-	  <div class="modal-footer">
-	   <div class="col-xs-6 col-xs-offset-2">
-		<div class="row">
-        <button type="button" class="btn btn-file course-button">Add Course</button>
-	    </div>
-	  </div>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
 
 
 
@@ -440,20 +354,15 @@ data={};
       <div class="modal-body">
 	  <div class="row">
 	   <div class="col-xs-3 col-xs-offset-2 ">
-        <select id="select1" value=""  name="year" placeholder="year" class="year">
+        <select id="course" value=""  name="year" placeholder="year" style="width:310px;"class="year form-control">
 	  <option value="My" style="color:#ccc">My Courses</option>
-	  <option value= "CHEMISTRY-101">CHEMISTRY-101</option>
-	  <option value="PHYSICS-101">PHYSICS-101</option>
-	  <option value="ALGORITHIMS-101">ALGORITHIMS-101</option>
-	  <option value="DATA STRUCTURES">DATA STRUCTURES</option>
 	  </select>
       </div>
 	  </div>
 	  <br>
-        <button type="button" class="btn btn-file continue" style="background-color:#37BC61;border-color:#37BC61;margin-left: 82px;width:310px;color:white;">Upload
-		<input type="file" multiple/></button>
+       <a href="/upload" id="upload"><button type="button" class="btn btn-file continue" style="background-color:#37BC61;border-color:#37BC61;margin-left: 82px;width:310px;color:white;">Continue</button></a>
 	  <br><br>
-	  <a href="#courses" class="course" data-toggle="modal" data-target="#courses" data-dismiss="modal"> Add a new course</a>
+	  <a href="/add_course" class="course"> Add a new course</a>
       </div>
     </div>
   </div>
