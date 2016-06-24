@@ -220,9 +220,9 @@ $("#dtBox").DateTimePicker();
 		$('#done').on('click',function(){
 		
 		
-		pId="ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgMDhigkM";
+		//pId="ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgMDhigkM";
 		
-		 alert(cId);
+		// alert(cId);
 		var courseName=$('#course-name').val();
 		 var courseCode=$('#course-code').val();
 		 var proff=$('#proff').val();
@@ -259,9 +259,9 @@ $("#dtBox").DateTimePicker();
 				  url: 'https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/addCourse',
 				  data: JSON.stringify(data),
 				  success: function (data) {
-				  console.log(data);
-				  //(data.key);
-				  window.location="/course?id="+data.key;
+				  console.log(data.key);
+				  
+				 window.location="/course?id="+data.key+"-notes#view1";
 					}
 				});
 		/* 

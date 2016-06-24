@@ -3,9 +3,9 @@
 
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-      <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
-  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+      <script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />
     <script src="/static/js/sidebar.js"></script>
     <script src="/static/js/cookie-js.js"></script>
@@ -146,6 +146,7 @@ $(document).ready(function(){
   },
   success: function (data) {
       console.log(data);
+	  if(data.photoUrl!="undefined")
       $('img[src="profile.png"]').attr('src', data.photoUrl);
      //$("#image").src()
       // alert(data.subscribedCourseList[i].points);
@@ -426,7 +427,7 @@ $(document).ready(function(){
 					<br>
 					<div id="course-name" style="font-size:25px;"> PROFILE</div>
 					<br>
-					<div><img src="profile.png" class="img-circle" width="40%" height="40%"> </div>
+					<div><img src="/static/style/profile.png" class="img-circle" width="40%" height="40%"> </div>
 				</div>
 				<div class="col-xs-4">
 				<br><br><br><br>
