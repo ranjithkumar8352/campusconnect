@@ -371,7 +371,16 @@ data={"profileId":pId,
         $("#student-no").text(data.studentCount);
         $("#student-no").text(data.studentCount);
 		$("#course-name").text(data.courseName);
-		
+		 if(data.isSubscribed==0)
+	  	{
+		$("#subscribe").css('background-color','#ccc');
+		$("#subscribe-text").text('SUBSCRIBE');
+		}
+	  else
+	  	{
+		$("#subscribe").css('background-color','#f7971d');
+		$("#subscribe-text").text('SUBSCRIBED');
+		}
         for(i=0;i<data.date.length;i++)
         {
             if(data.date[i]==1)
@@ -405,7 +414,7 @@ data={"profileId":pId,
       
 	$('#layout1').layout({
 		itemMargin: 10,
-		itemPadding: 10
+		itemPadding: 0
 			});  
     
     
@@ -426,8 +435,8 @@ try{
     {
       for(i=0;i<data.noteBookList.length;i++)
       {
-          var card=['<div class="ui card bottom" id="'+data.noteBookList[i].noteBookId+'" style="background-color:white;border:1px solid\ #ccc;height:200px;color:black;width:440px;cursor:pointer" >\
-        <div class="row" >\
+          var card=['<div class="ui card bottom" id="'+data.noteBookList[i].noteBookId+'" style="background-color:white;border:1px solid\ #ccc;height:200px;color:black;width:340px;cursor:pointer" >\
+        <div class="row" style="padding:10px;">\
         <div class="col-xs-8">\
         <div class="course-name"  style="font-size:15px;"> &nbsp '+data.noteBookList[i].courseName+'</div>\
         <div class="author-name"  style="font-size:10px;"> &nbsp;  &nbsp;By '+data.noteBookList[i].uploaderName+'</div>\
@@ -437,7 +446,7 @@ try{
         <div id="date1">'+data.noteBookList[i].lastUpdated+'</div></center>\
         </div>\
         </div>\
-        <div class="row" style="margin-left:-6px;margin-top:95px;">\
+        <div class="row" style="margin-left:0px;margin-top:107px;background-color:#ccc;">\
         <div class="col-xs-4">\
         <div><i class="fa fa-eye" aria-hidden="true"></i> '+data.noteBookList[i].views+'</div>\
         </div>\
@@ -476,7 +485,7 @@ function ajaxAssignments()
 {
     $('#layout2').layout({
 			itemMargin: 10,
-			itemPadding: 10
+			itemPadding: 0
 							});
  data={
         
@@ -499,8 +508,8 @@ function ajaxAssignments()
         for(i=0;i<data.assList.length;i++)
           {
                   
-         var ass=['<div class="ui card bottom " id="'+data.assList[i].assignmentId+'" style="cursor:pointer;background-color:white;border:1px solid\ #ccc;height:200px;color:black;width:440px;" >\
-        <div class="row" >\
+         var ass=['<div class="ui card bottom " id="'+data.assList[i].assignmentId+'" style="cursor:pointer;background-color:white;border:1px solid\ #ccc;height:200px;color:black;width:340px;" >\
+        <div class="row" style="padding:10px;">\
         <div class="col-xs-8">\
         <div class="course-name"  style="font-size:15px;"> &nbsp '+data.assList[i].assignmentTitle+'</div>\
         <div class="author-name"  style="font-size:10px;"> &nbsp;  &nbsp;By '+data.assList[i].uploaderName+'</div>\
@@ -510,13 +519,13 @@ function ajaxAssignments()
         <div id="date1">'+data.assList[i].lastUpdated+'</div></center>\
         </div>\
         </div>\
-        <div class="row" style="margin-left:-6px;">\
+        <div class="row" style="margin-left:-6px;padding:10px;">\
         <div class="col-xs-12">\
         <br>\
         <div class="desc"  style="font-size:10px;">'+data.assList[i].assignmentDesc+' </div>\
         </div>\
         </div>\
-        <div class="row" style="margin-left:-6px;margin-top:35px;">\
+        <div class="row" style="margin-left:0px;margin-top:50px;background-color:#ccc;">\
         <div class="col-xs-4">\
         <div><i class="fa fa-eye" aria-hidden="true"></i> '+data.assList[i].views+'</div>\
         </div>\
@@ -544,7 +553,7 @@ function ajaxExam()
 {
     $('#layout3').layout({
 			itemMargin: 10,
-			itemPadding: 10
+			itemPadding: 0
 			} );
     
       data={
@@ -567,8 +576,8 @@ function ajaxExam()
         for(i=0;i<data.examList.length;i++)
           {
                   
-         var ass=['<div class="ui card bottom " id="'+data.examList[i].examId+'" style="cursor:pointer;background-color:white;border:1px solid\ #ccc;height:200px;color:black;width:440px;" >\
-        <div class="row" >\
+         var ass=['<div class="ui card bottom " id="'+data.examList[i].examId+'" style="cursor:pointer;background-color:white;border:1px solid\ #ccc;height:200px;color:black;width:340px;" >\
+        <div class="row" style="padding:10px;" >\
         <div class="col-xs-8">\
         <div class="course-name"  style="font-size:15px;"> &nbsp '+data.examList[i].examTitle+'</div>\
         <div class="author-name"  style="font-size:10px;"> &nbsp;  &nbsp;By '+data.examList[i].uploaderName+'</div>\
@@ -578,13 +587,13 @@ function ajaxExam()
         <div id="date1">'+data.examList[i].lastUpdated+'</div></center>\
         </div>\
         </div>\
-        <div class="row" style="margin-left:-6px;">\
+        <div class="row" style="margin-left:0px;paddin:10px;">\
         <div class="col-xs-12">\
         <br>\
         <div class="desc"  style="font-size:10px;">'+data.examList[i].examDesc+' </div>\
         </div>\
         </div>\
-        <div class="row" style="margin-left:-6px;margin-top:35px;">\
+        <div class="row" style="margin-top:70px;background-color:#ccc;margin-left:0px">\
         <div class="col-xs-4">\
         <div><i class="fa fa-eye" aria-hidden="true"></i> '+data.examList[i].views+'</div>\
         </div>\
@@ -614,7 +623,7 @@ function ajaxExam()
   $('#tab1').on('click',function(){
 	$('#layout1').layout({
 		itemMargin: 10,
-		itemPadding: 10
+		itemPadding: 0
 			});
       if(notesPressed==0)
         {
@@ -640,7 +649,7 @@ function ajaxExam()
      $('#tab2').on('click',function(){
 		$('#layout2').layout({
 			itemMargin: 10,
-			itemPadding: 10
+			itemPadding: 0
 							});
     if(assPressed==0)   
       {
@@ -668,7 +677,7 @@ function ajaxExam()
    $('#tab3').on('click',function(){
 		$('#layout3').layout({
 			itemMargin: 10,
-			itemPadding: 10
+			itemPadding: 0
 			} );
 		  if(examPressed==0)   
             {
@@ -688,7 +697,64 @@ function ajaxExam()
                 });
           }    
             }
-                                    });
+		//subscribe
+			
+		
+		
+			   
+		});
+
+		//subscribe
+		$("#subscribe").on('click',function(){
+		//console.log(cId[1],pId)
+		ID=[];
+		if(this.style.backgroundColor == "rgb(247, 151, 29)") {
+			   //ID.pop(this.id);
+			   this.style.backgroundColor="#ccc";
+			   $('#subscribe-text').text('SUBSCRIBE');
+			   }
+			   else
+			   {
+			  // ID.push(this.id);
+			   this.style.backgroundColor="#f7971d";
+			   $('#subscribe-text').text('SUBSCRIBED');
+			   }
+		
+			
+			 /*
+			 
+			  data={
+           "profileId":pId,
+           "noteBookId" :url[1]
+            } 
+			 
+			 $.ajax({
+				  type:'POST',
+				  dataType: 'json',
+				  contentType: 'application/json',
+				  url: "https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/rateThis",
+				  data: JSON.stringify(data),
+				  success: function (data) {
+					  console.log(data);
+			   if(this.style.backgroundColor == "rgb(247, 151, 29)") {
+			   //ID.pop(this.id);
+			   this.style.backgroundColor="#ccc";
+			   $('#bookmark-text').text('BOOKMARK');
+			   }
+			   else
+			   {
+			  // ID.push(this.id);
+			   this.style.backgroundColor="#f7971d";
+			   $('#bookmark-text').text('BOOKMARKED');
+			   }
+			}
+		});*/
+		});
+		
+		
+
+
+							
  
    /* $('window').on('scroll', function() {
         if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
@@ -810,7 +876,10 @@ function ajaxExam()
 			<div id="prof" style="margin-left:0px;">By Prof .XYZ</div>
 			<br>
 			<div id="calendar" style="font-size:10px;margin-left:0px;"><i class="fa fa-calendar" aria-hidden="true" style="font-size:30px;"></i><span style="font-size:20px; color:#ccc;" id="sun"> S</span><span style="font-size:20px;color:#ccc;" id="mon"> M</span><span style="font-size:20px;color:#ccc;" id="tue"> T</span><span style="font-size:20px;color:#ccc;" id="wed"> W</span><span style="font-size:20px;color:#ccc;" id="thu"> T</span><span style="font-size:20px;color:#ccc;" id="fri"> F</span><span style="font-size:20px;color:#ccc;" id="sat"> S</span></div>
-            <div class="visible-xs"><br><button id="students1" >Students<div id="student-no-1">0</div></button></div>  
+            <br>
+			<div id="subscribe" class="btn btn-default" style="background-color:#ccc;color:white;"><span id="subscribe-text">SUBSCRIBE</span></i></div>
+                
+			<div class="visible-xs"><br><button id="students1" >Students<div id="student-no-1">0</div></button></div>  
               </div>
 			<div class="col-xs-3 hidden-xs" >
 			<br>
@@ -822,7 +891,7 @@ function ajaxExam()
 				<div id="college-branch" style=""><center>Branch</center></div>
 				<br>
 				
-				<center><button id="students" >Students<div id="student-no">0</div></button></center>
+				<center><span id="students" >Students<div id="student-no">0</div></span></center>
 				
 			</div>
 				</div>
@@ -846,7 +915,7 @@ function ajaxExam()
 			<input type="radio" name="tabs" id="tab2">
 			<div class="tab-label-content" id="tab2-content">
 			  <label for="tab2" id="view2" >ASSIGNMENTS</label>
-			  <div class="tab-content">
+			  <div class="tab-content" style="margin-top:-30px;width:100%">
 						<div id="layout2" >
    
 						</div>
@@ -856,7 +925,7 @@ function ajaxExam()
 			<input type="radio" name="tabs" id="tab3">
 			<div class="tab-label-content" id="tab3-content">
 			  <label for="tab3" id="view3">EXAMS</label>
-			  <div class="tab-content">
+			  <div class="tab-content" style="margin-top:-30px;width:100%">
 						<div id="layout3" >
    
 						</div>

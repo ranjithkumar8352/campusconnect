@@ -137,7 +137,7 @@ data={
 ID=[];
 $('#layout').layout({
  itemMargin: 20,
- itemPadding: 20
+ itemPadding: 0
  }
  );
     
@@ -169,8 +169,8 @@ $('#layout').layout({
 		{
 		section+=data.courseList[i].sectionNames[j];
 		}    
-               var card=['<div class="ui card bottom " style="background-color:white;border:1px solid #ccc;height:160px;;color:black;width:440px;" id = "card">\
-				<div class="row" >\
+               var card=['<div class="ui card bottom " style="background-color:white;padding:0px;border:1px solid #ccc;height:160px;;color:black;width:440px;" id = "card">\
+				<div class="row" style="padding:20px;" >\
 				<div class="col-xs-6">\
                 <div class="course-name"  style="font-size:20px;"> '+data.courseList[i].courseName+'</div>\
 				<br>\
@@ -183,8 +183,8 @@ $('#layout').layout({
 				<center><div class="">'+section+'</div></center>\
                 </div>\
 				</div>\
-				<div class="btn-group" data-toggle="buttons">\
-				<label  id="'+data.courseList[i].courseId+'" class="btn " style="width:414px;height:30px;margin-top:20px;background-color:#ccc;margin-left:-20px;";border-color:#ccc;>\
+				<div  data-toggle="buttons">\
+				<label  id="'+data.courseList[i].courseId+'" class="btn btn-block" style="height:30px;background-color:#ccc;border-color:#ccc;border-radius:0px;">\
 				<input type="checkbox" autocomplete="off" > Subscribe\
 				</label>\
                 </div>\

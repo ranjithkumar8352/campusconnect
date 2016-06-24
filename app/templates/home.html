@@ -297,14 +297,21 @@ course=[];
            $('<option value= "'+data.subscribedCourseList[i].courseId+'">'+data.subscribedCourseList[i].courseName+'</option>').appendTo("#course");
               
              s="/course";
-                var card=['<div class="ui card bottom " style="background-color:white;border:1px solid #ccc;height:160px;;color:black;width:440px;" id = "card">\<div class="row" >\
-                <div class="course-name" id="'+data.subscribedCourseList[i].courseId+'" style="cursor:pointer;font-size:20px;"> &nbsp\ <u>'+data.subscribedCourseList[i].courseName+'</u></div>\
+                var card=['<div class="ui card bottom " style="background-color:white;border:1px solid #ccc;height:160px;;color:black;width:340px;" id = "card">\
+				<div class="row" >\
+				<div class="col-xs-8">\
+                <div class="course-name" id="'+data.subscribedCourseList[i].courseId+'" style="margin-left:-10px;cursor:pointer;font-size:20px;"> &nbsp\ <u>'+data.subscribedCourseList[i].courseName+'</u></div>\
                 </div>\
-                <div class="row" style="margin-top:20px;">\
+				<div clas="col-xs-4">\
+				<div id="calendar" style="font-size:15px;"><i class="fa fa-calendar" aria-hidden="true" style="font-size:15px;"></i><span style="font-size:15px;color:#ccc;" id="mon'+i+'"> M</span><span style="font-size:15px;color:#ccc;" id="tue'+i+'"> T</span><span style="font-size:15px;color:#ccc;" id="wed'+i+'"> W</span><span style="font-size:15px;color:#ccc;" id="thu'+i+'"> T</span><span style="font-size:15px;color:#ccc;" id="fri'+i+'"> F</span><span style="font-size:15px;color:#ccc;" id="sat'+i+'"> S</span></div>\
+				</div>\
+				</div>\
+				<br>\
+                <div class="row" style="margin-top:15px;">\
                 <div class="col-xs-3 notes"  id="'+data.subscribedCourseList[i].courseId+'-notes" style="cursor:pointer;padding-right:0px;border-right:1px solid #ccc">\
                 <div style="">NOTES</div>\
                 <br>\
-                <div class="notes-no" style="margin-left:20px;">+ '+data.subscribedCourseList[i].recentNotes+'</div>\
+                <div class="notes-no" style="margin-left:15px;">+ '+data.subscribedCourseList[i].recentNotes+'</div>\
                 </div>\
                 <div class="col-xs-5 col-xs-offset-1 ass"  id="'+data.subscribedCourseList[i].courseId+'-assignments" style="cursor:pointer;padding:0px;border-right:1px solid #ccc"">\
                 <div>  ASSIGNMENTS</div>\
@@ -342,6 +349,31 @@ course=[];
                  // id=document.getElementById(e.id).cid;
                 window.location="/course?id="+this.id+"#view3";
                 });
+				
+				for(j=0;j<data.subscribedCourseList[i].date.length;j++)
+					{
+						if(data.subscribedCourseList[i].date[j]==1)
+						{
+						 $("#mon"+i).css('color','black');
+						}
+					
+						if(data.subscribedCourseList[i].date[j]==2)
+						 $("#tue"+i).css('color','black');
+						
+						if(data.subscribedCourseList[i].date[j]==3)
+						 $("#wed"+i).css('color','black');
+						
+						if(data.subscribedCourseList[i].date[j]==4)
+						 $("#thu"+i).css('color','black');
+						
+						if(data.subscribedCourseList[i].date[j]==5)
+						 $("#fri"+i).css('color','black');
+						
+						if(data.subscribedCourseList[i].date[j]==6)
+						 $("#sat"+i).css('color','black');
+					}
+				
+				
           }
   }
 });
@@ -397,7 +429,7 @@ course=[];
      
       <form class="navbar-form navbar-left hidden-xs" role="search">
         <div class="form-group">
-			<button type="submit" class="btn btn-default sub " ><span class="glyphicon glyphicon-search" style="width:10px;"></button>
+			<button type="submit" class="btn btn-default sub " ><span class="glyphicon glyphicon-search" style="width:15px;"></button>
           <input type="text" class="form-control search hidden-sm"  id="search" style="width:700px;" >
 		  <input type="text" class="form-control search hidden-lg"  id="search" style="width:300px;" >
        <div style="background-color:#5cb85c;color:white;" class="btn btn-default btn-success  center"  data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span>Upload</div>
@@ -514,13 +546,13 @@ course=[];
       <div class="modal-body">
 	  <div class="row">
 	   <div class="col-xs-3 col-xs-offset-2 ">
-        <select id="course" value=""  name="year" placeholder="year" style="width:310px;"class="year form-control">
+        <select id="course" value=""  name="year" placeholder="year" style="width:315px;"class="year form-control">
 	  <option value="My" style="color:#ccc">My Courses</option>
 	  </select>
       </div>
 	  </div>
 	  <br>
-       <a href="/upload" id="upload"><button type="button" class="btn btn-file continue" style="background-color:#37BC61;border-color:#37BC61;margin-left: 82px;width:310px;color:white;">Continue</button></a>
+       <a href="/upload" id="upload"><button type="button" class="btn btn-file continue" style="background-color:#37BC61;border-color:#37BC61;margin-left: 82px;width:315px;color:white;">Continue</button></a>
 	  <br><br>
 	  <a href="/add_course" class="course"> Add a new course</a>
       </div>
