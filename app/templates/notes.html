@@ -37,6 +37,9 @@
 <!--incr or decr text-->
 <script type="text/javascript" src="/static/js/jquery.shorten.js"></script>
 <!--incr or decr text-->
+
+<link href="/static/style/toastr.min.css" rel="stylesheet"/>
+	<script src="/static/js/toastr.min.js"></script>
   </head>
 <style>
 
@@ -195,6 +198,16 @@ $(document).ready(function(){
 	  $("#course-name").text(data.courseName);
       $("#date-mod").text(data.lastUpdated);
       $("#prof").text("By "+data.uploaderName);
+	  if(data.bookmarkStatus==0)
+	  	{
+		$("#bookmark").css('background-color','#ccc');
+		$("#bookmark-text").text('BOOKMARK');
+		}
+	  else
+	  	{
+		$("#bookmark").css('background-color','#f7971d');
+		$("#bookmark-text").text('BOOKMARKED');
+		}
       //alert(data.rated);
       //$(".rating").val(data.rated);
       $('#rating-input').rating({
@@ -216,7 +229,7 @@ $(document).ready(function(){
                     for(j=0;j<images[i].urlList.length;j++)
                     {
 					console.log(images[i].urlList[j]);
-                        $('<div class="item"><center><a href="'+images[i].urlList[j]+'"><img id="img-'+index+'" src="'+images[i].urlList[j]+'" alt="'+s+'" descp="'+images[i].description+'"></a></center></div>').appendTo('.carousel-inner');
+                        $('<div class="item"><center><a href="'+images[i].urlList[j]+'"><img id="img-'+index+'" src="'+images[i].urlList[j]+'" alt="'+s+'" descp="'+images[i].description+'" width=50% height=50%;"></a></center></div>').appendTo('.carousel-inner');
                     index++;
                     }
                    }
@@ -421,7 +434,7 @@ function image1(images)
      index=0;
       for(i=0;i<images.length;i++)
                     {//console.log(images[i].urlList[j]);
-                        $('<div class="item"><center><a href="'+images[i]+'"><img id="img-'+index+'" src="'+images[i]+'" ></a></center></div>').appendTo('.carousel-inner');
+                        $('<div class="item"><center><a href="'+images[i]+'"><img id="img-'+index+'" src="'+images[i]+'" width=50% height=50%></a></center></div>').appendTo('.carousel-inner');
                     index++;
                     }
                    
@@ -474,8 +487,84 @@ function image1(images)
             
             
             var i=0;
-    
-        
+		//rating event
+		 $('#rating-input').on('rating.change', function(event, value, caption) {
+			console.log(value);
+			
+							var value1 = Math.floor(value);
+				data={
+						   "profileId":pId,
+						   "rating":value1,
+						   "noteBookId" :url[1]
+							} ;			 
+			
+			 $.ajax({
+				  type:'POST',
+				  dataType: 'json',
+				  contentType: 'application/json',
+				  url: "https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/rateThis",
+				  data: JSON.stringify(data),
+				  success: function (data) {
+					  console.log(data);
+						
+						toastr.options = {
+				  "closeButton": true,
+				  "debug": false,
+				  "newestOnTop": false,
+				  "progressBar": false,
+				  "positionClass": "toast-top-right",
+				  "preventDuplicates": true,
+				  "onclick": null,
+				  "showDuration": "5",
+				  "hideDuration": "1000",
+				  "timeOut": "1600",
+				  "extendedTimeOut": "1000",
+				  "showEasing": "swing",
+				  "hideEasing": "linear",
+				  "showMethod": "fadeIn",
+				  "hideMethod": "fadeOut"
+				}
+				//toastr.success('Your Product has been added to cart');
+				Command: toastr["success"]("<center>  Thanx for Rating!</center>");
+					  
+							}
+					  
+					  });
+        });
+		
+		//bookmark stuff
+		$("#bookmark").on('click',function(){
+		console.log(cId[1],pId)
+		ID=[];
+			 data={
+           "profileId":pId,
+           "noteBookId" :url[1]
+            } 
+			 $.ajax({
+				  type:'POST',
+				  dataType: 'json',
+				  contentType: 'application/json',
+				  url: "https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/rateThis",
+				  data: JSON.stringify(data),
+				  success: function (data) {
+					  console.log(data);
+			   if(this.style.backgroundColor == "rgb(247, 151, 29)") {
+			   //ID.pop(this.id);
+			   this.style.backgroundColor="#ccc";
+			   $('#bookmark-text').text('BOOKMARK');
+			   }
+			   else
+			   {
+			  // ID.push(this.id);
+			   this.style.backgroundColor="#f7971d";
+			   $('#bookmark-text').text('BOOKMARKED');
+			   }
+			}
+		});
+		
+		
+		});
+		
         });
         
         
@@ -587,7 +676,7 @@ function image1(images)
 				
 				</div>	
             <div class="col-md-2 hidden-xs" style="padding:0px;">
-                <button><i class="glyphicon glyphicon-bookmark"> Bookmarks</i></button>
+                <div id="bookmark" class="btn btn-default" style="background-color:#ccc;"><i class="glyphicon glyphicon-bookmark"><span id="bookmark-text">BOOKMARKS</span></i></div>
                 </div>
             </div>
               </div>  
