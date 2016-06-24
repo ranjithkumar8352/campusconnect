@@ -31,6 +31,146 @@
 
   </head>
 <style>
+h1 {
+  font-size: 26px;
+  background: #00bcd4;
+  color: white;
+  padding: 40px 0 100px 20%;
+  margin-bottom: 50px;
+}
+
+label, p, a, h1, div {
+  font-family: Roboto, sans-serif;
+}
+
+.tab-wrap {
+  width: 100%;
+  position: relative;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  
+}
+
+input[type="radio"][name="tabs"] {
+  position: absolute;
+  z-index: -1;
+}
+input[type="radio"][name="tabs"]:checked + .tab-label-content label {
+  color: orange;
+  background-color:white;
+}
+input[type="radio"][name="tabs"]:checked + .tab-label-content .tab-content {
+  display: block;
+}
+input[type="radio"][name="tabs"]:nth-of-type(1):checked ~ .slide {
+  left: calc((100% / 2) * 0);
+}
+input[type="radio"][name="tabs"]:nth-of-type(2):checked ~ .slide {
+  left: calc((100% / 2) * 1);
+}
+input[type="radio"][name="tabs"]:nth-of-type(3):checked ~ .slide {
+  left: calc((100% / 2) * 2);
+}
+input[type="radio"][name="tabs"]:nth-of-type(4):checked ~ .slide {
+  left: calc((100% / 2) * 3);
+}
+input[type="radio"][name="tabs"]:first-of-type:checked ~ .slide {
+  left: 0;
+}
+
+label {
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.8);
+  background-color: #f7971d;
+  box-sizing: border-box;
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  text-align: center;
+  height: 56px;
+  -webkit-transition: color 0.2s ease;
+  transition: color 0.2s ease;
+  width: 100%;
+}
+
+.slide {
+  background: #f7971d;
+  width: calc(100% / 2);
+  height: 4px;
+  position: absolute;
+  left: 0;
+  top: calc(100% - 4px);
+  -webkit-transition: left 0.3s ease-out;
+  transition: left 0.3s ease-out;
+}
+
+.tab-label-content {
+  width: 100%;
+}
+.tab-label-content .tab-content {
+  position: absolute;
+  top: 100px;
+  left: 16px;
+  line-height: 130%;
+  display: none;
+}
+
+@media screen and (max-width: 800px) {
+  h1 {
+    padding: 40px 0 90px 10%;
+  }
+
+  .tab-wrap {
+    width: 80%;
+    margin-left: 10%;
+    
+  }
+}
+.follow {
+  width: 42px;
+  height: 42px;
+  border-radius: 50px;
+  background: #03A9F4;
+  display: block;
+  margin: 300px auto 0;
+  white-space: nowrap;
+  padding: 13px;
+  box-sizing: border-box;
+  color: white;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+  font-family: Roboto, sans-serif;
+  text-decoration: none;
+  box-shadow: 0 5px 6px 0 rgba(0, 0, 0, 0.2);
+}
+.follow i {
+  margin-right: 20px;
+  -webkit-transition: margin-right 0.2s ease;
+  transition: margin-right 0.2s ease;
+}
+.follow:hover {
+  width: 134px;
+}
+.follow:hover i {
+  margin-right: 10px;
+}
+
+@media screen and (max-width: 800px) {
+  .follow {
+    margin: 400px auto 0;
+  }
+}
 
 .img-circle {
     border-radius: 50%;
@@ -118,7 +258,7 @@ $(document).ready(function(){
 data={};
 course=[];
     
-     var append=['<div class="ui card bottom" style="background-color:white;border:1px solid #ccc;height:220px;margin-bottom:1px;margin-color:#ccc;width:400px;" id = "card"><center><button id="b1"> +CLICK ME</buton></canter></div>'];
+     var append=['<div class="ui card bottom" style="background-color:white;border:1px solid #ccc;height:200px;margin-bottom:1px;margin-color:#ccc;width:300px;" id = "card"><center><button id="b1"> +CLICK ME</buton></canter></div>'];
  //var append=['<div class="ui card bottom" style="background-color:white;border:1px solid #ccc;height:220px;margin-bottom:1px;margin-color:#ccc;width:400px;" id = "card">ssssdcsd</div>'];
 
 			
@@ -157,7 +297,7 @@ course=[];
            $('<option value= "'+data.subscribedCourseList[i].courseId+'">'+data.subscribedCourseList[i].courseName+'</option>').appendTo("#course");
               
              s="/course";
-                var card=['<div class="ui card bottom " style="background-color:white;border:1px solid #ccc;height:160px;;color:black;width:340px;" id = "card">\<div class="row" >\
+                var card=['<div class="ui card bottom " style="background-color:white;border:1px solid #ccc;height:160px;;color:black;width:440px;" id = "card">\<div class="row" >\
                 <div class="course-name" id="'+data.subscribedCourseList[i].courseId+'" style="cursor:pointer;font-size:20px;"> &nbsp\ <u>'+data.subscribedCourseList[i].courseName+'</u></div>\
                 </div>\
                 <div class="row" style="margin-top:20px;">\
@@ -317,24 +457,44 @@ course=[];
         </ul>
       </div>
       <div class="main col-xs-12 col-md-10 col-md-offset-2 ">
-        <div class="container1">
-            <ul class="rtabs" style="margin-left:30px;">
-                <li><a class="tabs1" href="#view1"><center><b>Courses</b></center></a></li>
-                <li><a class="tabs2" href="#view2" style="margin-left:-5px;"><center><b>Calendar</b></center></a></li>
-            </ul>
-            <div class="panel-container">
-                <div id="view1">
-                    <div id="layout" >
+		<div class="container1">
+		<div class="tab-wrap">
+		  
+			<input type="radio" name="tabs" id="tab1" checked>
+			<div class="tab-label-content" id="tab1-content">
+			  <label for="tab1">COURSES</label>
+			  <div class="tab-content" id="view1" style="margin-top:-30px;width:100%">
+						<div id="layout" >
    
+						</div>
+			  
+				</div>
+			</div>
+			 
+			<input type="radio" name="tabs" id="tab2">
+			<div class="tab-label-content" id="tab2-content">
+			  <label for="tab2" id="view2">CALENDAR</label>
+			  <div class="tab-content">
+						
 					</div>
-                </div>
-				 <div id="view2">
-                    <h2>Calendar to be done</h2>
-                </div>
-               
-            </div>
-            <br />
+			  </div>
+		  
+			
+		  <div class="slide"></div>
+		  </div>
+		</div>
+		
+		
+		 
+            
         </div>
+		
+		
+		
+		
+		
+	  
+    
     </div>
     </div>
      
