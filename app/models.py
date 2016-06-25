@@ -12,3 +12,7 @@ class User(models.Model):
     image_url = models.CharField(max_length=100, default="")
     email = models.CharField(max_length=30, default="")
     profileId = models.CharField(max_length=40, default="")
+    collegeId = models.CharField(max_length=40,default="")
+    batchName = models.CharField(max_length=10,default="")
+    branchName = models.CharField(max_length=20, default="")
+    sectionName = models.CharField(max_length=5, default="")

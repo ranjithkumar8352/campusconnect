@@ -39,6 +39,7 @@ urlpatterns = [
     url(r'^signout','app.views.sign_out'),
     url(r'^select_courses','app.views.select_courses'),
     url(r'^mobile_sign_in','app.views.mobile_sign_in'),
-    url(r'^mobile_sign_up','app.views.mobile_sign_up')
+    url(r'^mobile_sign_up','app.views.mobile_sign_up'),
+    url(r'^debugflush','app.views.debugflush')
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -233,6 +233,11 @@ def mobile_sign_up(request):
 		User.objects.create(gprofileId=gprofile_id,profileId=profile_id,firstname=firstname,lastname=lastname,email=email,image_url=image_url)
 		return HttpResponse("Success")
 
+@csrf_exempt
+def debugflush(request):
+	User.objects.all().delete()
+	return HttpResponse("Success")
+
 
 
 
