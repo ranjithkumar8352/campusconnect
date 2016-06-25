@@ -411,14 +411,9 @@ $(document).ready(function(){
       $("#prof").text("By "+data.uploaderName);
       //alert(data.rated);
       //$(".rating").val(data.rated);
-      $('#rating-input').rating({
-              min: 0,
-              max: 5,
-              step:0.5,
-              size: 'xs',
-             
-           });
-           $('#rating-input').rating('update', data.rated);
+      $('#rating-input').css('display','none');
+	  $('#rating-name').css('display','none');
+           //$('#rating-input').rating('update', data.rated);
       s='notes'
       images=data.urlList;
       //alert(images);
@@ -536,31 +531,42 @@ function image1(images)
 		$("#bookmark").on('click',function(){
 		console.log(cId[1],pId)
 		ID=[];
+		i=0;
 			 data={
            "profileId":pId,
            "noteBookId" :url[1]
             } 
+			ID=this.id;
+			color=this.style.backgroundColor;
 			 $.ajax({
 				  type:'POST',
 				  dataType: 'json',
 				  contentType: 'application/json',
-				  url: "https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/rateThis",
+				  url: "https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/bookmarkNoteBook",
 				  data: JSON.stringify(data),
 				  success: function (data) {
 					  console.log(data);
-			   if(this.style.backgroundColor == "rgb(247, 151, 29)") {
-			   //ID.pop(this.id);
-			   this.style.backgroundColor="#ccc";
-			   $('#bookmark-text').text('BOOKMARK');
-			   }
-			   else
-			   {
-			  // ID.push(this.id);
-			   this.style.backgroundColor="#f7971d";
-			   $('#bookmark-text').text('BOOKMARKED');
-			   }
+	
+							if( color== "rgb(247, 151, 29)") {
+						   //ID.pop(this.id);
+						   
+						   $("#"+ID).css("backgroundColor","#ccc");
+						   $('#bookmark-text').text('BOOKMARK');
+						   }
+						   else
+						   {
+						  // ID.push(this.id);
+						   $("#"+ID).css("backgroundColor","#f7971d");
+						   $('#bookmark-text').text('BOOKMARKED');
+						   }
+						
+					
+						
+						
 			}
-		});
+			});
+			
+		
 		
 		
 		});
@@ -727,7 +733,7 @@ function image1(images)
  <br>
   <div id="line" style="border-bottom:1px solid #ccc;"></div>
                  <br>
-  <div  style="font-size:20px;"><center>Ratings</center></div>
+  <div  style="font-size:20px;" id="rating-name"><center>Ratings</center></div>
 <div><center><input id="rating-input" type="number"></center></div>
   <div style="font-size:20px;color:grey"><center><i class="glyphicon glyphicon-eye-open"> &nbsp </i><span id="views" style="font-size:25px;font-weight: bold;text-align: center;">0</span></center></div>
 
@@ -767,13 +773,13 @@ function image1(images)
       <div class="modal-body">
 	  <div class="row">
 	   <div class="col-xs-3 col-xs-offset-2 ">
-        <select id="course" value=""  name="year" placeholder="year" style="width:310px;"class="year form-control">
+        <select  required id="course" value=""  name="year" placeholder="year" style="width:310px;"class="year form-control" >
 	  <option value="My" style="color:#ccc">My Courses</option>
 	  </select>
       </div>
 	  </div>
 	  <br>
-       <a href="/upload" id="upload"><button type="button" class="btn btn-file continue" style="background-color:#37BC61;border-color:#37BC61;margin-left: 82px;width:310px;color:white;">Continue</button></a>
+       <a href="/upload" id="upload"><button type="button" class="btn btn-file continue" style="background-color:#37BC61;border-color:#37BC61;margin-left: 82px;width:310px;color:white;" required>Continue</button></a>
 	  <br><br>
 	  <a href="/add_course" class="course"> Add a new course</a>
       </div>
