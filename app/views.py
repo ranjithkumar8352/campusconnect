@@ -214,7 +214,16 @@ def mobile_sign_in(request):
 		try:
 			user = User.objects.get(gprofileId=gprofileId)
 			if user.profileId!="":
-				return HttpResponse(user.profileId)
+				response = dict()
+				response["profileId"] = user.profileId
+				response["collegeId"] = user.collegeId
+				response["profileName"] = user.firstname +" "+user.lastname
+				response["batchName"] = user.batchName
+				response["sectionName"] = user.sectionName
+				response["branchName"] = user.branchName
+				response["email"] = user.email
+				response["photourl"] = user.image_url
+				return HttpResponse(json.dumps(response))
 			return HttpResponse("0")
 		except:
 			return HttpResponse("0")
@@ -227,10 +236,14 @@ def mobile_sign_up(request):
 		gprofile_id = data["gprofileId"]
 		profile_id = data["profileId"]
 		profileName = data["profileName"]
+		batchName = data["batchName"]
+		branchName = data["branchName"]
+		sectionName = data["sectionName"]
+		collegeId = data["collegeId"]
 		firstname,lastname = profileName.split(" ")[0],profileName.split(" ")[1]
 		email = data["email"]
 		image_url = data["imageUrl"]
-		User.objects.create(gprofileId=gprofile_id,profileId=profile_id,firstname=firstname,lastname=lastname,email=email,image_url=image_url)
+		User.objects.create(gprofileId=gprofile_id,profileId=profile_id,batchName=batchName,branchName=branchName,sectionName=sectionName,collegeId=collegeId firstname=firstname,lastname=lastname,email=email,image_url=image_url)
 		return HttpResponse("Success")
 
 @csrf_exempt
