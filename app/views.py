@@ -252,6 +252,10 @@ def debugflush(request):
 	for user in User.objects.all():
 		delete_api.delete_profile(user,request)
 	return HttpResponse("Success")
+@csrf_exempt
+def debugclear(request):
+	delete_api.clear_all()
+	return HttpResponse("Success")
 
 
 
