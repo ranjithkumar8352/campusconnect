@@ -9,6 +9,13 @@
 	<link href="/static/style/styles.css" type="text/css" rel="stylesheet" />
 	
 	<link href="/static/style/photoswipe.css" type="text/css" rel="stylesheet" />
+	<!---Google stuff-->
+<script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
+    <meta name="google-signin-client_id" content="22051677189-1f55k773ct0qnlb5dkr83surcfk6565t.apps.googleusercontent.com">
+	  <script src="https://apis.google.com/js/api:client.js"></script>
+ 
+	<!--Google stuff-->
+	
 	
 	<script type="text/javascript" src="/static/js/klass.min.js"></script>
 	<script type="text/javascript" src="/static/js/code.photoswipe-2.1.6.min.js"></script>
@@ -149,6 +156,22 @@ display:none !important;
     
     </style>
     <script>
+	onLoad();
+function SignOut() {
+ //auth2.disconnect();
+ var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+	    window.location="/signout"
+    });
+   
+  }
+  
+  function onLoad() {
+      gapi.load('auth2', function() {
+        gapi.auth2.init();
+      });
+    }
         var descp=[];
     images=[];
         
@@ -628,7 +651,7 @@ function image1(images)
             <li><a href="#">Another action</a></li>
             <li><a href="#">Something else here</a></li>
             <li role="separator" class="divider"></li>
-            <li  ><div class ="g-signin2" onclick="SignOut()"> &nbsp; Sign out</div></li>
+           <li><div  onclick="SignOut()" style="cursor:pointer"> &nbsp; &nbsp;  Sign out</div></li>
           </ul>
         </li>
           

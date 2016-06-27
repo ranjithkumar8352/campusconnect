@@ -126,6 +126,22 @@ border-radius:1px;
 }
 </style>
 <script>
+onLoad();
+function SignOut() {
+ //auth2.disconnect();
+ var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+	    window.location="/signout"
+    });
+   
+  }
+  
+  function onLoad() {
+      gapi.load('auth2', function() {
+        gapi.auth2.init();
+      });
+    }
 $(document).ready(function(){
 
 //pid="ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAwMjFzAsM";

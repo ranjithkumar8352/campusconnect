@@ -1,0 +1,111 @@
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+  <!---Google stuff-->
+<script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
+    <meta name="google-signin-client_id" content="22051677189-1f55k773ct0qnlb5dkr83surcfk6565t.apps.googleusercontent.com">
+	  <script src="https://apis.google.com/js/api:client.js"></script>
+   
+	<!--Google stuff-->
+  <link href="/static/style/bootstrap-social.css" rel="stylesheet" type="text/css">
+  <script src="https://apis.google.com/js/api:client.js"></script>
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+   <meta property="og:url" content="https://lipis.github.io/bootstrap-social/" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />
+    <meta property="og:image" content="https://lipis.github.io/bootstrap-social/assets/img/bootstrap-social.png" />
+   <script src="/static/js/cookie-js.js"></script>
+  <script>
+  var googleUser = {};
+  var startApp = function() {
+    gapi.load('auth2', function(){
+      // Retrieve the singleton for the GoogleAuth library and set up the client.
+      auth2 = gapi.auth2.init({
+        client_id: '22051677189-1f55k773ct0qnlb5dkr83surcfk6565t.apps.googleusercontent.com',
+        cookiepolicy: 'single_host_origin',
+        // Request scopes in addition to 'profile' and 'email'
+        //scope: 'additional_scope'
+      });
+      attachSignin(document.getElementById('customBtn'));
+    });
+  };
+
+  function attachSignin(element) {
+    console.log(element.id);
+    auth2.attachClickHandler(element, {},
+        function(googleUser) {
+          var profile = googleUser.getBasicProfile();
+	      Cookies.set("gid",profile.getId());
+         Cookies.set("firstname",profile.getGivenName());
+         Cookies.set("lastname",profile.getFamilyName());
+         Cookies.set("email",profile.getEmail());
+         Cookies.set("imageURL",profile.getImageUrl());
+		
+		 window.location="/start";
+        }, function(error) {
+          alert(JSON.stringify(error, undefined, 2));
+        });
+  }
+  </script>
+  <style type="text/css">
+  body{
+  background-image:url("/static/style/background.png");
+  overflow-y:hidden;
+  }
+  
+ 
+ html, body, .container-table {
+    height: 100%;
+}
+.container-table {
+    display: table;
+}
+.vertical-center-row {
+    display: table-cell;
+    vertical-align: middle;
+}
+.font1{
+color:#f7971d;
+font-size:16px;
+}
+.btn-social{
+width:50% !important;
+
+}
+#customBtn:hover{
+color:white !important;
+}
+  </style>
+  </head>
+  <body>
+  <!-- In the callback, you would hide the gSignInWrapper element on a
+  successful sign in -->
+   
+  <div class="container container-table">
+    <div class="row vertical-center-row">
+        <div class="text-center col-md-4 col-md-offset-4">
+		<div class="font1"><b>Are you ready for your greatest adventure?<b></div>
+		<br>
+		<div class="font1"><b>We just made it easier.<b>
+		
+		
+		</div>
+		
+		<br>
+		
+			<a  id="customBtn" class="btn  btn-social btn-google" >
+            <span class="fa fa-google"></span>&nbsp;  &nbsp; &nbsp; Sign in with Google
+          </a>
+		</div>
+    </div>
+</div>
+
+ 
+  <div id="name"></div>
+  <script>startApp();</script>
+</body>
+</html>
+
+<a href="#" onclick="signOut();">Sign out</a>

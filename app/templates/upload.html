@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html>
-
   <head>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <!---Google stuff-->
+<script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
+    <meta name="google-signin-client_id" content="22051677189-1f55k773ct0qnlb5dkr83surcfk6565t.apps.googleusercontent.com">
+	  <script src="https://apis.google.com/js/api:client.js"></script>
+
+	<!--Google stuff-->
       <script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
@@ -149,8 +154,25 @@ width:30%;
 .well{
 min-height:200px;
 }
+
 </style>
 <script>
+onLoad();
+function SignOut() {
+ //auth2.disconnect();
+ var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+	    window.location="/signout"
+    });
+   
+  }
+  
+  function onLoad() {
+      gapi.load('auth2', function() {
+        gapi.auth2.init();
+      });
+    }
 $(document).on('ready',function(){
 url1= $(location).attr('href'); 
 url=url1.split('=');
@@ -386,7 +408,7 @@ url=url1.split('=');
             <li><a href="#">Another action</a></li>
             <li><a href="#">Something else here</a></li>
             <li role="separator" class="divider"></li>
-            <li  ><div class ="g-signin2" onclick="SignOut()"> &nbsp; Sign out</div></li>
+              <li><div  onclick="SignOut()" style="cursor:pointer"> &nbsp; &nbsp;  Sign out</div></li>
           </ul>
         </li>
           

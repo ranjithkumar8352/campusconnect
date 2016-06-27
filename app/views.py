@@ -14,7 +14,7 @@ import app.sign_up_api as register_api
 
 @csrf_exempt
 def signin(request):
-	template = loader.get_template("signin.html")
+	template = loader.get_template("login1.html")
 	return HttpResponse(template.render())
 
 @csrf_exempt
@@ -160,7 +160,7 @@ def upload(request):
 def profile(request):
 	if "active" in request.session:
 		if request.session["active"]:
-			template = loader.get_template("profile.html")
+			template = loader.get_template("Profile.html")
 			return HttpResponse(template.render())
 		else:
 			return HttpResponseRedirect("/signin")
@@ -243,7 +243,7 @@ def mobile_sign_up(request):
 		firstname,lastname = profileName.split(" ")[0],profileName.split(" ")[1]
 		email = data["email"]
 		image_url = data["imageUrl"]
-		User.objects.create(gprofileId=gprofile_id,profileId=profile_id,batchName=batchName,branchName=branchName,sectionName=sectionName,collegeId=collegeId firstname=firstname,lastname=lastname,email=email,image_url=image_url)
+		User.objects.create(gprofileId=gprofile_id,profileId=profile_id,batchName=batchName,branchName=branchName,sectionName=sectionName,collegeId=collegeId,firstname=firstname,lastname=lastname,email=email,image_url=image_url)
 		return HttpResponse("Success")
 
 @csrf_exempt

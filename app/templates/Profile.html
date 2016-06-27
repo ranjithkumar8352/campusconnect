@@ -4,6 +4,13 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
       <script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+	  
+	  <!---Google stuff-->
+<script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
+    <meta name="google-signin-client_id" content="22051677189-1f55k773ct0qnlb5dkr83surcfk6565t.apps.googleusercontent.com">
+	  <script src="https://apis.google.com/js/api:client.js"></script>
+
+	<!--Google stuff-->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />
@@ -232,6 +239,22 @@ background-color:blue;
 }
 </style>
 <script>
+onLoad();
+function SignOut() {
+ //auth2.disconnect();
+ var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+	    window.location="/signout"
+    });
+   
+  }
+  
+  function onLoad() {
+      gapi.load('auth2', function() {
+        gapi.auth2.init();
+      });
+    }
 $(document).ready(function(){
   pId=Cookies.get("profileId");
     bList=[];
@@ -265,7 +288,11 @@ $(document).ready(function(){
      $('#pname').text(data.profileName);
       $('#profile-name').text(data.profileName);
       $('#profile-pts').text(data.points);
-     // $('#profile-rank').text("0");
+	   if(data.photoUrl!="undefined")
+	  {
+		$('img[src="/static/style/profile.png"]').attr('src', data.photoUrl);
+	  }
+	 // $('#profile-rank').text("0");
       //$('.filled-stars').val('4');
       // $('#input21-d').rating('update', 3);
           $('#rating-input').rating({
@@ -491,7 +518,7 @@ $(document).ready(function(){
             <li><a href="#">Another action</a></li>
             <li><a href="#">Something else here</a></li>
             <li role="separator" class="divider"></li>
-            <li  ><div class ="g-signin2" onclick="SignOut()"> &nbsp; Sign out</div></li>
+             <li><div  onclick="SignOut()" style="cursor:pointer"> &nbsp; &nbsp;  Sign out</div></li>
           </ul>
         </li>
           
@@ -532,7 +559,7 @@ $(document).ready(function(){
 	  <div class="row">
 		<div class="col-xs-12" style="padding-right:0px;">
 		
-		  <div class="ui card bottom " style="background-color:white;border:1px solid #ccc;margin-bottom:1px;margin-color:#ccc;color:black;height:230px;width:100%;" id = "card">
+		  <div class="ui card bottom " style="background-color:#434343;border:1px solid #ccc;margin-bottom:1px;margin-color:#ccc;color:white;height:230px;width:100%;" id = "card">
 			<div class="col-xs-8" >
 				<div class="col-xs-4">
 					<br>

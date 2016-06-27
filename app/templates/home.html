@@ -3,8 +3,10 @@
 
   <head>
     <meta name="google-signin-scope" content="profile email">
+	
     <meta name="google-signin-client_id" content="22051677189-1f55k773ct0qnlb5dkr83surcfk6565t.apps.googleusercontent.com">
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
+	 
+	<script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
     <script src="/static/js/cookie-js.js"></script>
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
       <script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
@@ -242,14 +244,22 @@ background-color:transparent;
 }
 </style>
 <script>
+onLoad();
 function SignOut() {
-    var auth2 = gapi.auth2.getAuthInstance();
+ //auth2.disconnect();
+ var auth2 = gapi.auth2.getAuthInstance();
     auth2.signOut().then(function () {
-
       console.log('User signed out.');
-      window.location="/signout"
+	    window.location="/signout"
     });
+   
   }
+  
+  function onLoad() {
+      gapi.load('auth2', function() {
+        gapi.auth2.init();
+      });
+    }
   function profile(){
       window.location="/profile"
   }
@@ -453,7 +463,7 @@ course=[];
             <li><a href="#">Another action</a></li>
             <li><a href="#">Something else here</a></li>
             <li role="separator" class="divider"></li>
-            <li  ><div class ="g-signin2" onclick="SignOut()"> &nbsp; Sign out</div></li>
+            <li><div  onclick="SignOut()" style="cursor:pointer"> &nbsp; &nbsp;  Sign out</div></li>
           </ul>
         </li>
           

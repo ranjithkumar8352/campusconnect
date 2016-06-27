@@ -114,6 +114,22 @@ background-color:transparent;
    }
 </style>
 <script>
+onLoad();
+function SignOut() {
+ //auth2.disconnect();
+ var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+	    window.location="/signout"
+    });
+   
+  }
+  
+  function onLoad() {
+      gapi.load('auth2', function() {
+        gapi.auth2.init();
+      });
+    }
 days=[];
    startTime=[];
    endTime=[]
@@ -339,7 +355,7 @@ $("#dtBox").DateTimePicker();
             <li><a href="#">Another action</a></li>
             <li><a href="#">Something else here</a></li>
             <li role="separator" class="divider"></li>
-            <li  ><div class ="g-signin2" onclick="SignOut()"> &nbsp; Sign out</div></li>
+              <li><div  onclick="SignOut()" style="cursor:pointer"> &nbsp; &nbsp;  Sign out</div></li>
           </ul>
         </li>
           

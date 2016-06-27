@@ -4,6 +4,11 @@
   <head>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
       <script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+	  <!--google stuff-->
+	    <meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id" content="22051677189-1f55k773ct0qnlb5dkr83surcfk6565t.apps.googleusercontent.com">
+	<script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
+	<!--google stuff-->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
    <script src="/static/js/cookie-js.js"></script>
@@ -280,6 +285,22 @@ background-color:blue;
 }
 </style>
 <script>
+onLoad();
+function SignOut() {
+ //auth2.disconnect();
+ var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+	    window.location="/signout"
+    });
+   
+  }
+  
+  function onLoad() {
+      gapi.load('auth2', function() {
+        gapi.auth2.init();
+      });
+    }
 $(document).ready(function(){
     pId = Cookies.get("profileId");
     var noteBookId=[];
@@ -707,20 +728,37 @@ function ajaxExam()
 		//subscribe
 		$("#subscribe").on('click',function(){
 		//console.log(cId[1],pId)
-		ID=[];
-		if(this.style.backgroundColor == "rgb(247, 151, 29)") {
-			   //ID.pop(this.id);
-			   this.style.backgroundColor="#ccc";
-			   $('#subscribe-text').text('SUBSCRIBE');
-			   }
-			   else
-			   {
-			  // ID.push(this.id);
-			   this.style.backgroundColor="#f7971d";
-			   $('#subscribe-text').text('SUBSCRIBED');
-			   }
+		ID=this.id;
+		color=this.style.backgroundColor;
+		data={
+		"profileId":pId,
+		"courseId":url[0]
+		};
+		$.ajax({
+				  type:'POST',
+				  dataType: 'json',
+				  contentType: 'application/json',
+				  url: "https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/unsubscribeCourse",
+				  data: JSON.stringify(data),
+				  success: function (data) {
+					  console.log(data);
 		
-			
+						if(color == "rgb(247, 151, 29)") {
+					   //ID.pop(this.id);
+					   $("#"+ID).css("backgroundColor","#ccc");
+					   $('#subscribe-text').text('SUBSCRIBE');
+					   }
+					   else
+					   {
+					  // ID.push(this.id);
+					  $("#"+ID).css("backgroundColor","#f7971d");
+					   $('#subscribe-text').text('SUBSCRIBED');
+					   }
+		
+							}
+							
+			});
+			});
 			 /*
 			 
 			  data={
@@ -749,7 +787,7 @@ function ajaxExam()
 			   }
 			}
 		});*/
-		});
+		
 		
 		
 
@@ -830,7 +868,7 @@ function ajaxExam()
             <li><a href="#">Another action</a></li>
             <li><a href="#">Something else here</a></li>
             <li role="separator" class="divider"></li>
-            <li  ><div class ="g-signin2" onclick="SignOut()"> &nbsp; Sign out</div></li>
+            <li  ><div  onclick="SignOut()"> &nbsp; Sign out</div></li>
           </ul>
         </li>
           
