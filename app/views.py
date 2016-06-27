@@ -9,6 +9,7 @@ import app.validate
 from app.models import User
 import json
 import app.sign_up_api as register_api
+import delete_api
 # Create your views here.
 
 
@@ -248,7 +249,8 @@ def mobile_sign_up(request):
 
 @csrf_exempt
 def debugflush(request):
-	User.objects.all().delete()
+	for user in User.objects.all():
+		delete_api.delete_profile(user,request)
 	return HttpResponse("Success")
 
 
