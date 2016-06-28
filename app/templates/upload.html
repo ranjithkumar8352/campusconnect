@@ -157,7 +157,8 @@ min-height:200px;
 
 </style>
 <script>
-onLoad();
+ 
+$(document).on('ready',function(){
 function SignOut() {
  //auth2.disconnect();
  var auth2 = gapi.auth2.getAuthInstance();
@@ -173,7 +174,8 @@ function SignOut() {
         gapi.auth2.init();
       });
     }
-$(document).on('ready',function(){
+
+
 url1= $(location).attr('href'); 
 url=url1.split('=');
 //alert(url[1]);
@@ -207,7 +209,10 @@ url=url1.split('=');
 					$('#pname').text(data.profileName);
 					$('#profile-name').text(data.profileName);
 					$('#profile-pts').text(data.points);
-					
+					  if(data.photoUrl!="undefined")
+					  {
+						$('img[src="/static/style/profile.png"]').attr('src', data.photoUrl);
+					  }
 	 for(i=0;i<data.subscribedCourseList.length;i++)
           {//420  
            $('<option value= "'+data.subscribedCourseList[i].courseId+'">'+data.subscribedCourseList[i].courseName+'</option>').appendTo("#course");}

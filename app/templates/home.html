@@ -244,7 +244,8 @@ background-color:transparent;
 }
 </style>
 <script>
-onLoad();
+
+$(document).ready(function(){
 function SignOut() {
  //auth2.disconnect();
  var auth2 = gapi.auth2.getAuthInstance();
@@ -260,10 +261,7 @@ function SignOut() {
         gapi.auth2.init();
       });
     }
-  function profile(){
-      window.location="/profile"
-  }
-$(document).ready(function(){
+
    pId=Cookies.get("profileId");
 data={};
 course=[];
@@ -302,22 +300,32 @@ course=[];
       // alert(data.subscribedCourseList[i].points);
      $('#pts').text(data.points);
      $('#pname').text(data.profileName);
+	 try
+	 {
       for(i=0;i<data.subscribedCourseList.length;i++)
-          {//420  
+          {
+		  var s='display:none';
+		  if(data.subscribedCourseList[i].elective!="0")
+		  s='display:block'
+		  color="white";
+		  if(data.subscribedCourseList[i].colour!="undefined")
+		  color=data.subscribedCourseList[i].colour.toLowerCase();
            $('<option value= "'+data.subscribedCourseList[i].courseId+'">'+data.subscribedCourseList[i].courseName+'</option>').appendTo("#course");
               
-             s="/course";
-                var card=['<div class="ui card bottom " style="background-color:white;border:1px solid #ccc;height:160px;;color:black;width:340px;" id = "card">\
+            
+                var card=['<div class="ui card bottom " style="background-color:'+color+';border:1px solid #ccc;height:160px;;color:black;width:340px;" id = "card">\
 				<div class="row" >\
-				<div class="col-xs-8">\
+				<div class="col-xs-7">\
                 <div class="course-name" id="'+data.subscribedCourseList[i].courseId+'" style="margin-left:-10px;cursor:pointer;font-size:20px;"> &nbsp\ <u>'+data.subscribedCourseList[i].courseName+'</u></div>\
-                </div>\
-				<div clas="col-xs-4">\
-				<div id="calendar" style="font-size:15px;"><i class="fa fa-calendar" aria-hidden="true" style="font-size:15px;"></i><span style="font-size:15px;color:#ccc;" id="mon'+i+'"> M</span><span style="font-size:15px;color:#ccc;" id="tue'+i+'"> T</span><span style="font-size:15px;color:#ccc;" id="wed'+i+'"> W</span><span style="font-size:15px;color:#ccc;" id="thu'+i+'"> T</span><span style="font-size:15px;color:#ccc;" id="fri'+i+'"> F</span><span style="font-size:15px;color:#ccc;" id="sat'+i+'"> S</span></div>\
+                <div class="proff" style="margin-left:2px;margin-top:3px;">By Prof.'+data.subscribedCourseList[i].professorName+'</div>\
+				<div class="elective " style="margin-left:2px;margin-top:3px;width:33%;border:1px solid black;border-color:black;'+s+';" >Elective</div>\
+				</div>\
+				<div class="col-xs-5 " style="padding-right:0px;">\
+				<div id="calendar" style="font-size:15px;margin-left:5px;"><i class="fa fa-calendar" aria-hidden="true" style="font-size:15px;"></i><span style="font-size:15px;color:#ccc;" id="mon'+i+'"> M</span><span style="font-size:15px;color:#ccc;" id="tue'+i+'"> T</span><span style="font-size:15px;color:#ccc;" id="wed'+i+'"> W</span><span style="font-size:15px;color:#ccc;" id="thu'+i+'"> T</span><span style="font-size:15px;color:#ccc;" id="fri'+i+'"> F</span><span style="font-size:15px;color:#ccc;" id="sat'+i+'"> S</span></div>\
 				</div>\
 				</div>\
 				<br>\
-                <div class="row" style="margin-top:15px;">\
+                <div class="row" style="margin-top:-6px;">\
                 <div class="col-xs-3 notes"  id="'+data.subscribedCourseList[i].courseId+'-notes" style="cursor:pointer;padding-right:0px;border-right:1px solid #ccc">\
                 <div style="">NOTES</div>\
                 <br>\
@@ -385,6 +393,13 @@ course=[];
 				
 				
           }
+		  
+		 }
+		  catch(err)
+		  {
+		   $(".cal").text('NO SUBSCRIBED COURSES');
+		  
+		  }
   }
 });
     
@@ -505,7 +520,7 @@ course=[];
 			<input type="radio" name="tabs" id="tab1" checked>
 			<div class="tab-label-content" id="tab1-content">
 			  <label for="tab1">COURSES</label>
-			  <div class="tab-content" id="view1" style="margin-top:-30px;width:100%">
+			  <div class="tab-content " id="content1" style="margin-top:-30px;width:100%">
 						<div id="layout" >
    
 						</div>
@@ -515,8 +530,8 @@ course=[];
 			 
 			<input type="radio" name="tabs" id="tab2">
 			<div class="tab-label-content" id="tab2-content">
-			  <label for="tab2" id="view2">CALENDAR</label>
-			  <div class="tab-content">
+			  <label for="tab2" id="content2">CALENDAR</label>
+			  <div class="tab-content cal">
 						
 					</div>
 			  </div>

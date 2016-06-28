@@ -239,7 +239,8 @@ background-color:blue;
 }
 </style>
 <script>
-onLoad();
+$(document).ready(function(){
+
 function SignOut() {
  //auth2.disconnect();
  var auth2 = gapi.auth2.getAuthInstance();
@@ -255,7 +256,6 @@ function SignOut() {
         gapi.auth2.init();
       });
     }
-$(document).ready(function(){
   pId=Cookies.get("profileId");
     bList=[];
     uList=[];
@@ -359,7 +359,7 @@ $(document).ready(function(){
       });
  
   // $('#layout').layout('addBefore', append2);
-  $('.tabs1').on('click',function(){
+  $('#tab1').on('click',function(){
 	$('#layout1').layout({
 		itemMargin: 10,
 		itemPadding: 10
@@ -375,7 +375,7 @@ $(document).ready(function(){
   
   });
     uPressed=0;
-    $('.tabs2').on('click',function(){
+    $('#tab2').on('click',function(){
 	$('#layout2').layout({
 		itemMargin: 10,
 		itemPadding: 10
@@ -600,8 +600,8 @@ $(document).ready(function(){
 		  
 			<input type="radio" name="tabs" id="tab1" checked>
 			<div class="tab-label-content" id="tab1-content">
-			  <label for="tab1">BOOKMARKED</label>
-			  <div class="tab-content" id="view1" style="margin-top:-30px;">
+			  <label for="tab1" id="view1">BOOKMARKED</label>
+			  <div class="tab-content" id="view1" style="margin-top:-35px;">
 						<div id="layout1" >
    
 						</div>
@@ -612,7 +612,7 @@ $(document).ready(function(){
 			<input type="radio" name="tabs" id="tab2">
 			<div class="tab-label-content" id="tab2-content">
 			  <label for="tab2" id="view2">UPLOADED</label>
-			  <div class="tab-content">
+			  <div class="tab-content" style="margin-top:-35px;">
 						<div id="layout2">
 						</div>
 					</div>

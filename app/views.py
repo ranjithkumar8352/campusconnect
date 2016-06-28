@@ -9,13 +9,13 @@ import app.validate
 from app.models import User
 import json
 import app.sign_up_api as register_api
-import delete_api
+import app.delete_api
 # Create your views here.
 
 
 @csrf_exempt
 def signin(request):
-	template = loader.get_template("login1.html")
+	template = loader.get_template("signin.html")
 	return HttpResponse(template.render())
 
 @csrf_exempt
@@ -36,6 +36,10 @@ def start(request):
 		# template = loader.get_template("home.html") #home
 			temp = HttpResponseRedirect("/home")
 			temp.set_cookie("profileId", user.profileId)
+			temp.set_cookie("profileId", profileId)
+			temp.set_cookie("branchName", user.branchName)
+			temp.set_cookie("batchName", user.batchName)
+			temp.set_cookie("sectionName", user.sectionName)
 			request.session["active"] = True
 			return temp
 		else:
@@ -65,9 +69,16 @@ def sign_up_api(request):
     		# user = User.objects
     		# template = loader.get_template("home.html")
 			user.profileId = profileId
+			user.collegeId = form_data["college"]
+			user.batchName = form_data["batch"]
+			user.branchName = form_data["branch"]
+			user.sectionName = form_data["section"]
 			user.save()
 			response = HttpResponseRedirect("/select_courses")
 			response.set_cookie("profileId", profileId)
+			response.set_cookie("branchName", user.branchName)
+			response.set_cookie("batchName", user.batchName)
+			response.set_cookie("sectionName", user.sectionName)
 			request.session["active"] = True
 			return response
 		else:
@@ -250,11 +261,11 @@ def mobile_sign_up(request):
 @csrf_exempt
 def debugflush(request):
 	for user in User.objects.all():
-		delete_api.delete_profile(user,request)
+		app.delete_api.delete_profile(user,request)
 	return HttpResponse("Success")
 @csrf_exempt
 def debugclear(request):
-	delete_api.clear_all()
+	app.delete_api.clear_all()
 	return HttpResponse("Success")
 
 

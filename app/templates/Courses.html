@@ -285,7 +285,10 @@ background-color:blue;
 }
 </style>
 <script>
-onLoad();
+
+
+$(document).ready(function(){
+
 function SignOut() {
  //auth2.disconnect();
  var auth2 = gapi.auth2.getAuthInstance();
@@ -301,8 +304,8 @@ function SignOut() {
         gapi.auth2.init();
       });
     }
-$(document).ready(function(){
     pId = Cookies.get("profileId");
+	 //alert( Cookies.get("imageURL"));
     var noteBookId=[];
     courseList=[];
     notesPressed=0;
@@ -381,17 +384,29 @@ data={"profileId":pId,
   url: 'https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/coursePage',
   data: JSON.stringify(data),
   success: function (data) {
-      console.log(data);
-      //$('img[src="profile.png"]').attr('src', data.photoUrl);
-     //$("#image").src()
-      // alert(data.subscribedCourseList[i].points);
-     // alert(data.courseName);
+      console.log(data,'sds');
+      
    //$(".course-name").text(data.courseName);
         $("#course-name-main").text(data.courseName);
         //alert(data.studentCount);
         $("#student-no").text(data.studentCount);
         $("#student-no").text(data.studentCount);
 		$("#course-name").text(data.courseName);
+		$("#prof").text("By Prof."+data.professorName);
+		$("#course-name").text(data.courseName);
+		for(i=0;i<data.branchNames.length;i++)
+		$("#college-branch").text(data.branchNames[i]);
+		$("#college-name").text(data.collegeName);
+		
+		for(i=0;i<data.batchNames.length;i++)
+		$("#college-year").text(data.batchNames[i]);
+		
+		if(data.elective==0)
+		{
+		$("#elective").hide();
+		}
+		
+		
 		 if(data.isSubscribed==0)
 	  	{
 		$("#subscribe").css('background-color','#ccc');
@@ -424,6 +439,8 @@ data={"profileId":pId,
             if(data.date[i]==6)
              $("#sat").css('color','black');
         }
+		///alert(data.color);
+		$("#card").css('background-color',data.colour);
        
   }
 });
@@ -450,13 +467,14 @@ data={"profileId":pId,
   url: 'https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/notebookList',
   data: JSON.stringify(data),
   success: function (data) {
-  console.log(data);
+  console.log(data,'s');
 try{
       if(data.noteBookList.length!=0)
     {
       for(i=0;i<data.noteBookList.length;i++)
       {
-          var card=['<div class="ui card bottom" id="'+data.noteBookList[i].noteBookId+'" style="background-color:white;border:1px solid\ #ccc;height:200px;color:black;width:340px;cursor:pointer" >\
+		
+        var card=['<div class="ui card bottom" id="'+data.noteBookList[i].noteBookId+'" style="cursor:pointer;background-color:white;border:1px solid\ #ccc;height:200px;color:black;width:340px;" >\
         <div class="row" style="padding:10px;">\
         <div class="col-xs-8">\
         <div class="course-name"  style="font-size:15px;"> &nbsp '+data.noteBookList[i].courseName+'</div>\
@@ -494,7 +512,9 @@ try{
       
     }
    }
-    catch(err){}
+    catch(err){
+	$("#layout1").text('NO NOTEBOOKS!');
+	}
   }
 });
 }
@@ -565,7 +585,11 @@ function ajaxAssignments()
           }
   }
     }
-            catch(err){}
+            catch(err){
+			
+			$("#layout2").text('NO ASSIGNMENTS!');
+			
+			}
       }
         });
 }
@@ -634,7 +658,11 @@ function ajaxExam()
         }
     
       }
-            catch(err){}
+        catch(err){
+
+		$("#layout3").text('NO EXAMS!');
+			
+		}
         }
         });
     
@@ -868,7 +896,7 @@ function ajaxExam()
             <li><a href="#">Another action</a></li>
             <li><a href="#">Something else here</a></li>
             <li role="separator" class="divider"></li>
-            <li  ><div  onclick="SignOut()"> &nbsp; Sign out</div></li>
+            <li  ><div  onclick="SignOut()" style="cursor:pointer"> &nbsp; Sign out</div></li>
           </ul>
         </li>
           
@@ -912,8 +940,9 @@ function ajaxExam()
 			<br>
 			<div id="course-name-main" style="font-size:20px;margin-left:0px;"> COURSE NAME</div>
 			<div id="prof" style="margin-left:0px;">By Prof .XYZ</div>
+			<div id="elective" style="margin-left:0px;width:6.5%;border:1px solid black;border-color:black;">Elective</div>
 			<br>
-			<div id="calendar" style="font-size:10px;margin-left:0px;"><i class="fa fa-calendar" aria-hidden="true" style="font-size:30px;"></i><span style="font-size:20px; color:#ccc;" id="sun"> S</span><span style="font-size:20px;color:#ccc;" id="mon"> M</span><span style="font-size:20px;color:#ccc;" id="tue"> T</span><span style="font-size:20px;color:#ccc;" id="wed"> W</span><span style="font-size:20px;color:#ccc;" id="thu"> T</span><span style="font-size:20px;color:#ccc;" id="fri"> F</span><span style="font-size:20px;color:#ccc;" id="sat"> S</span></div>
+			<div id="calendar" style="font-size:10px;margin-left:0px;"><i class="fa fa-calendar" aria-hidden="true" style="font-size:30px;"></i><span style="font-size:20px;color:#ccc;" id="mon"> M</span><span style="font-size:20px;color:#ccc;" id="tue"> T</span><span style="font-size:20px;color:#ccc;" id="wed"> W</span><span style="font-size:20px;color:#ccc;" id="thu"> T</span><span style="font-size:20px;color:#ccc;" id="fri"> F</span><span style="font-size:20px;color:#ccc;" id="sat"> S</span></div>
             <br>
 			<div id="subscribe" class="btn btn-default" style="background-color:#ccc;color:white;"><span id="subscribe-text">SUBSCRIBE</span></i></div>
                 
@@ -922,11 +951,11 @@ function ajaxExam()
 			<div class="col-xs-3 hidden-xs" >
 			<br>
 			<div class="col-xs-12" style="border-left:1px solid #ccc">
-				<div id="college-name" style=";"><center>NATIONAL INSTITUTE OF TECHNOLOGY SURATKAL</center></div>
+				<div id="college-name" style="text-align:center;">NITK</div>
 				<br>
-				<div id="college-year" style=""><center>Year</center></div>
+				<div id="college-year" style="text-align:center;">Year</div>
 				<br>
-				<div id="college-branch" style=""><center>Branch</center></div>
+				<div id="college-branch" style="text-align:center;">Branch</div>
 				<br>
 				
 				<center><span id="students" >Students<div id="student-no">0</div></span></center>
@@ -942,9 +971,9 @@ function ajaxExam()
 			<input type="radio" name="tabs" id="tab1" checked >
 			<div class="tab-label-content" id="tab1-content">
 			  <label for="tab1" id="view1">NOTEBOOKS</label>
-			  <div class="tab-content"  style="margin-top:-30px;width:100%">
+			  <div class="tab-content note"  style="margin-top:-30px;width:100%">
 						<div id="layout1" >
-   
+						
 						</div>
 			  
 				</div>

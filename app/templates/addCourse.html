@@ -23,7 +23,7 @@
    <script src="/static/js/brick-by-brick.js"></script>
    <link rel="stylesheet" href="/static/style/brick-by-brick.css" />
 <!--grid layout-->
-
+<script type="text/javascript" src="/static/js/jquery.simple-color.js"></script>
  <!--tabs-->
     <link href="/static/style/generic-notForTabs.css" rel="stylesheet" type="text/css" />
     <link href="/static/style/responsive-tabs.css" rel="stylesheet" type="text/css" />
@@ -112,27 +112,23 @@ background-color:transparent;
    .col-xs-2{
       padding:0px !important;
    }
+   .simpleColorContainer{
+   display:inline-block;
+   }
+   #branch,#section,#batch{
+   color:#A9A9A9;
+   }
+  
 </style>
 <script>
-onLoad();
-function SignOut() {
- //auth2.disconnect();
- var auth2 = gapi.auth2.getAuthInstance();
-    auth2.signOut().then(function () {
-      console.log('User signed out.');
-	    window.location="/signout"
-    });
-   
-  }
-  
-  function onLoad() {
-      gapi.load('auth2', function() {
-        gapi.auth2.init();
-      });
-    }
+branchName = Cookies.get("branchName");
+sectionName=Cookies.get("sectionName");
+batchName=Cookies.get("batchName");
+
 days=[];
    startTime=[];
-   endTime=[]
+   endTime=[];
+   color="#9a5194";
 function start(day){
   // alert(e.target.id);
  // alert("#startTime-"+day);
@@ -162,6 +158,31 @@ function start(day){
    }
 
 $(document).ready(function(){
+ 
+ $("#batch").attr("placeholder",batchName);
+ $("#batch").val(batchName);
+$("#branch").val(branchName);
+$("#section").val(sectionName);
+
+	function SignOut() {
+ //auth2.disconnect();
+ var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+	    window.location="/signout"
+    });
+   
+  }
+  
+  function onLoad() {
+      gapi.load('auth2', function() {
+        gapi.auth2.init();
+      });
+    }
+
+
+
+
     pId = Cookies.get("profileId");
 	cId="";
 	//onchange for modal upload
@@ -180,7 +201,7 @@ $.ajax({
     }
   },
   success: function (data) {
-     // console.log(data);
+      console.log(data);
 	 if(data.photoUrl!="undefined")
       $('img[src="/static/style/profile.png"]').attr('src', data.photoUrl);
      //$("#image").src()
@@ -252,7 +273,7 @@ $("#dtBox").DateTimePicker();
 			"batchNames": batch,
 			"branchNames": branch,
 			"collegeId": cId,
-			"colour": "ANY",
+			"colour": color,
 			"courseCode": courseCode,
 			"courseName": courseName,
 			"date": days,
@@ -300,6 +321,28 @@ $("#dtBox").DateTimePicker();
   
 		
 		});
+		$('.simple_color_kitchen_sink').simpleColor({
+    boxHeight: 26,
+    cellWidth: 26,
+    cellHeight: 20,
+    chooserCSS: { 'border': '1px solid #660033' ,'width':'100%','left':'-5%','top':'100%'},
+    displayCSS: {  },
+	colors: [
+      '9a5194', 'ee5451', 'ab6bac','e47373',
+	  'c593c2', 'ed999a', '9bcb65','acd480',
+	  'c4dfa5','25a599','4cb5ab','80cac3'
+     
+    ],
+    displayColorCode: true,
+    livePreview: true,
+    onSelect: function(hex, element) {
+      color="#"+hex;
+	  //alert(color);
+    },
+    onCellEnter: function(hex, element) {
+      //console.log("You just entered #" + hex + " for input #" + element.attr('class'));
+    }
+  });
 });
 </script>	
 <body>
@@ -366,9 +409,9 @@ $("#dtBox").DateTimePicker();
 </nav>
   <div class="container-fluid">
     <div class="row">
-      <div class="col-xs-6 col-md-2 sidebar sidebar-left sidebar-animate sidebar-md-show" >
+    <div class="col-xs-6 col-md-2 sidebar sidebar-left sidebar-animate sidebar-md-show" >
         <ul class="nav navbar-stacked">
-		<li><center><a  href="/profile" width="50%" height="50%" class="profile.png"><img src="/static/style/profile.png" class="img-circle" width="50%" height="20%"></a></center></li>
+		<li><center><a  href="/profile" width="50%" height="50%" class="profile.png"><img src="/static/style/profile.png" class="img-circle" width="50%"></a></center></li>
 		 <li><center><span id="pname">Name</span></center></li>
         
         <li><center>Points: &nbsp <span id="pts">0</span></center></li>
@@ -395,13 +438,13 @@ $("#dtBox").DateTimePicker();
 	  <br>
 	    <div class="row">
       <div class="col-xs-12" >
-        <p><input class="form" type="text" id="course-name"style="width:80%" placeholder="  Course Name" required></p>
+        <p><input class="form" type="text" id="course-name"style="width:88.7%" placeholder="  Course Name" required><span> <input class='simple_color_kitchen_sink' value='#9a5194' style="display:inline-block !important;"/></span></p>
         <p><input class="form-control" id="course-code" type="text" placeholder="Course Code.. e.g..,CHE402" required></p>
         <p><input class="form-control" id="proff" type="text" placeholder="Professor" required></p>
 		<p><input class="form-control" id="sem" type="text" placeholder="Semester..Odd/Even" required></p>
 		<p><input type="checkbox"  id="elective" name="elective" value="elective" style="margin-top:-1px;" placeholder="" required><span>Elective</span></p>
 		<div style="border:1px solid #ccc;" placeholder="Semester" required></div><br>
-        <p><input class="form-control" id="batch" type="text" placeholder="Batch" required></p>
+        <p><input class="form-control" id="batch" type="text"  required></p>
         <p><input class="form-control" id="section" type="text" placeholder="Section" required></p>
         <p><input class="form-control" id="branch" type="text" placeholder="Branch" required></p>
        <div style="border:1px solid #ccc;" ></div><br>
@@ -432,11 +475,12 @@ $("#dtBox").DateTimePicker();
 	   <br>
 	   <br>
 	   <br>
-	  <center> <button value="create" id="done" style="background-color:#f7971d;border-color:#f7971d;color:white">Create</button></center>
+	  <center> <div value="create" id="done" class="btn" style="background-color:#f7971d;border-color:#f7971d;color:white">Create</div></center>
       </div>
 	  </div>
 	  </div>
-	  
+	  </div>
+	  </div>
 	  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" >
   <div class="modal-dialog" role="document">
     <div class="modal-content upload-select-title" >
