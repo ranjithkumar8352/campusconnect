@@ -39,6 +39,17 @@
   </head>
   
 <style>
+.no-js #loader { display: none;  }
+.js #loader { display: block; position: absolute; left: 100px; top: 0; }
+.se-pre-con {
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 9999;
+	background: url(/static/style/loading.gif) center no-repeat #fff;
+}
 
 .img-circle {
     border-radius: 50%;
@@ -172,7 +183,10 @@ display:none;
 }
 </style>
 <script>
- 
+ $(window).load(function() {
+		// Animate loader off screen
+		$(".se-pre-con").fadeOut(1000);;
+	});
 $(document).on('ready',function(){
 
 $("#dtBox").DateTimePicker();
@@ -198,21 +212,7 @@ today = dd+'-'+mm+'-'+yyyy;
 document.getElementById('date').value = today;
 document.getElementById('date1').value = today;
 
-function SignOut() {
- //auth2.disconnect();
- var auth2 = gapi.auth2.getAuthInstance();
-    auth2.signOut().then(function () {
-      console.log('User signed out.');
-	    window.location="/signout"
-    });
-   
-  }
-  
-  function onLoad() {
-      gapi.load('auth2', function() {
-        gapi.auth2.init();
-      });
-    }
+
 
 
 url1= $(location).attr('href'); 
@@ -423,11 +423,11 @@ url=url1.split('=');
 								});
 								
 		$("#fileUpload").fileinput({
-		uploadUrl: 'https://uploadnotes-2016.appspot.com/img', // you must set a valid URL here else you will get an error
+		uploadUrl: 'https://uploadnotes-2016.appspot.com/imgweb', // you must set a valid URL here else you will get an error
         allowedFileExtensions : ['jpg', 'png','gif'],
         overwriteInitial: false,
         maxFilesNum: 10,
-		uploadExtraData: function() {
+		/*uploadExtraData: function() {
             return {
                 profileId: pId,
                 courseId: url[1],
@@ -438,7 +438,7 @@ url=url1.split('=');
 				dueDate:$('#date1').val(),
 				dueTime:$('#time').val()
             };
-		}
+		}*/
 		
 		
     }).on('filesuccessremove', function(event, id) 
@@ -476,6 +476,7 @@ url=url1.split('=');
 
 </script>
 <body>
+<div class="se-pre-con"></div>
     <!-- Fixed navbar -->
 <nav class="navbar navbar-default nav" style="margin-top:-55px;">
   <div class="container-fluid">
@@ -497,7 +498,7 @@ url=url1.split('=');
                  <span class="glyphicon glyphicon-search" style="border:0px solid white;"></a><span>
       </button>
         
-      <a class="navbar-brand" href="#">Brand</a>
+      <a class="navbar-brand" href="/home"><img src="/static/style/bee-icon-h50px.png" style="height: 180%;margin-top: -7px;"></a>
         
     </div>
 
@@ -519,18 +520,7 @@ url=url1.split('=');
        
       <ul class="nav navbar-nav navbar-right">
           <li><a href="#"><span class="glyphicon glyphicon-bell" ></span></a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user" ></span> </a>
-           
-        
-          <ul class="dropdown-menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li role="separator" class="divider"></li>
-              <li><div  onclick="SignOut()" style="cursor:pointer"> &nbsp; &nbsp;  Sign out</div></li>
-          </ul>
-        </li>
+       
           
       </ul>
     </div><!-- /.navbar-collapse -->
@@ -622,10 +612,7 @@ url=url1.split('=');
 	 <div>Description:</div>
 	   <textarea  id="desc" class="btn-block" name="desc" form="upload" rows="4">
 	   </textarea>
-	   <center>
 	   <br>
-	 <input type="submit" form="upload" class="btn btn-success" value="Done">
-	   </center>
 	 </div>
 	  </div>
 	  </div>

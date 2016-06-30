@@ -119,34 +119,13 @@ background-color:transparent;
    #branch,#section,#batch{
    color:black;
    }
-  if it's not present, don't show loader */
-.no-js #loader { display: none;  }
-.js #loader { display: block; position: absolute; left: 100px; top: 0; }
-.se-pre-con {
-	position: fixed;
-	left: 0px;
-	top: 0px;
-	width: 100%;
-	height: 100%;
-	z-index: 9999;
-	background: url(/static/style/loading.gif) center no-repeat #fff;
-}
+  
 </style>
 <script>
- $(window).load(function() {
-		// Animate loader off screen
-		$(".se-pre-con").fadeOut("slow");;
-	});
 branchName = Cookies.get("branchName");
 sectionName=Cookies.get("sectionName");
 batchName=Cookies.get("batchName");
- $('#pts').text(Cookies.get("profilePoints"));
-     $('#pname').text( Cookies.get("profileName"));
-        if(Cookies.get("imageURL")!="undefined")
-	  {
-		$('img[src="/static/style/profile.png"]').attr('src',Cookies.get("imageURL"));
-	  }
-	 
+
 days=[];
    startTime=[];
    endTime=[];
@@ -332,7 +311,6 @@ $("#dtBox").DateTimePicker();
 		});
 		$('.simple_color_kitchen_sink').simpleColor({
     boxHeight: 34,
-	boxWidth:170,
     cellWidth: 26,
     cellHeight: 20,
     chooserCSS: { 'border': '1px solid #660033' ,'width':'100%','left':'-5%','top':'100%'},
@@ -357,7 +335,6 @@ $("#dtBox").DateTimePicker();
 });
 </script>	
 <body>
-<div class="se-pre-con"></div>
     <!-- Fixed navbar -->
 	<nav class="navbar navbar-default nav" style="margin-top:-55px;">
   <div class="container-fluid">

@@ -39,6 +39,20 @@ h1 {
   padding: 40px 0 100px 20%;
   margin-bottom: 50px;
 }
+* This only works with JavaScript, 
+if it's not present, don't show loader */
+.no-js #loader { display: none;  }
+.js #loader { display: block; position: absolute; left: 100px; top: 0; }
+.se-pre-con {
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 9999;
+	background: url(/static/style/loading.gif) center no-repeat #fff;
+}
+
 
 label, p, a, h1, div {
   font-family: Roboto, sans-serif;
@@ -289,27 +303,26 @@ background-color:blue;
 }
 </style>
 <script>
-
+$(window).load(function() {
+		// Animate loader off screen
+		$(".se-pre-con").fadeOut(2500);;
+	});
+       
 
 $(document).ready(function(){
-
-function SignOut() {
- //auth2.disconnect();
- var auth2 = gapi.auth2.getAuthInstance();
-    auth2.signOut().then(function () {
-      console.log('User signed out.');
-	    window.location="/signout"
-    });
-   
-  }
-  
-  function onLoad() {
-      gapi.load('auth2', function() {
-        gapi.auth2.init();
-      });
-    }
+	
     pId = Cookies.get("profileId");
-	 //alert( Cookies.get("imageURL"));
+	
+	//setting the sidebar
+	 $('#pts').text(Cookies.get("profilePoints"));
+     $('#pname').text( Cookies.get("profileName"));
+        if(Cookies.get("imageURL")!="undefined")
+	  {
+		$('img[src="/static/style/profile.png"]').attr('src',Cookies.get("imageURL"));
+	  }
+	 
+	
+	 
     var noteBookId=[];
     courseList=[];
     notesPressed=0;
@@ -320,65 +333,7 @@ function SignOut() {
    url2= $(location).attr('href'); 
    url1=url2.split('=');
    url=url1[1].split('/');
-   
-   if(url.length!=1)
-   {
-   tabShow=url[1].split('#');
-   if(tabShow[1]=='view2')
-   {
-   $('#tab2').attr('checked','');
-    ajaxAssignments();
-    assPressed=1;
-   }
-       
-   else if(tabShow[1]=='view1')
-    {
-	 
-        ajaxNotes();
-        notesPressed=1;
-    }
-    else
-    {
-	$('#tab3').attr('checked','');
-        ajaxExam();
-        examPressed=1;
-    }
-       
-   }
-  
-  
-//onchange for modal upload
-	$('#course').on('change',function(){
-	$('#upload').attr('href','/upload?id='+this.value);
-	});
-//getting profile details    
-data={"profileId":pId};        
-$.ajax({
-  type:'GET',
-  dataType: 'json',
-  url: 'https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/feed/ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgLyhggoM',
-  data: data,
-  beforeSend: function (xhr) {
-    if (xhr && xhr.overrideMimeType) {
-      xhr.overrideMimeType('application/json;charset=utf-8');
-    }
-  },
-  success: function (data) {
-     // console.log(data);
-      if(data.photoUrl!="undefined")
-	  $('img[src="/static/style/profile.png"]').attr('src', data.photoUrl);
-      // alert(data.subscribedCourseList[i].points);
-     $('#pts').text(data.points);
-     $('#pname').text(data.profileName);
-	 
-	 for(i=0;i<data.subscribedCourseList.length;i++)
-          {//420  
-           $('<option value= "'+data.subscribedCourseList[i].courseId+'">'+data.subscribedCourseList[i].courseName+'</option>').appendTo("#course");}
-      
-  }
-});
-    
-//getting course details    
+   //getting course details    
 data={"profileId":pId,
       "courseId" :url[0]
      };
@@ -449,6 +404,40 @@ data={"profileId":pId,
        
   }
 });
+   if(url.length!=1)
+   {
+   tabShow=url[1].split('#');
+   if(tabShow[1]=='view2')
+   {
+   $('#tab2').attr('checked','');
+    ajaxAssignments();
+    assPressed=1;
+   }
+       
+   else if(tabShow[1]=='view1')
+    {
+	 
+        ajaxNotes();
+        notesPressed=1;
+    }
+    else
+    {
+	$('#tab3').attr('checked','');
+        ajaxExam();
+        examPressed=1;
+    }
+       
+   }
+  
+  
+//onchange for modal upload
+	$('#course').on('change',function(){
+	$('#upload').attr('href','/upload?id='+this.value);
+	});
+//getting profile details    
+
+    
+
 
 
     
@@ -673,7 +662,28 @@ function ajaxExam()
     
     }
 
-    
+    	data={"profileId":pId};        
+$.ajax({
+  type:'GET',
+  dataType: 'json',
+  url: 'https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/feed/ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgLyhggoM',
+  data: data,
+  beforeSend: function (xhr) {
+    if (xhr && xhr.overrideMimeType) {
+      xhr.overrideMimeType('application/json;charset=utf-8');
+    }
+  },
+  success: function (data) {
+     // console.log(data);
+     
+      // alert(data.subscribedCourseList[i].points);
+     
+	 for(i=0;i<data.subscribedCourseList.length;i++)
+          {//420  
+           $('<option value= "'+data.subscribedCourseList[i].courseId+'">'+data.subscribedCourseList[i].courseName+'</option>').appendTo("#course");}
+      
+  }
+});
   $('#tab1').on('click',function(){
 	$('#layout1').layout({
 		itemMargin: 10,
@@ -757,6 +767,7 @@ function ajaxExam()
 		
 			   
 		});
+	
 
 		//subscribe
 		$("#subscribe").on('click',function(){
@@ -849,6 +860,7 @@ function ajaxExam()
 	
 </script>
 <body>
+<div class="se-pre-con"></div>
     <!-- Fixed navbar -->
 	<nav class="navbar navbar-default nav" style="margin-top:-55px;">
   <div class="container-fluid">
@@ -870,7 +882,7 @@ function ajaxExam()
                  <span class="glyphicon glyphicon-search" style="border:0px solid white;"></a><span>
       </button>
         
-      <a class="navbar-brand" href="#">Brand</a>
+      <a class="navbar-brand" href="/home"><img src="/static/style/bee-icon-h50px.png" style="height: 180%;margin-top: -7px;"></a>
         
     </div>
 
@@ -892,7 +904,7 @@ function ajaxExam()
        
       <ul class="nav navbar-nav navbar-right">
           <li><a href="#"><span class="glyphicon glyphicon-bell" ></span></a></li>
-        <li class="dropdown">
+      <!--  <li class="dropdown">
           <a href="#" class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user" ></span> </a>
            
         
@@ -903,7 +915,7 @@ function ajaxExam()
             <li role="separator" class="divider"></li>
             <li  ><div  onclick="SignOut()" style="cursor:pointer"> &nbsp; Sign out</div></li>
           </ul>
-        </li>
+        </li>-->
           
       </ul>
     </div><!-- /.navbar-collapse -->
@@ -933,7 +945,7 @@ function ajaxExam()
 		  <li><a href="#contact"><i class="fa fa-info-circle" aria-hidden="true"></i> &nbsp; About</a></li>
 		  <li><a href="#contact"><i class="fa fa-star-o" aria-hidden="true"></i> &nbsp; Rate</a></li>
 		  <li><a href="#contact"><i class="fa fa-cog" aria-hidden="true"></i> &nbsp; Settings</a></li>
-		  <li><a href="#contact"><i class="fa fa-power-off" aria-hidden="true"></i> &nbsp; Logout</a></li>
+		  <li><a href="/signout"><i class="fa fa-power-off" aria-hidden="true"></i> &nbsp; Logout</a></li>
         </ul>
       </div>
       <div class="main col-xs-12 col-md-10 col-md-offset-2 " style="padding-left:20px;">
@@ -945,14 +957,26 @@ function ajaxExam()
 			<br>
 			<div id="course-name-main" style="font-size:20px;margin-left:0px;"> COURSE NAME</div>
 			<div id="prof" style="margin-left:0px;">By Prof .XYZ</div>
-			<div id="elective" style="margin-left:0px;width:6.5%;border:1px solid black;border-color:black;">Elective</div>
+			<div id="elective" style="margin-left:0px;width:7%;border:1px solid black;border-color:black;">Elective</div>
 			<br>
 			<div id="calendar" style="font-size:10px;margin-left:0px;"><i class="fa fa-calendar" aria-hidden="true" style="font-size:30px;"></i><span style="font-size:20px;color:#ccc;" id="mon"> M</span><span style="font-size:20px;color:#ccc;" id="tue"> T</span><span style="font-size:20px;color:#ccc;" id="wed"> W</span><span style="font-size:20px;color:#ccc;" id="thu"> T</span><span style="font-size:20px;color:#ccc;" id="fri"> F</span><span style="font-size:20px;color:#ccc;" id="sat"> S</span></div>
             <br>
-			<div id="subscribe" class="btn btn-default" style="background-color:#ccc;color:white;"><span id="subscribe-text">SUBSCRIBE</span></i></div>
-                
-			<div class="visible-xs"><br><button id="students1" >Students<div id="student-no-1">0</div></button></div>  
-              </div>
+			<div id="subscribe" class="btn btn-default hidden-xs" style="background-color:#ccc;color:white;"><span id="subscribe-text">SUBSCRIBE</span></div>
+            <!--
+			<div class="row visible-xs">
+			<div class="col-xs-7">
+			<div id="subscribe" class="btn btn-default" style="background-color:#ccc;color:white;"><span id="subscribe-text">SUBSCRIBE</span></div>
+			</div>
+			<div class="col-xs-5" >
+			<center>
+			<span id="students" >Students<div id="student-no">0</div>
+			</span>
+			</center>
+			</div> 
+			</div>	-->		
+              
+			  
+			  </div>
 			<div class="col-xs-3 hidden-xs" >
 			<br>
 			<div class="col-xs-12" style="border-left:1px solid #ccc">
@@ -971,13 +995,13 @@ function ajaxExam()
 				</div>	
 				
 				<div class="container1">
-		<div class="tab-wrap">
+		<div class="tab-wrap" style="width:100%">
 		  
 			<input type="radio" name="tabs" id="tab1" checked >
 			<div class="tab-label-content" id="tab1-content">
 			  <label for="tab1" id="view1">NOTEBOOKS</label>
 			  <div class="tab-content note"  style="margin-top:-30px;width:100%">
-						<div id="layout1" >
+						<div id="layout1" style="margin-left:-15px;" >
 						
 						</div>
 			  
@@ -988,7 +1012,7 @@ function ajaxExam()
 			<div class="tab-label-content" id="tab2-content">
 			  <label for="tab2" id="view2" >ASSIGNMENTS</label>
 			  <div class="tab-content" style="margin-top:-30px;width:100%">
-						<div id="layout2" >
+						<div id="layout2" style="margin-left:-15px;">
    
 						</div>
 					</div>
@@ -998,7 +1022,7 @@ function ajaxExam()
 			<div class="tab-label-content" id="tab3-content">
 			  <label for="tab3" id="view3">EXAMS</label>
 			  <div class="tab-content" style="margin-top:-30px;width:100%">
-						<div id="layout3" >
+						<div id="layout3" style="margin-left:-15px;">
    
 						</div>
 					</div>

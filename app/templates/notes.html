@@ -47,6 +47,7 @@
 
 <link href="/static/style/toastr.min.css" rel="stylesheet"/>
 	<script src="/static/js/toastr.min.js"></script>
+	
   </head>
 <style>
 
@@ -159,30 +160,32 @@ display:none !important;
   img[alt]:select{
    min-height:0px;
   }
-    
+    if it's not present, don't show loader */
+.no-js #loader { display: none;  }
+.js #loader { display: block; position: absolute; left: 100px; top: 0; }
+.se-pre-con {
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 9999;
+	background: url(/static/style/loading.gif) center no-repeat #fff;
+}
+
     </style>
     <script>
 
+	
+	$(window).load(function() {
+		// Animate loader off screen
+		$(".se-pre-con").fadeOut(2500);;
+	});
         var descp=[];
     images=[];
         
 $(document).ready(function(){
-	 function SignOut() {
- //auth2.disconnect();
- var auth2 = gapi.auth2.getAuthInstance();
-    auth2.signOut().then(function () {
-      console.log('User signed out.');
-	    window.location="/signout"
-    });
-   
-  }
-  
-  function onLoad() {
-      gapi.load('auth2', function() {
-        gapi.auth2.init();
-      });
-    }
-	
+ 
 
 
       url2= $(location).attr('href'); 
@@ -195,7 +198,13 @@ $(document).ready(function(){
 	  cId=splitId[1].split('=');
 	  
 	  $("#course-name").attr("href","/course?id="+cId[1]+"/notes#view1");
-      
+       $('#pts').text(Cookies.get("profilePoints"));
+     $('#pname').text( Cookies.get("profileName"));
+        if(Cookies.get("imageURL")!="undefined")
+	  {
+		$('img[src="/static/style/profile.png"]').attr('src',Cookies.get("imageURL"));
+	  }
+	 
 	  //onchange for modal upload
 	$('#course').on('change',function(){
 	$('#upload').attr('href','/upload?id='+this.value);
@@ -415,7 +424,7 @@ $(document).ready(function(){
   },
   success: function (data) {
      // console.log(data);
-      $('img[src="profile.png"]').attr('src', data.photoUrl);
+      //$('img[src="profile.png"]').attr('src', data.photoUrl);
      //$("#image").src()
       // alert(data.subscribedCourseList[i].points);
      $('#pts').text(data.points);
@@ -624,6 +633,7 @@ function image1(images)
         
     </script>
     <body>
+	<div class="se-pre-con"></div>
     <!-- Fixed navbar -->
 	<nav class="navbar navbar-default nav" style="margin-top:-55px;">
   <div class="container-fluid">
@@ -645,7 +655,7 @@ function image1(images)
                  <span class="glyphicon glyphicon-search" style="border:0px solid white;"></a><span>
       </button>
         
-      <a class="navbar-brand" href="#">Brand</a>
+      <a class="navbar-brand" href="/home"><img src="/static/style/bee-icon-h50px.png" style="height: 180%;margin-top: -7px;"></a>
         
     </div>
 
@@ -698,7 +708,7 @@ function image1(images)
 		  <li><a href="#contact"><i class="fa fa-info-circle" aria-hidden="true"></i> &nbsp; About</a></li>
 		  <li><a href="#contact"><i class="fa fa-star-o" aria-hidden="true"></i> &nbsp; Rate</a></li>
 		  <li><a href="#contact"><i class="fa fa-cog" aria-hidden="true"></i> &nbsp; Settings</a></li>
-		  <li><a href="#contact"><i class="fa fa-power-off" aria-hidden="true"></i> &nbsp; Logout</a></li>
+		  <li><a href="/signout"><i class="fa fa-power-off" aria-hidden="true"></i> &nbsp; Logout</a></li>
         </ul>
       </div>
       <div class="main col-xs-12 col-md-10 col-md-offset-2 " style="padding-left:20px;">

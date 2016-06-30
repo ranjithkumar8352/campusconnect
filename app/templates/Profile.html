@@ -233,29 +233,30 @@ background-color:white;border:1px solid #ccc;height:220px;margin-bottom:1px;marg
 }
 
 }*/
-//grid
-#card{
-background-color:blue;
+
+if it's not present, don't show loader */
+.no-js #loader { display: none;  }
+.js #loader { display: block; position: absolute; left: 100px; top: 0; }
+.se-pre-con {
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 9999;
+	background: url(/static/style/loading.gif) center no-repeat #fff;
 }
 </style>
 <script>
+$(window).load(function() {
+		// Animate loader off screen
+		$(".se-pre-con").fadeOut("slow");;
+	});
 $(document).ready(function(){
 
-function SignOut() {
+
  //auth2.disconnect();
- var auth2 = gapi.auth2.getAuthInstance();
-    auth2.signOut().then(function () {
-      console.log('User signed out.');
-	    window.location="/signout"
-    });
-   
-  }
-  
-  function onLoad() {
-      gapi.load('auth2', function() {
-        gapi.auth2.init();
-      });
-    }
+
   pId=Cookies.get("profileId");
     bList=[];
     uList=[];
@@ -265,7 +266,13 @@ function SignOut() {
 	$('#course').on('change',function(){
 	$('#upload').attr('href','/upload?id='+this.value);
 	});
-	
+	 $('#pts').text(Cookies.get("profilePoints"));
+     $('#pname').text( Cookies.get("profileName"));
+        if(Cookies.get("imageURL")!="undefined")
+	  {
+		$('img[src="/static/style/profile.png"]').attr('src',Cookies.get("imageURL"));
+	  }
+	 
      data={"profileId":pId};
         
   $.ajax({
@@ -466,6 +473,7 @@ function SignOut() {
 	
 </script>
 <body>
+<div class="se-pre-con"></div>
     <!-- Fixed navbar -->
 	<nav class="navbar navbar-default nav" style="margin-top:-55px;">
   <div class="container-fluid">
@@ -487,7 +495,7 @@ function SignOut() {
                  <span class="glyphicon glyphicon-search" style="border:0px solid white;"></a><span>
       </button>
         
-      <a class="navbar-brand" href="#">Brand</a>
+      <a class="navbar-brand" href="/home"><img src="/static/style/bee-icon-h50px.png" style="height: 180%;margin-top: -7px;"></a>
         
     </div>
 
@@ -509,18 +517,7 @@ function SignOut() {
        
       <ul class="nav navbar-nav navbar-right">
           <li><a href="#"><span class="glyphicon glyphicon-bell" ></span></a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user" ></span> </a>
-           
-        
-          <ul class="dropdown-menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li role="separator" class="divider"></li>
-             <li><div  onclick="SignOut()" style="cursor:pointer"> &nbsp; &nbsp;  Sign out</div></li>
-          </ul>
-        </li>
+ 
           
       </ul>
     </div><!-- /.navbar-collapse -->
@@ -550,7 +547,7 @@ function SignOut() {
 		  <li><a href="#contact"><i class="fa fa-info-circle" aria-hidden="true"></i> &nbsp; About</a></li>
 		  <li><a href="#contact"><i class="fa fa-star-o" aria-hidden="true"></i> &nbsp; Rate</a></li>
 		  <li><a href="#contact"><i class="fa fa-cog" aria-hidden="true"></i> &nbsp; Settings</a></li>
-		  <li><a href="#contact"><i class="fa fa-power-off" aria-hidden="true"></i> &nbsp; Logout</a></li>
+		  <li><a href="/signout"><i class="fa fa-power-off" aria-hidden="true"></i> &nbsp; Logout</a></li>
         </ul>
       </div>
       <div class="main col-xs-12 col-md-10 col-md-offset-2 " style="padding-right:0px;">
