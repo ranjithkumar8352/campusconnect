@@ -193,7 +193,8 @@ $(document).ready(function(){
 	//alert(type[1]);
 	  //getting cId
 	  cId=splitId[1].split('=');
-	  $("#course-name").attr("href","/course?id="+cId[1]+"-notes#view1");
+	  
+	  $("#course-name").attr("href","/course?id="+cId[1]+"/notes#view1");
       
 	  //onchange for modal upload
 	$('#course').on('change',function(){

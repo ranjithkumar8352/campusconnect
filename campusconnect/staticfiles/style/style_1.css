@@ -24,8 +24,8 @@ body {
   justify-content: center;
   width: 100%;
   min-height: 100%;
-  padding: 20px;
-  background: rgba(4, 40, 68, 0.85);
+
+  
 
 }
 
@@ -154,7 +154,7 @@ footer a, footer a:link {
 }
 .login input:focus {
   outline: none;
-  color: #444;
+  color: #ddddddddd;
   border-color: #2196F3;
   border-left-width: 35px;
 }

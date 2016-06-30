@@ -158,12 +158,12 @@ function start(day){
    }
 
 $(document).ready(function(){
- 
+ onLoad();
  $("#batch").attr("placeholder",batchName);
  $("#batch").val(batchName);
 $("#branch").val(branchName);
 $("#section").val(sectionName);
-
+$('#sign-out').bind('click',SignOut);
 	function SignOut() {
  //auth2.disconnect();
  var auth2 = gapi.auth2.getAuthInstance();
@@ -298,7 +298,7 @@ $("#dtBox").DateTimePicker();
 				  success: function (data) {
 				  console.log(data.key);
 				  
-				 window.location="/course?id="+data.key+"-notes#view1";
+				 window.location="/course?id="+data.key+"/notes#view1";
 					}
 				});
 		/* 
@@ -398,7 +398,7 @@ $("#dtBox").DateTimePicker();
             <li><a href="#">Another action</a></li>
             <li><a href="#">Something else here</a></li>
             <li role="separator" class="divider"></li>
-              <li><div  onclick="SignOut()" style="cursor:pointer"> &nbsp; &nbsp;  Sign out</div></li>
+              <li><div   style="cursor:pointer"> &nbsp; &nbsp;  Sign out</div></li>
           </ul>
         </li>
           
@@ -430,7 +430,7 @@ $("#dtBox").DateTimePicker();
 		  <li><a href="#contact"><i class="fa fa-info-circle" aria-hidden="true"></i> &nbsp; About</a></li>
 		  <li><a href="#contact"><i class="fa fa-star-o" aria-hidden="true"></i> &nbsp; Rate</a></li>
 		  <li><a href="#contact"><i class="fa fa-cog" aria-hidden="true"></i> &nbsp; Settings</a></li>
-		  <li><a href="#contact"><i class="fa fa-power-off" aria-hidden="true"></i> &nbsp; Logout</a></li>
+		  <li><div  id="sign-out"  style="margin-left:-2px;color:#337ab7;cursor:pointer;">&nbsp; &nbsp; <i class="fa fa-power-off" aria-hidden="true"></i> &nbsp;  Logout</div></li>
         </ul>
       </div>
 	  <div class="main col-xs-12 col-md-10 col-md-offset-2 " style="padding-left:20px;">

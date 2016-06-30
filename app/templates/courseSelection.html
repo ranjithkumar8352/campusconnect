@@ -171,13 +171,18 @@ $('#layout').layout({
 		{
 		section+=data.courseList[i].sectionNames[j];
 		}    
+	
                var card=['<div class="ui card bottom " style="background-color:white;padding:0px;border:1px solid #ccc;height:160px;;color:black;width:440px;" id = "card">\
-				<div class="row" style="padding:20px;" >\
-				<div class="col-xs-9">\
-                <div class="course-name"  style="font-size:20px;"> '+data.courseList[i].courseName+'</div>\
+				<div class="row" style="padding:0px;margin-left:0px;background-color:'+data.courseList[i].colour+';" >\
+				<div class="col-xs-12">\
+                <div class="course-name"  style="font-size:20px;margin-top:0px;"> '+data.courseList[i].courseName+'</div>\
+				</div>\
+				</div>\
 				<br>\
-				<div>  '+data.courseList[i].professorName+'</div>\
-				<div>   Semester</div>\
+				<div class="row" style="padding:20px;margin-top:-10px;padding-bottom:10px;">\
+				<div class="col-xs-9">\
+				<div> '+data.courseList[i].professorName+'</div>\
+				<div>  Semester-'+data.courseList[i].semester+'</div>\
 				</div>\
 				<div class="col-xs-3"  style="padding-left:30px;padding-right:0px;">\
 				<div class="course-year"><center>'+batch+'</center></div>\

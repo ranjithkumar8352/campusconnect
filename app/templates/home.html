@@ -272,7 +272,7 @@ course=[];
 			
  $('#layout').layout({
  itemMargin: 20,
- itemPadding: 20
+ itemPadding: 0
  }
  
  );
@@ -304,39 +304,48 @@ course=[];
 	 {
       for(i=0;i<data.subscribedCourseList.length;i++)
           {
-		  var s='display:none';
+		  //var s='display:none';
+		  var text="",border="white";
+		  el='<div style="margin-top:22px;"/>'; 
 		  if(data.subscribedCourseList[i].elective!="0")
-		  s='display:block'
-		  color="white";
+		 { 
+		 text="Elective";
+		 border="black"
+		 el='<div class="elective " style="margin-left:2px;margin-top:3px;width:18%;border-color:black;border:1px solid black;" >Elective</div>'	;	 
+		 }
 		  if(data.subscribedCourseList[i].colour!="undefined")
 		  color=data.subscribedCourseList[i].colour.toLowerCase();
            $('<option value= "'+data.subscribedCourseList[i].courseId+'">'+data.subscribedCourseList[i].courseName+'</option>').appendTo("#course");
               
             
-                var card=['<div class="ui card bottom " style="background-color:'+color+';border:1px solid #ccc;height:160px;;color:black;width:340px;" id = "card">\
-				<div class="row" >\
-				<div class="col-xs-7">\
+                var card=['<div class="ui card bottom " style="background-color:white;border:1px solid #ccc;height:160px;;color:black;width:340px;" id = "card">\
+				<div class="row" style="background-color:'+color+';padding:0px;margin-left:0px;padding-top:10px;">\
+				<div class="col-xs-7" >\
                 <div class="course-name" id="'+data.subscribedCourseList[i].courseId+'" style="margin-left:-10px;cursor:pointer;font-size:20px;"> &nbsp\ <u>'+data.subscribedCourseList[i].courseName+'</u></div>\
                 <div class="proff" style="margin-left:2px;margin-top:3px;">By Prof.'+data.subscribedCourseList[i].professorName+'</div>\
-				<div class="elective " style="margin-left:2px;margin-top:3px;width:33%;border:1px solid black;border-color:black;'+s+';" >Elective</div>\
 				</div>\
 				<div class="col-xs-5 " style="padding-right:0px;">\
 				<div id="calendar" style="font-size:15px;margin-left:5px;"><i class="fa fa-calendar" aria-hidden="true" style="font-size:15px;"></i><span style="font-size:15px;color:#ccc;" id="mon'+i+'"> M</span><span style="font-size:15px;color:#ccc;" id="tue'+i+'"> T</span><span style="font-size:15px;color:#ccc;" id="wed'+i+'"> W</span><span style="font-size:15px;color:#ccc;" id="thu'+i+'"> T</span><span style="font-size:15px;color:#ccc;" id="fri'+i+'"> F</span><span style="font-size:15px;color:#ccc;" id="sat'+i+'"> S</span></div>\
 				</div>\
 				</div>\
+				<div class="row" style="margin-left:0px;">\
+				<div class="col-xs-12">\
+				'+el+'\
+				</div>\
+				</div>\
 				<br>\
-                <div class="row" style="margin-top:-6px;">\
-                <div class="col-xs-3 notes"  id="'+data.subscribedCourseList[i].courseId+'-notes" style="cursor:pointer;padding-right:0px;border-right:1px solid #ccc">\
+                <div class="row" style="margin-top:-6px;margin-left:0px;">\
+                <div class="col-xs-3 notes"  id="'+data.subscribedCourseList[i].courseId+'/notes" style="cursor:pointer;padding-right:0px;border-right:1px solid #ccc">\
                 <div style="">NOTES</div>\
                 <br>\
                 <div class="notes-no" style="margin-left:15px;">+ '+data.subscribedCourseList[i].recentNotes+'</div>\
                 </div>\
-                <div class="col-xs-5 col-xs-offset-1 ass"  id="'+data.subscribedCourseList[i].courseId+'-assignments" style="cursor:pointer;padding:0px;border-right:1px solid #ccc"">\
+                <div class="col-xs-5 col-xs-offset-1 ass"  id="'+data.subscribedCourseList[i].courseId+'/assignments" style="cursor:pointer;padding:0px;border-right:1px solid #ccc"">\
                 <div>  ASSIGNMENTS</div>\
                 <br>\
                 <div class="ass-no" style="margin-left:40px;">'+data.subscribedCourseList[i].dueAssignments+'</div>\
                 </div>\
-                <div class="col-xs-3  exam"  id="'+data.subscribedCourseList[i].courseId+'-exams" style="cursor:pointer;padding:0px"><div> &nbsp &nbsp EXAMS</div>\
+                <div class="col-xs-3  exam"  id="'+data.subscribedCourseList[i].courseId+'/exams" style="cursor:pointer;padding:0px"><div> &nbsp &nbsp EXAMS</div>\
                 <br>\
                 <div class="date-no" style="margin-left:35px;">'+data.subscribedCourseList[i].dueExams+'</div>\
                 </div>\
@@ -348,22 +357,22 @@ course=[];
                 document.getElementById(data.subscribedCourseList[i].courseId).addEventListener('click',function(e){ 
                  // id=document.getElementById(e.id).cid;
 				 //alert("hi");
-                window.location="/course?id="+this.id+"-notes#view1";
+                window.location="/course?id="+this.id+"/notes#view1";
                 });
               
               s=
-                document.getElementById(data.subscribedCourseList[i].courseId+"-notes").addEventListener('click',function(e){ 
+                document.getElementById(data.subscribedCourseList[i].courseId+"/notes").addEventListener('click',function(e){ 
                  // id=document.getElementById(e.id).cid;
                 window.location="/course?id="+this.id+"#view1";
                 });
               
               
-                document.getElementById(data.subscribedCourseList[i].courseId+"-assignments").addEventListener('click',function(e){ 
+                document.getElementById(data.subscribedCourseList[i].courseId+"/assignments").addEventListener('click',function(e){ 
                  // id=document.getElementById(e.id).cid;
                 window.location="/course?id="+this.id+"#view2";
                 });
               
-                document.getElementById(data.subscribedCourseList[i].courseId+"-exams").addEventListener('click',function(e){ 
+                document.getElementById(data.subscribedCourseList[i].courseId+"/exams").addEventListener('click',function(e){ 
                  // id=document.getElementById(e.id).cid;
                 window.location="/course?id="+this.id+"#view3";
                 });
