@@ -48,7 +48,7 @@
 	width: 100%;
 	height: 100%;
 	z-index: 9999;
-	background: url(/static/style/loading.gif) center no-repeat #fff;
+	background: url(/static/style/loading1.gif) center no-repeat #fff;
 }
 
 .img-circle {
@@ -185,7 +185,7 @@ display:none;
 <script>
  $(window).load(function() {
 		// Animate loader off screen
-		$(".se-pre-con").fadeOut(1000);;
+		$(".se-pre-con").fadeOut(2300);;
 	});
 $(document).on('ready',function(){
 
@@ -423,11 +423,12 @@ url=url1.split('=');
 								});
 								
 		$("#fileUpload").fileinput({
-		uploadUrl: 'https://uploadnotes-2016.appspot.com/imgweb', // you must set a valid URL here else you will get an error
+		uploadUrl: 'https://uploadnotes-2016.appspot.com/img', // you must set a valid URL here else you will get an error
         allowedFileExtensions : ['jpg', 'png','gif'],
         overwriteInitial: false,
         maxFilesNum: 10,
-		/*uploadExtraData: function() {
+		uploadAsync:false,
+		uploadExtraData: function() {
             return {
                 profileId: pId,
                 courseId: url[1],
@@ -437,8 +438,9 @@ url=url1.split('=');
 				date:$('#date').val(),
 				dueDate:$('#date1').val(),
 				dueTime:$('#time').val()
+
             };
-		}*/
+		}
 		
 		
     }).on('filesuccessremove', function(event, id) 
@@ -460,14 +462,27 @@ url=url1.split('=');
     var form = data.form, files = data.files, extra = data.extra,
         response = data.response, reader = data.reader;
 	
-		window.location="/notebook?id="+response.noteBookId+"&"+url[1];
+		
     console.log(response,reader);
-});
+	//alert(ressponse.url[0])
+	})
+	.on('filebatchuploadsuccess', function(event, data, previewId, index) {
+	var form = data.form, files = data.files, extra = data.extra, 
+    response = data.response, reader = data.reader;
+    alert (extra.bdInteli + " " +  response.uploaded);
+	window.location="/notebook?id="+response.noteBookId+"&"+url[1];
+	});
 });
 	
 
 	
-	
+	/*
+					title:'sds',
+				desc:$("#desc").val(),
+				type:$("#type-select").val(),
+				date:$('#date').val(),
+				dueDate:$('#date1').val(),
+				dueTime:$('#time').val()*/
 	
 		
 		

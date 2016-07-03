@@ -36,7 +36,6 @@ def start(request):
 		# template = loader.get_template("home.html") #home
 			temp = HttpResponseRedirect("/home")
 			temp.set_cookie("profileId", user.profileId)
-			temp.set_cookie("profileId", profileId)
 			temp.set_cookie("branchName", user.branchName)
 			temp.set_cookie("batchName", user.batchName)
 			temp.set_cookie("sectionName", user.sectionName)
