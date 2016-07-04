@@ -438,7 +438,10 @@ data={"profileId":pId,
 	$('#upload').attr('href','/upload?id='+this.value);
 	});
 //getting profile details    
-
+$('#search').on('change',function(){
+	$('#course-search').attr('href','/search?q='+this.value+'&type=course');
+	$('#note-search').attr('href','/search?q='+this.value+'&type=note');
+	});
     
 
 jQuery(document).ready(function() {
@@ -885,7 +888,7 @@ $.ajax({
 <body>
 <div class="se-pre-con"></div>
     <!-- Fixed navbar -->
-	<nav class="navbar navbar-default nav" style="margin-top:-55px;">
+<nav class="navbar navbar-default nav" style="margin-top:-55px;">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -908,26 +911,34 @@ $.ajax({
       <a class="navbar-brand" href="/home"><img src="/static/style/bee-icon-h50px.png" style="height: 180%;margin-top: -7px;"></a>
         
     </div>
-
-     
-      <form class="navbar-form navbar-left hidden-xs" role="search">
-        <div class="form-group">
-			<button type="submit" class="btn btn-default sub " ><span class="glyphicon glyphicon-search" style="width:10px;"></button>
-          <input type="text" class="form-control search hidden-sm"  id="search" style="width:700px;" >
-		  <input type="text" class="form-control search hidden-lg"  id="search" style="width:300px;" >
-       <div style="background-color:#5cb85c;color:white;" class="btn btn-default btn-success  center"  data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span>Upload</div>
-                
-		 
-	   </div>
-		 
-		<!--  <input type="file"  class="btn btn-primary btn-success upload"><span class="glyphicon glyphicon-plus"></span> Upload  <span style="background-color:#5cb85c;color:white;" class="btn btn-default btn-success  center" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span>Upload
-        <input type="file"/></span>-->
-	</form>
-	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	<ul class="nav hidden-xs" style="width: 500px;height:0px;margin-left: 220px;">
+	<div class="navbar-inner" style="margin-top:15px;">
+     <li class="dropdown" style="width:10px;">
+          <a href="#" class="dropdown-toggle user" style="color:black;" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-search" ><i class="fa fa-caret-down" aria-hidden="true"></i></span> </a>
+           
+        
+          <ul class="dropdown-menu" style="background-color:#f5f5f5;min-width:60px!important;">
+            <li><a href="/search?q=none&type=course" id="course-search">Courses &nbsp;<i class="fa fa-th" aria-hidden="true"></i></a> </li>
+			<li role="separator" class="divider"></li>
+            <li><a href="/search?q=none&type=note" id="note-search">Notes &nbsp; &nbsp; &nbsp;<i class="fa fa-pencil" aria-hidden="true"></i></a></li>
+          </ul>
+        </li>
+	 <input type="text" class="form-control search hidden-sm hidden-xs"  placeholder="search..." id="search" style="width:500px;margin-top:-30px;border-bottom:1px solid #f5f5f5;margin-left:30px;padding: 0px;" >
+	<input type="text" class="form-control search hidden-lg hidden-xs"  placeholder="search..." id="search" style="width:300px;margin-top:-30px;border-bottom:1px solid #f5f5f5;margin-left:30px;padding: 0px;" >
+	</div>
+    </ul>
+	
+	
        
-      <ul class="nav navbar-nav navbar-right">
+      <ul class="nav navbar-nav navbar-right hidden-xs">
+	  
+	
+             
+	  <li><div style="background-color:#5cb85c;color:white;margin-top:8px;" class="btn btn-default btn-success  center"  data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span>Upload</div>
+       </li>
           <li><a href="#"><span class="glyphicon glyphicon-bell" ></span></a></li>
-      <!--  <li class="dropdown">
+		<!--
+	   <li class="dropdown">
           <a href="#" class="dropdown-toggle user" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user" ></span> </a>
            
         
@@ -936,12 +947,12 @@ $.ajax({
             <li><a href="#">Another action</a></li>
             <li><a href="#">Something else here</a></li>
             <li role="separator" class="divider"></li>
-            <li  ><div  onclick="SignOut()" style="cursor:pointer"> &nbsp; Sign out</div></li>
+            <li><div  onclick="SignOut()" style="cursor:pointer"> &nbsp; &nbsp;  Sign out</div></li>
           </ul>
         </li>-->
           
       </ul>
-    </div><!-- /.navbar-collapse -->
+   </div>
           
   </div><!-- /.container-fluid -->
 </nav>

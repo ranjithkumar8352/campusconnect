@@ -313,6 +313,10 @@ $(document).ready(function(){
     }
 	*/
 	//table
+	$('#search').on('change',function(){
+	$('#course-search').attr('href','/search?q='+this.value+'&type=course');
+	$('#note-search').attr('href','/search?q='+this.value+'&type=note');
+	});
 	if(Cookies.get("profilePoints")!="undefined");
 	 {
 	 $('#pts').text(Cookies.get("profilePoints"));
@@ -581,25 +585,31 @@ course=[];
       <a class="navbar-brand" href="/home"><img src="/static/style/bee-icon-h50px.png" style="height: 180%;margin-top: -7px;"></a>
         
     </div>
-
-     
-      <form class="navbar-form navbar-left hidden-xs" role="search">
-        <div class="form-group">
-			<button onclick="alert('g')" class="btn btn-default sub " ><span class="glyphicon glyphicon-search" style="width:15px;"></button>
-			
-          <input type="text" class="form-control search hidden-sm"  id="search" style="width:700px;" >
-		  <input type="text" class="form-control search hidden-lg"  id="search" style="width:300px;" >
-       <div style="background-color:#5cb85c;color:white;" class="btn btn-default btn-success  center"  data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span>Upload</div>
-                
-		 
-	   </div>
-		 
-		<!--  <input type="file"  class="btn btn-primary btn-success upload"><span class="glyphicon glyphicon-plus"></span> Upload  <span style="background-color:#5cb85c;color:white;" class="btn btn-default btn-success  center" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span>Upload
-        <input type="file"/></span>-->
-	</form>
-	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	<ul class="nav hidden-xs" style="width: 500px;height:0px;margin-left: 220px;">
+	<div class="navbar-inner" style="margin-top:15px;">
+     <li class="dropdown" style="width:10px;">
+          <a href="#" class="dropdown-toggle user" style="color:black;" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-search" ><i class="fa fa-caret-down" aria-hidden="true"></i></span> </a>
+           
+        
+          <ul class="dropdown-menu" style="background-color:#f5f5f5;min-width:60px!important;">
+            <li><a href="/search?q=none&type=course" id="course-search">Courses &nbsp;<i class="fa fa-th" aria-hidden="true"></i></a> </li>
+			<li role="separator" class="divider"></li>
+            <li><a href="/search?q=none&type=note" id="note-search">Notes &nbsp; &nbsp; &nbsp;<i class="fa fa-pencil" aria-hidden="true"></i></a></li>
+          </ul>
+        </li>
+	 <input type="text" class="form-control search hidden-sm hidden-xs"  placeholder="search..." id="search" style="width:500px;margin-top:-30px;border-bottom:1px solid #f5f5f5;margin-left:30px;padding: 0px;" >
+	<input type="text" class="form-control search hidden-lg hidden-xs"  placeholder="search..." id="search" style="width:300px;margin-top:-30px;border-bottom:1px solid #f5f5f5;margin-left:30px;padding: 0px;" >
+	</div>
+    </ul>
+	
+	
        
-      <ul class="nav navbar-nav navbar-right">
+      <ul class="nav navbar-nav navbar-right hidden-xs">
+	  
+	
+             
+	  <li><div style="background-color:#5cb85c;color:white;margin-top:8px;" class="btn btn-default btn-success  center"  data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-plus"></span>Upload</div>
+       </li>
           <li><a href="#"><span class="glyphicon glyphicon-bell" ></span></a></li>
 		<!--
 	   <li class="dropdown">
@@ -616,13 +626,13 @@ course=[];
         </li>-->
           
       </ul>
-    </div><!-- /.navbar-collapse -->
+   </div>
           
   </div><!-- /.container-fluid -->
 </nav>
   <div class="container-fluid">
     <div class="row">
-      <div class="col-xs-6 col-md-2 sidebar sidebar-left sidebar-animate sidebar-md-show" >
+      <div class="col-xs-6 col-md-2 sidebar sidebar-left sidebar-animate sidebar-md-show" style="margin-top:3px;">
         <ul class="nav navbar-stacked">
 		<li><center><a  href="/profile" width="50%" height="50%" class="profile.png"><img src="/static/style/profile.png" class="img-circle" width="50%" height="50%"></a></center></li>
 		 <li><center><span id="pname">Name</span></center></li>
