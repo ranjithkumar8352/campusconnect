@@ -353,16 +353,44 @@ $("#dtBox").DateTimePicker();
       //console.log("You just entered #" + hex + " for input #" + element.attr('class'));
     }
   });
-$('#search').on('change',function(){
-	$('#course-search').attr('href','/search?q='+this.value+'&type=course');
-	$('#note-search').attr('href','/search?q='+this.value+'&type=note');
+$('#note-search').on('click',function(){
+		$('#note-search').css('display','none');
+		$('.nsearch').css('display','block');
+		$('.csearch').css('display','none');
+		$('#course-search').css('display','block');
+		$('#form').attr('action','/search?q=none&type=note');
+		
+		
+		});
+		
+		$('#course-search').on('click',function(){
+		$('#note-search').css('display','block');
+		$('.nsearch').css('display','none');
+		$('.csearch').css('display','block');
+		$('#course-search').css('display','none');
+		$('#form').attr('action','/search?q=none&type=course');
+		
+		
+		});
+	$('#form').submit(function(){
+	text=$('#search').val();
+	if(text=="")
+	text="none";
+
+	action1=$('#form').attr('action');
+	action2=action1.split('&');
+	//alert(action2[0],action2[1])
+	action3=action2[0].split('=');
+	//alert(action3[0],action3[1]);
+	action=action3[0]+"="+text+"&"+action2[1];
+	$('#form').attr('action',action);
 	});
 });
 </script>	
 <body>
 <div class="se-pre-con"></div>
     <!-- Fixed navbar -->
-	<nav class="navbar navbar-default nav" style="margin-top:-55px;">
+<nav class="navbar navbar-default nav" style="margin-top:-55px;">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -385,26 +413,31 @@ $('#search').on('change',function(){
       <a class="navbar-brand" href="/home"><img src="/static/style/bee-icon-h50px.png" style="height: 180%;margin-top: -7px;"></a>
         
     </div>
-	<ul class="nav hidden-xs" style="width: 500px;height:0px;margin-left: 220px;">
+	<ul class="nav hidden-xs" style="width: 700px;height:0px;margin-left: 220px;">
+	<form action="/search?q=none&type=course" method="POST" id="form">
 	<div class="navbar-inner" style="margin-top:15px;">
-     <li class="dropdown" style="width:10px;">
-          <a href="#" class="dropdown-toggle user" style="color:black;" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-search" ><i class="fa fa-caret-down" aria-hidden="true"></i></span> </a>
+     <li class="dropdown" style="width:80px;">
+          <a href="#" class="dropdown-toggle csearch" style="color:black;" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span>Course <i class="fa fa-th"></i> <i class="fa fa-caret-down" aria-hidden="true"></i></span></a>
+          <a href="#"  class="dropdown-toggle nsearch" style="color:black;display:none" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span>Notes <i class="fa fa-pencil"></i> <i class="fa fa-caret-down" aria-hidden="true"></i></span></a>
            
         
-          <ul class="dropdown-menu" style="background-color:#f5f5f5;min-width:60px!important;">
-            <li><a href="/search?q=none&type=course" id="course-search">Courses &nbsp;<i class="fa fa-th" aria-hidden="true"></i></a> </li>
-			<li role="separator" class="divider"></li>
-            <li><a href="/search?q=none&type=note" id="note-search">Notes &nbsp; &nbsp; &nbsp;<i class="fa fa-pencil" aria-hidden="true"></i></a></li>
+          <ul class="dropdown-menu" style="background-color:#f5f5f5;min-width:100px!important;">
+            <li style="display:none;cursor:pointer" id="course-search">&nbsp; Courses &nbsp;<i class="fa fa-th" aria-hidden="true"></i></li>
+            <li style="cursor:pointer" id="note-search">&nbsp; Notes &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-pencil" aria-hidden="true"></i></li>
           </ul>
-        </li>
-	 <input type="text" class="form-control search hidden-sm hidden-xs"  placeholder="search..." id="search" style="width:500px;margin-top:-30px;border-bottom:1px solid #f5f5f5;margin-left:30px;padding: 0px;" >
-	<input type="text" class="form-control search hidden-lg hidden-xs"  placeholder="search..." id="search" style="width:300px;margin-top:-30px;border-bottom:1px solid #f5f5f5;margin-left:30px;padding: 0px;" >
-	</div>
-    </ul>
-	
-	
+		  
+      </li>
+	 
+	<!--	<button type="submit" class="btn btn-default sub " style="float:right"><span class="glyphicon glyphicon-search" style="width:10px;"></button> --> 
+	 <input type="text" class="form-control search hidden-sm hidden-xs"  placeholder="search..." id="search" style="overflow: hidden;width:500px;margin-top:-30px;border-bottom:1px solid #f5f5f5;margin-left:80px;padding: 0px;" >
+     <button id="done" type="submit" class="btn btn-default sub " style="margin-top:-30px;border:0px;margin-left:580px" ><span class="glyphicon glyphicon-search" style="width:10px;"></button>
        
-      <ul class="nav navbar-nav navbar-right hidden-xs">
+	     
+	
+</div>
+</form>
+    </ul>
+	 <ul class="nav navbar-nav navbar-right hidden-xs">
 	  
 	
              
@@ -426,6 +459,9 @@ $('#search').on('change',function(){
         </li>-->
           
       </ul>
+	
+       
+     
    </div>
           
   </div><!-- /.container-fluid -->

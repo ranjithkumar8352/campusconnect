@@ -16,14 +16,20 @@ background-color:#f7971d;
  .dropdown:focus{
 background-color:#f7971d ;
 }
-.user{
+.user,.csearch,.nsearch{
 background-color:#f7971d !important;
+}
+.csearch:focus,.csearch:hover{
+text-decoration:none !important;
+}
+.nsearch:focus,.nsearch:hover{
+text-decoration:none !important;
 }
 .sidebar-animate{
 margin-top:3px;
 }
 .sub1{
-border:0px solid #f7971d ;
+
 border-radius:0;
 background-color:#f7971d;
 margin-top:10px;
