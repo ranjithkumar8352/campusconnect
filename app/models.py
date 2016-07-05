@@ -16,3 +16,4 @@ class User(models.Model):
     batchName = models.CharField(max_length=10,default="")
     branchName = models.CharField(max_length=20, default="")
     sectionName = models.CharField(max_length=5, default="")
+    gcmId = models.CharField(max_length=30,default="")

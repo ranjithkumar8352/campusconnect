@@ -8,13 +8,14 @@ def sign_up(user, form_data):
     user_profile = dict()
     user_profile["profileName"] = user.firstname + " " + user.lastname
     user_profile["collegeId"] = form_data["college"]
-    try:
+    if "batch" in user_profile:
         user_profile["batchName"] = form_data["batch"]
+    if "branch" in user_profile:
         user_profile["branchName"] = form_data["branch"]
+    if "section" in user_profile:
         user_profile["sectionName"] = form_data["section"]
-        user_profile["gcmId"] = "worst" #form_data[""]
-    except:
-        pass
+    if "gcm" in user_profile:
+        user_profile["gcmId"] = form_data["gcm"]
     user_profile["photoUrl"] = user.image_url
     user_profile["email"] = user.email
 
