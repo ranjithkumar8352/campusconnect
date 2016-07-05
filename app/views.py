@@ -10,6 +10,7 @@ from app.models import User
 import json
 import app.sign_up_api as register_api
 import app.delete_api
+import app.edit_profile_api
 # Create your views here.
 
 
@@ -222,9 +223,13 @@ def mobile_sign_in(request):
 	if request.method == "POST":
 		data = json.loads(request.body)
 		gprofileId = data["gprofileId"]
+		gcmId = data["gcmId"]
 		try:
 			user = User.objects.get(gprofileId=gprofileId)
 			if user.profileId!="":
+				user.gcmId = gcmId
+				user.save()
+				edit_profile_api.edit_profile(user.profileId,gcmId)
 				response = dict()
 				response["profileId"] = user.profileId
 				response["collegeId"] = user.collegeId
@@ -251,10 +256,14 @@ def mobile_sign_up(request):
 		branchName = data["branchName"]
 		sectionName = data["sectionName"]
 		collegeId = data["collegeId"]
+		gcmId = data["gcmId"]
 		firstname,lastname = profileName.split(" ")[0],profileName.split(" ")[1]
 		email = data["email"]
 		image_url = data["imageUrl"]
-		User.objects.create(gprofileId=gprofile_id,profileId=profile_id,batchName=batchName,branchName=branchName,sectionName=sectionName,collegeId=collegeId,firstname=firstname,lastname=lastname,email=email,image_url=image_url)
+		try:
+			User.objects.create(gprofileId=gprofile_id,gcmId=gcmId,profileId=profile_id,batchName=batchName,branchName=branchName,sectionName=sectionName,collegeId=collegeId,firstname=firstname,lastname=lastname,email=email,image_url=image_url)
+		except:
+			pass
 		return HttpResponse("Success")
 
 @csrf_exempt
