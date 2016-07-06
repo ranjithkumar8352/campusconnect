@@ -277,6 +277,18 @@ def debugclear(request):
 	return HttpResponse("Success")
 
 
+@csrf_exempt
+def edit_profile(request):
+	if request.method == "POST":
+		user_profile = dict()
+		data = rerquest.loads(request.body)
+		#start off with extremely redundant call
+		##all fields sent by user regardless of edit or not
+		#test
+		
+
+
+
 
 
 

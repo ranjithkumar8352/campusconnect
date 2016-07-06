@@ -18,7 +18,6 @@ def sign_up(user, form_data):
         user_profile["gcmId"] = form_data["gcm"]
     user_profile["photoUrl"] = user.image_url
     user_profile["email"] = user.email
-
     api_call = requests.post(url, data=json.dumps(user_profile), headers=headers)
     print(api_call.json())
     return(api_call.json())
