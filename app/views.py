@@ -280,7 +280,7 @@ def debugclear(request):
 def debugusers(request):
 	response=""
 	for user in User.objects.all():
-		response+=user.profileName+"\n"
+		response+=user.firstname+"\n"
 	return HttpResponse(response)
 
 
