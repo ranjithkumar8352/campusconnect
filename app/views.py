@@ -276,15 +276,31 @@ def debugclear(request):
 	app.delete_api.clear_all()
 	return HttpResponse("Success")
 
+@csrf_exempt
+def debugusers(request):
+	response=""
+	for user in User.objects.all():
+		response+=user.profileName+"\n"
+	return HttpResponse(response)
+
 
 @csrf_exempt
 def edit_profile(request):
 	if request.method == "POST":
 		user_profile = dict()
 		data = rerquest.loads(request.body)
-		#start off with extremely redundant call
-		##all fields sent by user regardless of edit or not
-		#test
+		gprofileId = data["gprofileId"]
+		user = User.objects.get(gprofileId=gprofileId)
+		user.profileName = data["profileName"]
+		user.collegeId = data["collegeId"]
+		user.collegeName = data["collegeName"]
+		user.batchName = data["batchName"]
+		user.branchName = data["branchName"]
+		user.sectionName = data["sectionName"]
+		user.image_url = data["imageUrl"]
+		user.gcmId = data["gcmId"]
+		user.save()
+
 		
 
 

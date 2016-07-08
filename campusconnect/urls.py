@@ -41,6 +41,8 @@ urlpatterns = [
     url(r'^mobile_sign_in','app.views.mobile_sign_in'),
     url(r'^mobile_sign_up','app.views.mobile_sign_up'),
     url(r'^debugflush','app.views.debugflush'),
-    url(r'^debugclear','app.views.debugclear')
+    url(r'^debugclear','app.views.debugclear'),
+    url(r'^mobile_update','app.views.edit_profile'),
+    url(r'^debugusers','app.views.debugusers')
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
