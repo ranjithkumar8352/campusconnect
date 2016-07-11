@@ -508,7 +508,7 @@ try{
     {
 		
 		
-      for(i=0;i<data.noteBookList.length;i++)
+      for(i=data.noteBookList.length-1;i>=0;i--)
       {
 	  /*alert(date3);
 		date2=date3.split('.');
@@ -592,7 +592,7 @@ function ajaxAssignments()
     try{
         if(data.assList.length!=0)
     {
-        for(i=0;i<data.assList.length;i++)
+        for(i=data.assList.length-1;i>=0;i--)
           {
                 name1=jQuery.timeago(data.assList[i].lastUpdated);  
 		nameChar=name1.charAt(0).toUpperCase();
@@ -666,7 +666,7 @@ function ajaxExam()
     try{
         if(data.examList.length!=0)
     {
-        for(i=0;i<data.examList.length;i++)
+        for(i=data.examList.length-1;i>=0;i--)
           {
           name1=jQuery.timeago(data.examList[i].lastUpdated);
 		 nameChar=name1.charAt(0).toUpperCase();

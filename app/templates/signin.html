@@ -12,11 +12,21 @@
   <script src="https://apis.google.com/js/platform.js" async defer></script>
    <meta property="og:url" content="https://lipis.github.io/bootstrap-social/" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
- 
+  <script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />
     <meta property="og:image" content="https://lipis.github.io/bootstrap-social/assets/img/bootstrap-social.png" />
    <script src="/static/js/cookie-js.js"></script>
-  <script>
+<link rel="icon" href="/static/style/bee-icon-h50px.png">
+  </head>
+  <title>Campus Connect</title>
+    <script>
+	 url= $(location).attr('href'); 
+	if(url.split(':')[0]!="https")
+	{
+	window.location="https://campusconnect-2016.herokuapp.com";
+	}
+	
+		
   var googleUser = {};
   var startApp = function() {
     gapi.load('auth2', function(){
@@ -68,7 +78,6 @@ width:50% !important;
 color:white !important;
 }
   </style>
-  </head>
   <body>
   <!-- In the callback, you would hide the gSignInWrapper element on a
   successful sign in -->
