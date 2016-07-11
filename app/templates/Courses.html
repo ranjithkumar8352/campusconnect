@@ -30,9 +30,11 @@
     <link href="/static/style/responsive-tabs.css" rel="stylesheet" type="text/css" />
     <script src="/static/js/responsive-tabs.js" type="text/javascript"></script>
 <!--tabs-->
-
+	
 	<script src="/static/js/jquery.timeago.js" type="text/javascript"></script>
+	<link rel="icon" href="/static/style/bee-icon-h50px.png">
   </head>
+  <title>Campus Connect</title>
 <style>
 h1 {
   font-size: 26px;
@@ -308,7 +310,7 @@ background-color:blue;
 <script>
 $(window).load(function() {
 		// Animate loader off screen
-		$(".se-pre-con").fadeOut(2300);;
+		$(".se-pre-con").fadeOut(2300);
 	});
        
 
@@ -518,7 +520,7 @@ try{
 		 nameChar=name1.charAt(0).toUpperCase();
 		 date = name1.replace(name1.charAt(0),nameChar);
 		//alert(p);
-        var card=['<div class="ui card bottom" id="'+data.noteBookList[i].noteBookId+'" style="cursor:pointer;background-color:white;border:1px solid\ #ccc;height:200px;color:black;width:340px;" >\
+        var card=['<div class="ui card bottom" id="'+data.noteBookList[i].noteBookId+'" style="cursor:pointer;background-color:white;border:1px solid\ #ccc;height:218px;color:black;width:340px;" >\
         <div class="row" style="padding:10px;">\
         <div class="col-xs-7">\
         <div class="course-name"  style="font-size:15px;"> &nbsp '+data.noteBookList[i].courseName+'</div>\
@@ -529,7 +531,7 @@ try{
         <time id="date1" class="timeago responsive" >'+date+'</time></center>\
         </div>\
         </div>\
-        <div class="row" style="margin-left:0px;bottom:-112px;background-color:#ccc;padding:0px;position:relative;height:30px;">\
+        <div class="row" style="margin-left:0px;bottom:-130px;background-color:#ccc;padding:0px;position:relative;height:30px;">\
         <div class="col-xs-4" style="margin-top:5px;">\
         <div><i class="fa fa-eye" aria-hidden="true"></i> '+data.noteBookList[i].views+'</div>\
         </div>\
@@ -595,7 +597,7 @@ function ajaxAssignments()
                 name1=jQuery.timeago(data.assList[i].lastUpdated);  
 		nameChar=name1.charAt(0).toUpperCase();
 		 date = name1.replace(name1.charAt(0),nameChar);
-         var ass=['<div class="ui card bottom " id="'+data.assList[i].assignmentId+'" style="cursor:pointer;background-color:white;border:1px solid\ #ccc;height:200px;color:black;width:340px;" >\
+         var ass=['<div class="ui card bottom " id="'+data.assList[i].assignmentId+'" style="cursor:pointer;background-color:white;border:1px solid\ #ccc;height:218px;color:black;width:340px;" >\
         <div class="row" style="padding:10px;">\
         <div class="col-xs-8">\
         <div class="course-name"  style="font-size:15px;"> &nbsp '+data.assList[i].assignmentTitle+'</div>\
@@ -669,14 +671,14 @@ function ajaxExam()
           name1=jQuery.timeago(data.examList[i].lastUpdated);
 		 nameChar=name1.charAt(0).toUpperCase();
 		 date = name1.replace(name1.charAt(0),nameChar);		   
-         var ass=['<div class="ui card bottom " id="'+data.examList[i].examId+'" style="cursor:pointer;background-color:white;border:1px solid\ #ccc;height:200px;color:black;width:340px;" >\
+         var ass=['<div class="ui card bottom " id="'+data.examList[i].examId+'" style="cursor:pointer;background-color:white;border:1px solid\ #ccc;height:218px;color:black;width:340px;" >\
         <div class="row" style="padding:10px;" >\
         <div class="col-xs-8">\
         <div class="course-name"  style="font-size:15px;"> &nbsp '+data.examList[i].examTitle+'</div>\
         <div class="author-name"  style="font-size:10px;"> &nbsp;  &nbsp;By '+data.examList[i].uploaderName+'</div>\
         </div>\
         <div class="col-xs-4" style="padding:0px;">\
-        <center><div>Posted on</div>\
+        <center><div>Posted</div>\
         <div id="date1">'+date+'</div></center>\
         </div>\
         </div>\
@@ -1030,7 +1032,10 @@ $.ajax({
 			<br>
 			<div id="course-name-main" style="font-size:20px;margin-left:0px;"> COURSE NAME</div>
 			<div id="prof" style="margin-left:0px;">By Prof .XYZ</div>
-			<div id="elective" style="margin-left:0px;width:7%;border:1px solid black;border-color:black;">Elective</div>
+			<div class="col-md-1 col-xs-5" style="padding:0px;">
+			<div id="elective" class="btn-default" style="margin-left:0px;border:1px solid black;border-color:black;background-color:transparent;">&nbsp;&nbsp;Elective</div>
+			</div>
+			<br>
 			<br>
 			<div id="calendar" style="font-size:10px;margin-left:0px;"><i class="fa fa-calendar" aria-hidden="true" style="font-size:30px;"></i><span style="font-size:20px;color:#ccc;" id="mon"> M</span><span style="font-size:20px;color:#ccc;" id="tue"> T</span><span style="font-size:20px;color:#ccc;" id="wed"> W</span><span style="font-size:20px;color:#ccc;" id="thu"> T</span><span style="font-size:20px;color:#ccc;" id="fri"> F</span><span style="font-size:20px;color:#ccc;" id="sat"> S</span></div>
             <br>

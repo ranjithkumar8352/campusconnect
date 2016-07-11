@@ -30,7 +30,9 @@
     <script src="/static/js/responsive-tabs.js" type="text/javascript"></script>
 <!--tabs-->
 
+ <link rel="icon" href="/static/style/bee-icon-h50px.png">
   </head>
+  <title>Campus Connect</title>
 <style>
 
 .img-circle {
@@ -135,7 +137,7 @@ background-color:transparent;
 <script>
  $(window).load(function() {
 		// Animate loader off screen
-		$(".se-pre-con").fadeOut("slow");;
+		$(".se-pre-con").fadeOut("slow");
 	});
 branchName = Cookies.get("branchName");
 sectionName=Cookies.get("sectionName");
@@ -146,7 +148,7 @@ batchName=Cookies.get("batchName");
 	  {
 		$('img[src="/static/style/profile.png"]').attr('src',Cookies.get("imageURL"));
 	  }
-	 
+	 elective=0;
 days=[];
    startTime=[];
    endTime=[];
@@ -163,6 +165,11 @@ function start(day){
  
  //alert(index);
  startTime[index]=$("#startTime-"+day).val();
+ temp=$("#startTime-"+day).val();
+ newtemp=parseInt(temp.split(':')[0])+1;
+ end=(newtemp>10?'':'0')+newtemp+':'+temp.split(':')[1]+(newtemp>10?' PM':' AM');
+ $("#endTime-"+day).val(end);
+ endTime[index]=$("#endTime-"+day).val();
  
  //alert(startTime[day]);
    }
@@ -174,7 +181,7 @@ function start(day){
  {
  index=i;
  }
- alert($("#endTime-"+day).val())
+ //alert($("#endTime-"+day).val())
  endTime[index]=$("#endTime-"+day).val();
  //alert(endTime[day]);
  
@@ -232,12 +239,15 @@ $("#dtBox").DateTimePicker();
 				{days.push(this.value);
 				//alert('h');
 				$('<div id="time-'+this.value+'">Time:\
-				  <div><input type="text"  id="startTime-'+this.value+'"  value="8:00" data-field="time" placeholder="Start" style="width:60%" onchange="start('+this.value+')"></div>\
-				<div><input type="text"  id="endTime-'+this.value+'" value="9:00" data-field="time" placeholder="End" style="width:60%;margin-top:3px;" onchange="end('+this.value+')"></div>\
+				  <div><input type="text"  id="startTime-'+this.value+'"  value="08:00" data-field="time" placeholder="Start" style="width:60%" onchange="start('+this.value+')"></div>\
+				<div><input type="text"  id="endTime-'+this.value+'" value="09:00" data-field="time" placeholder="End" style="width:60%;margin-top:3px;" onchange="end('+this.value+')"></div>\
 				</div>').appendTo('.day-'+this.value);
 				startTime.push("08:00");
 				endTime.push("09:00");
 				 //alert($("#endTime-"+day).val())
+				}
+			else{
+				elective=1;
 				}
             }
             else if($(this).prop("checked") == false)
@@ -257,79 +267,15 @@ $("#dtBox").DateTimePicker();
 				endTime.splice(index,1);
 				$('#time-'+this.value).remove();
 				}
-			
+				else{
+				elective=0;
+				}
 			}
           
         });
 		
 		
-		$('#done').on('click',function(){
 		
-		
-		//pId="ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgMDhigkM";
-		
-		// alert(cId);
-		var courseName=$('#course-name').val();
-		 var courseCode=$('#course-code').val();
-		 var proff=$('#proff').val();
-		 var sem=$('#sem').val();
-		 batch=[],section=[],branch=[];
-		 batch.push($('#batch').val()); 
-		 section.push($('#section').val());
-		 branch.push($('#branch').val());
-		 
-		data={
-			"batchNames": batch,
-			"branchNames": branch,
-			"collegeId": cId,
-			"colour": color,
-			"courseCode": courseCode,
-			"courseName": courseName,
-			"date": days,
-			"endTime": endTime,
-			"professorName": proff,
-			"profileId": pId,
-			"sectionNames": section,
-			"semester": sem,
-			"startTime": startTime
-
-        };
-		
-		
-		
-		 console.log(JSON.stringify(data));
-		$.ajax({
-				  type:'POST',
-				  dataType: 'json',
-				  contentType: 'application/json',
-				  url: 'https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/addCourse',
-				  data: JSON.stringify(data),
-				  success: function (data) {
-				  console.log(data.key);
-				  
-				 window.location="/course?id="+data.key+"/notes#view1";
-					}
-				});
-		/* 
-		 data={
-			"batchNames": ["2014"],
-			"branchNames": ["CSE"],
-			"collegeId": "ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB0NvbGxlZ2UYgICAgMCcggkM",
-			"colour": "ANY",
-			"courseCode": "DCS2",
-			"courseName": "Digital circuits2",
-			"date": ["1"],
-			"endTime": ["22:10"],
-			"professorName": "ME",
-			"profileId": "ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgMDhigkM",
-			"sectionNames": ["A"],
-			"semester": "Odd",
-			"startTime": ["21:00"]
-
-        };*/
-  
-		
-		});
 		$('.simple_color_kitchen_sink').simpleColor({
     boxHeight: 34,
 	boxWidth:170,
@@ -385,6 +331,80 @@ $('#note-search').on('click',function(){
 	action=action3[0]+"="+text+"&"+action2[1];
 	$('#form').attr('action',action);
 	});
+	
+	$('.btn-done').on('click',function(){
+		
+		
+		//pId="ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgMDhigkM";
+		
+		//alert(cId);
+		var courseName=$('#course-name').val();
+		 var courseCode=$('#course-code').val();
+		 var proff=$('#proff').val();
+		 var sem=$('#sem').val();
+		 batch=[],section=[],branch=[];
+		 batch.push($('#batch').val()); 
+		 section.push($('#section').val());
+		 branch.push($('#branch').val());
+		 e=parseInt(elective);
+		 alert(typeof(e));
+		data={
+			"batchNames": batch,
+			"branchNames": branch,
+			"collegeId": cId,
+			"colour": color,
+			"courseCode": courseCode,
+			"courseName": courseName,
+			"date": days,
+			"endTime": endTime,
+			"professorName": proff,
+			"profileId": pId,
+			"sectionNames": section,
+			"semester": sem,
+			"startTime": startTime
+
+        };
+		//"elective":elective
+		
+		
+		 console.log(JSON.stringify(data));
+		 $(".se-pre-con").show();
+				  
+		$.ajax({
+				  type:'POST',
+				  dataType: 'json',
+				  contentType: 'application/json',
+				  url: 'https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/addCourse',
+				  data: JSON.stringify(data),
+				  beforeSend:function(xhr){
+				  },
+				  success: function (data) {
+				  console.log(data.key);
+				//  $(".se-pre-con").hide();
+				 window.location="/course?id="+data.key+"/notes#view1";
+					}
+				});
+		/* 
+		 data={
+			"batchNames": ["2014"],
+			"branchNames": ["CSE"],
+			"collegeId": "ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB0NvbGxlZ2UYgICAgMCcggkM",
+			"colour": "ANY",
+			"courseCode": "DCS2",
+			"courseName": "Digital circuits2",
+			"date": ["1"],
+			"endTime": ["22:10"],
+			"professorName": "ME",
+			"profileId": "ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgMDhigkM",
+			"sectionNames": ["A"],
+			"semester": "Odd",
+			"startTime": ["21:00"]
+
+        };*/
+  
+		
+		});
+		
 });
 </script>	
 <body>
@@ -539,7 +559,7 @@ $('#note-search').on('click',function(){
 	   <br>
 	   <br>
 	   <br>
-	  <center> <div value="create" id="done" class="btn" style="background-color:#f7971d;border-color:#f7971d;color:white">Create</div></center>
+	  <center> <div value="create" id="done" class="btn btn-done" style="background-color:#f7971d;border-color:#f7971d;color:white">Create</div></center>
       </div>
 	  </div>
 	  </div>
