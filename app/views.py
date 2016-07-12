@@ -229,7 +229,7 @@ def mobile_sign_in(request):
 			if user.profileId!="":
 				user.gcmId = gcmId
 				user.save()
-				edit_profile_api.edit_profile(user.profileId,gcmId)
+				app.edit_profile_api.edit_profile(user.profileId,gcmId)
 				response = dict()
 				response["profileId"] = user.profileId
 				response["collegeId"] = user.collegeId

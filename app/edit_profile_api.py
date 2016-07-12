@@ -6,6 +6,7 @@ headers = {'Content-Type': 'application/json'}
 def edit_profile(profileId,gcmId):
     user_profile = dict()
     user_profile["gcmId"] = gcmId
-    api_call = requests.post(url+profileId, data=json.dumps(), headers=headers)
+    user_profile["profileId"] = profileId
+    api_call = requests.post(url, data=json.dumps(user_profile), headers=headers)
     print(api_call.json())
     return(api_call.json())
