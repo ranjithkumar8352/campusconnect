@@ -167,7 +167,7 @@ function start(day){
  startTime[index]=$("#startTime-"+day).val();
  temp=$("#startTime-"+day).val();
  newtemp=parseInt(temp.split(':')[0])+1;
- end=(newtemp>10?'':'0')+newtemp+':'+temp.split(':')[1]+(newtemp>10?' PM':' AM');
+ end=(newtemp>10?'':'0')+newtemp+':'+temp.split(':')[1];
  $("#endTime-"+day).val(end);
  endTime[index]=$("#endTime-"+day).val();
  

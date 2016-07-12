@@ -62,10 +62,11 @@ img {
 $(document).on('ready',function(){
 //for getting colleges
 
-name1=Cookies.get("firstname");
+
 image=Cookies.get("imageURL");
  if(image!="undefined")
  $('img[src="/static/style/profile.png"]').attr('src', image);
+ name1=Cookies.get("firstname");
  nameChar=name1.charAt(0).toUpperCase();
  name = name1.replace(name1.charAt(0),nameChar);
 
