@@ -270,7 +270,9 @@ background-color:#f5f5f5;
 	margin-left:20px;
 }
 //grid
-
+@media (max-width: @screen-xs-min) {
+  .modal-xs { width: @modal-sm; }
+}
 .profile:hover{
 background-color:transparent;
 }
@@ -882,7 +884,7 @@ course=[];
 
 
 
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" >
+<div class="modal fade " id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" >
   <div class="modal-dialog" role="document">
     <div class="modal-content upload-select-title" >
       
@@ -892,21 +894,48 @@ course=[];
       <br>
       <div class="modal-body">
 	  <div class="row">
-	   <div class="col-xs-3 col-xs-offset-2 ">
-        <select id="course" value=""  name="year" placeholder="year" style="width:315px;"class="year form-control">
+	   <div class="col-xs-9 col-xs-offset-2 ">
+        <select id="course" value=""  name="year" placeholder="year" class="year form-control">
 	  <option value="My" style="color:#ccc">My Courses</option>
 	  </select>
+	  <br>
+       <a href="/upload" id="upload"><button type="button" class="btn btn-file continue form-control" style="background-color:#37BC61;border-color:#37BC61;color:white;">Continue</button></a>
+	  
+	  <a href="/add_course" class="course"> <center>Add a new course</center></a>
       </div>
 	  </div>
+	  
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade " id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" >
+  <div class="modal-dialog" role="document">
+    <div class="modal-content upload-select-title" >
+      
+        <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+		<br><br>
+        <h4 class="modal-title " id="myModalLabel" ><center><b>&nbsp Choose Course</b></center></h4>
+      <br>
+      <div class="modal-body">
+	  <div class="row">
+	   <div class="col-xs-9 col-xs-offset-2 ">
+        <select id="course" value=""  name="year" placeholder="year" class="year form-control">
+	  <option value="My" style="color:#ccc">My Courses</option>
+	  </select>
 	  <br>
-       <a href="/upload" id="upload"><button type="button" class="btn btn-file continue" style="background-color:#37BC61;border-color:#37BC61;margin-left: 82px;width:315px;color:white;">Continue</button></a>
-	  <br><br>
-	  <a href="/add_course" class="course"> Add a new course</a>
+       <a href="/upload" id="upload"><button type="button" class="btn btn-file continue form-control" style="background-color:#37BC61;border-color:#37BC61;color:white;">Continue</button></a>
+	  
+	  <a href="/add_course" class="course"> <center>Add a new course</center></a>
+      </div>
+	  </div>
+	  
       </div>
     </div>
   </div>
 </div>
 
 </body>
-
 </html>

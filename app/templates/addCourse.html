@@ -148,7 +148,7 @@ batchName=Cookies.get("batchName");
 	  {
 		$('img[src="/static/style/profile.png"]').attr('src',Cookies.get("imageURL"));
 	  }
-	 elective=0;
+	 elective='0';
 days=[];
    startTime=[];
    endTime=[];
@@ -247,7 +247,7 @@ $("#dtBox").DateTimePicker();
 				 //alert($("#endTime-"+day).val())
 				}
 			else{
-				elective=1;
+				elective='1';
 				}
             }
             else if($(this).prop("checked") == false)
@@ -268,7 +268,7 @@ $("#dtBox").DateTimePicker();
 				$('#time-'+this.value).remove();
 				}
 				else{
-				elective=0;
+				elective='0';
 				}
 			}
           
@@ -346,8 +346,8 @@ $('#note-search').on('click',function(){
 		 batch.push($('#batch').val()); 
 		 section.push($('#section').val());
 		 branch.push($('#branch').val());
-		 e=parseInt(elective);
-		 alert(typeof(e));
+	
+		 //(typeof(e));
 		data={
 			"batchNames": batch,
 			"branchNames": branch,
@@ -361,8 +361,8 @@ $('#note-search').on('click',function(){
 			"profileId": pId,
 			"sectionNames": section,
 			"semester": sem,
-			"startTime": startTime
-
+			"startTime": startTime,
+			"elective":elective
         };
 		//"elective":elective
 		
@@ -565,7 +565,8 @@ $('#note-search').on('click',function(){
 	  </div>
 	  </div>
 	  </div>
-	  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" >
+
+<div class="modal fade " id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" >
   <div class="modal-dialog" role="document">
     <div class="modal-content upload-select-title" >
       
@@ -575,18 +576,21 @@ $('#note-search').on('click',function(){
       <br>
       <div class="modal-body">
 	  <div class="row">
-	   <div class="col-xs-3 col-xs-offset-2 ">
-        <select id="course" value=""  name="year" placeholder="year" style="width:310px;"class="year form-control">
+	   <div class="col-xs-9 col-xs-offset-2 ">
+        <select id="course" value=""  name="year" placeholder="year" class="year form-control" required>
 	  <option value="My" style="color:#ccc">My Courses</option>
 	  </select>
+	  <br>
+       <a href="/upload" id="upload"><button type="button" class="btn btn-file continue form-control" style="background-color:#37BC61;border-color:#37BC61;color:white;">Continue</button></a>
+	  
+	  <a href="/add_course" class="course"> <center>Add a new course</center></a>
       </div>
 	  </div>
-	  <br>
-       <a href="/upload" id="upload"><button type="button" class="btn btn-file continue" style="background-color:#37BC61;border-color:#37BC61;margin-left: 82px;width:310px;color:white;">Continue</button></a>
-	  <br><br>
-	  <a href="/add_course" class="course"> Add a new course</a>
+	  
       </div>
     </div>
   </div>
 </div>
+
+
 	</body>
