@@ -1,0 +1,10 @@
+autopep8==1.2.4
+dj-database-url==0.4.1
+Django==1.9.7
+django-oauth2-provider==0.2.6.1
+gunicorn==19.6.0
+pep8==1.7.0
+Reindent==0.1.1
+requests==2.10.0
+shortuuid==0.4.3
+whitenoise==3.2
