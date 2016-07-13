@@ -16,7 +16,7 @@ import app.edit_profile_api
 
 @csrf_exempt
 def signin(request):
-	template = loader.get_template("signin.html")
+	template = loader.get_template("firebaseAuth.html")
 	return HttpResponse(template.render())
 
 @csrf_exempt
@@ -64,6 +64,7 @@ def sign_up_api(request):
 		user = User.objects.get(gprofileId=gid)
 		# call the api
 		sign_up_response = register_api.sign_up(user,form_data) #form data
+		print sign_up_response
 		if "key" in sign_up_response:
 			profileId = sign_up_response["key"]
     		# user = User.objects
@@ -214,7 +215,13 @@ def sign_out(request):
 	if "active" in request.session:
 		if request.session["active"]:
 			request.session["active"] = False
-	return HttpResponseRedirect("/signin")
+		response = HttpResponseRedirect("/signin")
+		response.delete_cookie("gid")
+		response.delete_cookie("firstname")
+		response.delete_cookie("lastname")
+		response.delete_cookie("email")
+		response.delete_cookie("imageURL")
+	return response
 
 
 
@@ -302,9 +309,17 @@ def edit_profile(request):
 		user.save()
 
 		
+@csrf_exempt
+def firebaseAuth(request):
+	template = loader.get_template("firebaseAuth.html")
+	return HttpResponse(template.render())	
 
-
-
+@csrf_exempt
+def deleteUser(request):
+	user = User.objects.filter(email='ranjithkumar8352@gmail.com')
+	print user
+	user.delete()
+	return HttpResponseRedirect("firebase")	
 
 
 
