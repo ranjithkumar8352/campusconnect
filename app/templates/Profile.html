@@ -250,13 +250,22 @@ if it's not present, don't show loader */
 	z-index: 9999;
 	background: url(/static/style/loading1.gif) center no-repeat #fff;
 }
+#photo:hover{
+
+}
 </style>
 <script>
 $(window).load(function() {
 		// Animate loader off screen
 		$(".se-pre-con").fadeOut("slow");;
 	});
+	
 $(document).ready(function(){
+
+
+$('#photo').hover(function(){
+$('.edit').show();
+});
 
 
  //auth2.disconnect();
@@ -265,6 +274,7 @@ $(document).ready(function(){
     bList=[];
     uList=[];
 	collegeId='';
+	imgSrc='';
 	
 	//onchange for modal upload
 	$('#course').on('change',function(){
@@ -569,21 +579,26 @@ $(document).ready(function(){
 //alert(document.cookie+'s');
 	
 	modal=0;	
+			
+				
+	$('#editModal').on('show.bs.modal', function (e) {	
+			
+			$('#loadingmessage').show(); 
+			if(modal==0)
+			{
+			modal++;
 			branchName = Cookies.get("branchName");
 			sectionName=Cookies.get("sectionName");
 			batchName=Cookies.get("batchName");
 			imageUrl=Cookies.get("imageURL");
 			name3=Cookies.get("profileName");
-				
-	$('#editModal').on('show.bs.modal', function (e) {	
-			if(modal==0)
-			{
-			modal++;
+			$('#branch').empty();
+			$('#college').empty();
 			//alert(document.cookie);
 			$('#section').val(sectionName);
 			
 			 name1=Cookies.get("firstname");
-			  $('<option value="'+branchName+'">'+branchName+'</option>').appendTo('#branch');
+			  //$('<option value="'+branchName+'">'+branchName+'</option>').appendTo('#branch');
 				
 			 nameChar=name1.charAt(0).toUpperCase();
 			 name = name1.replace(name1.charAt(0),nameChar);
@@ -610,17 +625,33 @@ $(document).ready(function(){
 				  if(data.collegeList[i].collegeId==collegeId)
 				  {
 				  option="selected";
-				  }
-				  $('<option value="'+data.collegeList[i].collegeId+'"'+option+'>'+data.collegeList[i].collegeName+'</option>').appendTo('#college');
+				  for(j=0;j<data.collegeList[i].branchNames.length;j++)
+								{	
+									if(data.collegeList[i].branchNames[j]==branchName)
+									{
+									option1='selected';
+									//alert(branchName);
+									}
+									else
+									option1='';
+									
+									 $('<option value="'+data.collegeList[i].branchNames[j]+'"'+option1+'>'+data.collegeList[i].branchNames[j]+'</option>').appendTo('#branch');
+									
+								}
+					$('<option value="'+data.collegeList[i].collegeId+'"'+option+'>'+data.collegeList[i].collegeName+'</option>').appendTo('#college');
 					branch.push(data.collegeList[i].branchNames);
+					break;
+				  }
+				  
 
 				  }
 				  
 				 }
 				});
 			k=0;	
+			$('#loadingmessage').hide(); 
 			//change in college=>change in branch
-			$('#college').on('change',function(){
+			/*$('#college').on('change',function(){
 					for(i=0;i<list.length;i++)
 					{
 						if(this.value==list[i].collegeId)
@@ -628,77 +659,157 @@ $(document).ready(function(){
 							$('#branch').empty();						 
 								for(j=0;j<list[i].branchNames.length;j++)
 								{	
-									 $('<option value="'+list[i].branchNames[j]+'"'+option+'>'+list[i].branchNames[j]+'</option>').appendTo('#branch');
+									 $('<option value="'+list[i].branchNames[j]+'">'+list[i].branchNames[j]+'</option>').appendTo('#branch');
 								}
 						}
 					}
 
-					});
+					});*/
 				}
 			});
+			
+		profileImg='';			
 	 $(document).on("click", "#done", function(event){
-
-			email=Cookies.get("email");
-	 
-	 
-	data={
-	'profileName':name3,
-	'collegeId':$('#college').val(),
-	'batchName':$('#batch').val(),
-	'branchName':$('#branch').val(),
-	'sectionName':$('#section').val(),
-	'photoUrl':imageUrl,
-	'email':email
-	};
-	data={
-	'profileName':'',
-	'collegeId':'',
-	'batchName':'',
-	'branchName':'',
-	'sectionName':'',
-	'photoUrl':'',
-	'email':''
-	}
-	console.log(JSON.stringify(data));
-	console.log('https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/editProfile/'+'{'+pId+'}')
-	
-	$.ajax({
-		  type:'POST',
-		  dataType: 'json',
-		  contentType: 'application/json',
-		  url: 'https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/editProfile/'+'{'+pId+'}',
-		  data: JSON.stringify(data),
-		  success: function (data) {
-			  console.log(data);
-			  	toastr.options = {
-				  "closeButton": true,
-				  "debug": false,
-				  "newestOnTop": false,
-				  "progressBar": false,
-				  "positionClass": "toast-top-full-width",
-				  "preventDuplicates": true,
-				  "onclick": null,
-				  "showDuration": "5",
-				  "hideDuration": "1000",
-				  "timeOut": "1600",
-				  "extendedTimeOut": "1000",
-				  "showEasing": "swing",
-				  "hideEasing": "linear",
-				  "showMethod": "fadeIn",
-				  "hideMethod": "fadeOut"
-				}
-				//toastr.success('Your Product has been added to cart');
-				Command: toastr["success"]("<center> Profile Updated Successfully!</center>");
-				 $('#editModal').modal('hide');
-			  }
-			 
-	});
+			
+			
+			
+			if(imgSrc!='')
+			{
+			data={ "profileId":pId,
+				  "file":imgSrc
+				  };
+			
+			$.ajax({
+					  type:'POST',
+					  dataType: 'json',
+					  contentType: 'application/json',
+					  url: 'https://uploadnotes-2016.appspot.com/changePic',
+					  data: JSON.stringify(data),
+					  success: function (data) {
+					  console.log(data+'d');
+					  profileImg=data.url;
+					  ajaxUpdate();
+					  }
+					  
+					  
+					});
+			
+			
+			}
+			else
+			{
+			ajaxUpdate();
+			}
 	
 });
+
+function ajaxUpdate()
+{
+branchName = Cookies.get("branchName");
+			sectionName=Cookies.get("sectionName");
+			batchName=Cookies.get("batchName");
+			imageUrl=Cookies.get("imageURL");
+			name3=Cookies.get("profileName");
+			email=Cookies.get("email");
+	 
+				data={
+				'profileName':name3,
+				'collegeId':$('#college').val(),
+				'batchName':$('#batch').val(),
+				'branchName':$('#branch').val(),
+				'sectionName':$('#section').val(),
+				'photoUrl':profileImg,
+				'email':email,
+				'profileId':pId
+				};
+				//console.log(JSON.stringify(data));
+				//onsole.log('https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/editProfile/'+'{'+pId+'}')
+				
+				$.ajax({
+					  type:'POST',
+					  dataType: 'json',
+					  contentType: 'application/json',
+					  url: 'https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/editProfile',
+					  data: JSON.stringify(data),
+					  success: function (data) {
+						  console.log(data);
+							toastr.options = {
+							  "closeButton": true,
+							  "debug": false,
+							  "newestOnTop": false,
+							  "progressBar": false,
+							  "positionClass": "toast-top-full-width",
+							  "preventDuplicates": true,
+							  "onclick": null,
+							  "showDuration": "5",
+							  "hideDuration": "1000",
+							  "timeOut": "1600",
+							  "extendedTimeOut": "1000",
+							  "showEasing": "swing",
+							  "hideEasing": "linear",
+							  "showMethod": "fadeIn",
+							  "hideMethod": "fadeOut"
+							}
+							//toastr.success('Your Product has been added to cart');
+							Command: toastr["success"]("<center> Profile Updated Successfully!</center>");
+							 modal=0;
+								collegeId=$('#college').val(),
+								Cookies.set("batchName",$('#batch').val())
+								
+								//'sectionName':$('#section').val(),
+							 Cookies.set("branchName",$('#branch').val());
+							Cookies.set("sectionName",$('#section').val());
+							if(profileImg!='')
+							Cookies.set("imageUrl",profileImg);
+							 $('#editModal').modal('hide');
+							 
+						  }
+						 
+				});
+
+}
 jQuery(document).ready(function() {
 	jQuery("time .timeago").timeago();
 	});
 	
+    $("#img-file").on('change',function(){
+	  $this=$("#img-file");
+          //Get count of selected files
+		   countFiles =0;
+          countFiles = $("#img-file")[0].files.length;
+		  
+          var imgPath = $("#img-file")[0].value;
+		  //alert(imgPath);
+          var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+          //var image_holder = $("#image-holder");
+          //image_holder.empty();
+		   
+          if (extn == "png" || extn == "jpg" || extn == "jpeg") {
+            if (typeof(FileReader) != "undefined") {
+              //loop for each file selected for uploaded.
+              for (var i = 0; i < countFiles; i++) 
+              {
+			  
+			   var img = document.createElement("img");
+			   img.src = window.URL.createObjectURL($("#img-file")[0].files[i]);
+			   //alert(img.src);
+			   //for getting the img src for uploading it to data store
+			   imgSrc=img.src;
+				$('#photo').attr('src',img.src);
+				//alert(m.length);
+              }
+			  
+            } else {
+              alert("This browser does not support FileReader.");
+            }
+          } else {
+            alert("Pls select only images");
+          }
+		  //car();
+		  flag=1;
+		 // alert(m.length);
+		  //car();
+        });
 	
 
 });
@@ -920,10 +1031,15 @@ jQuery(document).ready(function() {
   <div class="modal-dialog" role="document">
     <div class="modal-content studentModal-title" >
         <h4 class="modal-title " id="editModalLabel" style="border:1px solid #ccc;"><center><b>Edit Profile</b></center></h4>
-      <div class="modal-body" style="height:480px;">
+      <div class="modal-body" style="height:520px;">
 				<div class="col-xs-12">
 				<center>
-      <p><b>Hi </b><span id="user-name"> <b>User</b></span><b>!</b> &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  <!-- class="img-responsive"--><img src="/static/style/profile.png" id="profile" style="width:30%;height:30%;border-radius:50%;"></p>
+      <p><b>Hi </b><span id="user-name"> <b>User</b></span><b>!</b> &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp  <!-- class="img-responsive"--><img id="photo" src="/static/style/profile.png" id="profile" style="width:30%;height:30%;border-radius:50%;max-width:100px;max-height:150px;"></p>
+		<div  class="btn btn-file" style="border:1px solid #ccc;margin-left:120px;">
+	  <input id="img-file" type="file" multiple/><i class="fa fa-pencil fa-lg" class="edit" ></i> Edit Profile Picture</button>
+	  </div>
+	  <br>
+	  <br>
 	  	  <b>Which College do you go To?</b>
 		<br>
       <select id="college" type="text" value=""  name="college" placeholder="I'm in College/University" style="width:80%" required/>
@@ -958,7 +1074,9 @@ jQuery(document).ready(function() {
     </div>
   </div>
 </div>
-
+<div id='loadingmessage' style='display:none'>
+  <img src='/static/style/ajax-loader.gif'/>
+</div>
 
 </body>
 
