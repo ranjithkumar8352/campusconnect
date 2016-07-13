@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Firebase Auth</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/ui/live/0.4/firebase-ui-auth.js"></script>
+  <script src="/static/js/cookie-js.js"></script>
+  <link rel="stylesheet" type="text/css" href="/static/style/style_1.css"/>
+  <link href="/static/style/bootstrap-social.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/live/0.4/firebase-ui-auth.css" />
+  <link rel="icon" href="/static/style/bee-icon-h50px.png">
+	<style>
+   body{
+  background-image:url("/static/style/background.png");
+  overflow-y:hidden;
+  } 
+  .font1{
+  color:#f7971d;
+  font-size:16px;
+  font-weight: bold;
+  }
+.btn-social{
+width:50% !important;
+
+}
+  </style>
+	<script>
+	  var config = {
+      apiKey: "AIzaSyDc__Vt5WyN0B5TOVtewyNoekTQC-7VbLk",
+      authDomain: "campusconnect-650e6.firebaseapp.com",
+      databaseURL: "https://campusconnect-650e6.firebaseio.com",
+      storageBucket: "campusconnect-650e6.appspot.com",
+    };
+    firebase.initializeApp(config);
+    var uiConfig = {
+        'signInSuccessUrl': 'start',
+        'signInOptions': [
+          // Leave the lines as is for the providers you want to offer your users.
+          firebase.auth.GoogleAuthProvider.PROVIDER_ID
+        ],
+        // Terms of service url.
+        'tosUrl': 'tos',
+        'callbacks': {
+          'signInSuccess': function(currentUser, credential, redirectUrl) {
+            currentUser.providerData.forEach(function (profile) {
+            Cookies.set("gid",profile.uid);
+            console.log(profile.uid);
+            console.log(profile.displayName);
+            if (profile.displayName === null) {
+              Cookies.set("firstname","Firstname")
+              Cookies.set("lastname","lastname")
+            }
+            else {
+            Cookies.set("firstname",profile.displayName.split(" ")[0]);
+            Cookies.set("lastname",profile.displayName.split(" ")[1]);
+            }
+            Cookies.set("email",profile.email);
+            if(profile.photoURL !== null) {
+            Cookies.set("imageURL",profile.photoURL);
+            }
+            else {
+              Cookies.set("imageURL","http://i.imgur.com/yZgI1V3.jpg")
+            }
+            });
+            return true;
+          }
+        }
+      };
+
+      // Initialize the FirebaseUI Widget using Firebase.
+      var ui = new firebaseui.auth.AuthUI(firebase.auth());
+      // The start method will wait until the DOM is loaded.
+      ui.start('#firebaseui-auth-container', uiConfig);
+	</script>
+
+</head>
+<body>
+<div class="wrapper">
+<p class="text-center font1">Are you ready for your greatest adventure?</p>
+<p class="text-center font1">We just made it easier.</p>
+	<div id="firebaseui-auth-container"></div>
+  </div>
+</body>
+</html>
