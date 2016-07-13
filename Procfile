@@ -1,1 +1,0 @@
-web: gunicorn campusconnect.wsgi --log-file -
