@@ -671,23 +671,28 @@ $('.edit').show();
 		profileImg='';			
 	 $(document).on("click", "#done", function(event){
 			
-			
+			//alert('doh')
 			
 			if(imgSrc!='')
 			{
 			data={ "profileId":pId,
 				  "file":imgSrc
 				  };
-			
+			//alert(data);
+			var formData = new FormData();
+			formData.append('profileId',pId);
+			formData.append('file', $('#img-file')[0].files[0]);
 			$.ajax({
-					  type:'POST',
+					   type:'POST',
 					  dataType: 'json',
-					  contentType: 'application/json',
+					  contentType: false,
 					  url: 'https://uploadnotes-2016.appspot.com/changePic',
-					  data: JSON.stringify(data),
+					  processData:false,
+					  data: formData,
 					  success: function (data) {
 					  console.log(data+'d');
 					  profileImg=data.url;
+					  alert(profileImg)
 					  ajaxUpdate();
 					  }
 					  
@@ -711,7 +716,7 @@ branchName = Cookies.get("branchName");
 			imageUrl=Cookies.get("imageURL");
 			name3=Cookies.get("profileName");
 			email=Cookies.get("email");
-	 
+	  alert(profileImg)
 				data={
 				'profileName':name3,
 				'collegeId':$('#college').val(),
@@ -722,7 +727,7 @@ branchName = Cookies.get("branchName");
 				'email':email,
 				'profileId':pId
 				};
-				//console.log(JSON.stringify(data));
+				alert(JSON.stringify(data));
 				//onsole.log('https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/editProfile/'+'{'+pId+'}')
 				
 				$.ajax({
@@ -760,7 +765,9 @@ branchName = Cookies.get("branchName");
 							 Cookies.set("branchName",$('#branch').val());
 							Cookies.set("sectionName",$('#section').val());
 							if(profileImg!='')
-							Cookies.set("imageUrl",profileImg);
+							Cookies.set("imageURL",profileImg);
+							
+							alert(Cookies.get("imageURLl"));
 							 $('#editModal').modal('hide');
 							 
 						  }
@@ -899,7 +906,7 @@ jQuery(document).ready(function() {
     <div class="row">
       <div class="col-xs-6 col-md-2 sidebar sidebar-left sidebar-animate sidebar-md-show" >
         <ul class="nav navbar-stacked">
-		<li><center><a  href="/profile" width="50%" height="50%" class="profile.png"><img src="/static/style/profile.png" class="img-circle" width="50%" height="50%"></a></center></li>
+		<li><center><a  href="/profile" width="50%" height="50%" class="profile.png"><img src="/static/style/profile.png" class="img-circle" width="50%" height="50%" style="max-height:100px;"></a></center></li>
 		 <li><center><span id="pname">Name</span></center></li>
         
         <li><center>Points: &nbsp <span id="pts">0</span></center></li>
@@ -934,7 +941,7 @@ jQuery(document).ready(function() {
 					<br>
 					<div id="course-name" style="font-size:25px;"> PROFILE</div>
 					<br>
-					<div><img src="/static/style/profile.png" class="img-circle" width="40%" height="40%"> </div>
+					<div><img src="/static/style/profile.png" class="img-circle" width="40%" height="40%" style="max-height:100px;"> </div>
 				</div>
 				<div class="col-xs-4" >
 				<br><br><br><br>

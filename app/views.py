@@ -64,7 +64,6 @@ def sign_up_api(request):
 		user = User.objects.get(gprofileId=gid)
 		# call the api
 		sign_up_response = register_api.sign_up(user,form_data) #form data
-		print sign_up_response
 		if "key" in sign_up_response:
 			profileId = sign_up_response["key"]
     		# user = User.objects
@@ -317,7 +316,6 @@ def firebaseAuth(request):
 @csrf_exempt
 def deleteUser(request):
 	user = User.objects.filter(email='ranjithkumar8352@gmail.com')
-	print user
 	user.delete()
 	return HttpResponseRedirect("firebase")	
 
