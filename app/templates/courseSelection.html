@@ -1,10 +1,11 @@
 <html>
-
   <head>
     <meta name="google-signin-scope" content="profile email">
     <meta name="google-signin-client_id" content="22051677189-1f55k773ct0qnlb5dkr83surcfk6565t.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="/static/js/cookie-js.js"></script>
+	
+		<script src="/static/js/url.js" type="text/javascript" charset="utf-8"></script>
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
       <script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
@@ -146,15 +147,16 @@ background-color:#f7971d;
 	});
 $(document).ready(function(){
 
-//pid="ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAwMjFzAsM";
 pId=Cookies.get("profileId");
 
 data={
 "profileId":pId
 };
+//temp for subscribing to a course
 ID=[];
+//layout manager
 $('#layout').layout({
- itemMargin: 20,
+ itemMargin: 10,
  itemPadding: 0
  }
  );
@@ -163,7 +165,7 @@ $('#layout').layout({
   type:'POST',
   dataType: 'json',
   contentType: 'application/json',
-  url: "https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/courseList/1",
+  url: getCourseUrl,
   data: JSON.stringify(data),
   success: function (data) {
       console.log(data);
@@ -187,7 +189,7 @@ $('#layout').layout({
 		{
 		section+=data.courseList[i].sectionNames[j];
 		}    
-	
+				//generating cards for courses
                var card=['<div class="ui card bottom " style="background-color:white;padding:0px;border:1px solid #ccc;height:160px;;color:black;width:440px;" id = "card">\
 				<div class="row" style="padding:0px;margin-left:0px;background-color:'+data.courseList[i].colour+';" >\
 				<div class="col-xs-12">\
@@ -213,17 +215,11 @@ $('#layout').layout({
                 </div>\
 				</div>'
 				];
-                
+                //add card
 	           $('#layout').layout('addBefore', card);
-			   
+			   //intialise the listener
 			   document.getElementById(data.courseList[i].courseId).addEventListener('click',function(){
-			  
-			   //s=this.style.backgroundColor;
-			  
 			   s="rgb(247,151,29)"
-			    //alert(s.match(this.style.backgroundColor))
-			    console.log(this.style.backgroundColor)
-			   
 			   if(this.style.backgroundColor == "rgb(247, 151, 29)") {
 			   ID.pop(this.id);
 			   this.style.backgroundColor="#ccc";
@@ -235,6 +231,7 @@ $('#layout').layout({
 			   }
 			   });
 		}
+		//on submit of page
 		$('.done').on('click',function(){
 				data={
 				profileId:pId,
@@ -245,16 +242,11 @@ $('#layout').layout({
 			type:'POST',
 			dataType: 'json',
 			contentType: 'application/json',
-			url: "https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/subscribeCourse",
+			url: subscribeCourseUrl,
 			data: JSON.stringify(data),
 			success: function (data) {
 				console.log(data);
-				
-		
-		
 				window.location="/home";
-		
-		
 				}
 				});
 		

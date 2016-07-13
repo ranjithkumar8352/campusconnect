@@ -2,20 +2,29 @@
 <html>
 
   <head>
+  
+	<!--urls-->
+	 <script src="/static/js/url.js" type="text/javascript" charset="utf-8"></script>
+	 
+	<!--google stuff-->
     <meta name="google-signin-scope" content="profile email">
-	    <link href='http://fonts.googleapis.com/css?family=Pacifico|Average+Sans' rel='stylesheet' type='text/css'>
+	<script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
+	<link href='http://fonts.googleapis.com/css?family=Pacifico|Average+Sans' rel='stylesheet' type='text/css'>
     <meta name="google-signin-client_id" content="22051677189-1f55k773ct0qnlb5dkr83surcfk6565t.apps.googleusercontent.com">
 	<script>window.jQuery || document.write('<script src="/static/js/jquery-1.10.2.min.js" type="text/javascript"><\/script>')</script>
-	   <script type="text/javascript" src="/static/js/jquery-responsiveTables.js"></script>
+	
+	<!--responsive tables and text-->
+	<script type="text/javascript" src="/static/js/jquery-responsiveTables.js"></script>
     <script type="text/javascript" src="/static/js/jquery.responsiveText.js"></script>
 
-	<script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
-    <script src="/static/js/cookie-js.js"></script>
+	<script src="/static/js/cookie-js.js"></script>
+	
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+	
 	<!--Nav bar and side bar-->
 	  <script src="/static/js/sidebar.js"></script>
     <link rel="stylesheet" href="/static/style/style-sidebar.css" />
@@ -26,7 +35,7 @@
 	<!--grid layout-->
    <script src="/static/js/brick-by-brick.js"></script>
    <link rel="stylesheet" href="/static/style/brick-by-brick.css" />
-<!--grid layout-->
+  <!--grid layout-->
 
  <!--tabs-->
     <link href="/static/style/generic-notForTabs.css" rel="stylesheet" type="text/css" />
@@ -321,39 +330,39 @@ $(document).ready(function(){
 	$('#course-search').attr('href','/search?q='+this.value+'&type=course');
 	$('#note-search').attr('href','/search?q='+this.value+'&type=note');
 	});*/
-		$('#note-search').on('click',function(){
+	
+	//toggle for search in navbar
+	$('#note-search').on('click',function(){
 		$('#note-search').css('display','none');
 		$('.nsearch').css('display','block');
 		$('.csearch').css('display','none');
 		$('#course-search').css('display','block');
 		$('#form').attr('action','/search?q=none&type=note');
-		
-		
 		});
 		
-		$('#course-search').on('click',function(){
+	$('#course-search').on('click',function(){
 		$('#note-search').css('display','block');
 		$('.nsearch').css('display','none');
 		$('.csearch').css('display','block');
 		$('#course-search').css('display','none');
 		$('#form').attr('action','/search?q=none&type=course');
-		
-		
 		});
 	$('#form').submit(function(){
-	text=$('#search').val();
-	if(text=="")
-	text="none";
+		text=$('#search').val();
+		if(text=="")
+		text="none";
 
-	action1=$('#form').attr('action');
-	action2=action1.split('&');
-	//alert(action2[0],action2[1])
-	action3=action2[0].split('=');
-	//alert(action3[0],action3[1]);
-	action=action3[0]+"="+text+"&"+action2[1];
-	$('#form').attr('action',action);
+		action1=$('#form').attr('action');
+		action2=action1.split('&');
+		//alert(action2[0],action2[1])
+		action3=action2[0].split('=');
+		//alert(action3[0],action3[1]);
+		action=action3[0]+"="+text+"&"+action2[1];
+		$('#form').attr('action',action);
 	});
 	
+	
+	//setting profile stuff using cookies
 	if(Cookies.get("profilePoints")!="undefined");
 	 {
 	 $('#pts').text(Cookies.get("profilePoints"));
@@ -364,239 +373,212 @@ $(document).ready(function(){
 	  }
 	 }
 	
+	//intializing responsive text and tables
 	$(document).ready(function() {
         $('.responsive').not('table').responsiveText();
         $('table.responsive').responsiveTables();
       });
-
+   //global identifiers
    pId=Cookies.get("profileId");
-data={};
-course=[];
+   data={}; //for ajax
+   course=[]; //getting list of courses
     
-     var append=['<div class="ui card bottom" style="background-color:white;border:1px solid #ccc;height:200px;margin-bottom:1px;margin-color:#ccc;width:300px;" id = "card"><center><button id="b1"> +CLICK ME</buton></canter></div>'];
- //var append=['<div class="ui card bottom" style="background-color:white;border:1px solid #ccc;height:220px;margin-bottom:1px;margin-color:#ccc;width:400px;" id = "card">ssssdcsd</div>'];
-
-			
- $('#layout').layout({
- itemMargin: 10,
- itemPadding: 0
- }
- 
- );
     //onchange for modal upload
 	$('#course').on('change',function(){
 	$('#upload').attr('href','/upload?id='+this.value);
 	});
 	
-	
-    $.ajax({
-  type:'GET',
-  dataType: 'json',
-  url: 'https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/feed/ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgLyhggoM?profileId='+pId,
-  data: data,
-  beforeSend: function (xhr) {
-    if (xhr && xhr.overrideMimeType) {
-      xhr.overrideMimeType('application/json;charset=utf-8');
-    }
-  },
-  success: function (data) {
-      console.log(data);
-	 
-       if(data.photoUrl!="undefined")
-	  {
-	  $('img[src="/static/style/profile.png"]').attr('src', data.photoUrl);
-     
-	 }
-	 if(Cookies.get("profilePoints")=="undefined");
-	 {
-	 Cookies.set("profilePoints",data.points);
-	 Cookies.set("profileName",data.profileName);
-	 }
-	 //$("#image").src()
-      // alert(data.subscribedCourseList[i].points);
-     $('#pts').text(data.points);
-	  
-     $('#pname').text(data.profileName);
-	  
-	 dict={};
-      for(i=0;i<data.subscribedCourseList.length;i++)
-          {
+	//plugin for responsive layout for cards
+	$('#layout').layout({
+		 itemMargin: 10,
+		 itemPadding: 0
+		 });
 		 
-		  //var s='display:none console.log(".day"+data.subscribedCourseList[i].date[j]+" td:eq(1)")
-		// console.log($(".day"+data.subscribedCourseList[i].date[j]+" td:eq(1)").text('ChangedText'));';
-		  for(j=0;j<data.subscribedCourseList[i].date.length;j++)
-		 {
-			 index=0;
-			 
-			for(k=parseInt(data.subscribedCourseList[i].startTime[j]);k<parseInt(data.subscribedCourseList[i].endTime[j]);k++)
-			{
-			if(k==8)
-			index=1
-			else if(k==9)
-			index=2;
-			else if(k==10)
-			index=3;
-			else if(k==11)
-			index=4;
-			else if(k==12)
-			index=5;
-			else if(k==13)
-			index=6;
-			else if(k==14)
-			index=7;
-			else if(k==15)
-			index=8;
-			else if(k==16)
-			index=9;
-			else if(k==17)
-			index=10;
-			else if(k==18)
-			index=11;
-			else if(k==19)
-			index=12;
-			else if(k==20)
-			index=13;
-			//alert('h');
-			//console.log($('body').css("background-color"));
-			//alert($(".responsive tr:eq("+index+") td:eq("+(data.subscribedCourseList[i].date[j]-1)+")").css("background-color"));
-			//console.log($(".responsive tr:eq("+index+") td:eq("+(data.subscribedCourseList[i].date[j]-1)+")").css("background-color"));
-			if(($(".responsive tr:eq("+index+") td:eq("+(data.subscribedCourseList[i].date[j]-1)+")").css("background-color")=="rgba(0, 0, 0, 0)")||($(".responsive tr:eq("+index+") td:eq("+(data.subscribedCourseList[i].date[j]-1)+")").css("background-color")=="transparent"))
-			{
-			//alert()
-		
-			$(".responsive tr:eq("+index+") td:eq("+(data.subscribedCourseList[i].date[j]-1)+")").css("background-color",data.subscribedCourseList[i].colour);
-			$(".responsive tr:eq("+index+") td:eq("+(data.subscribedCourseList[i].date[j]-1)+")").text(data.subscribedCourseList[i].courseCode);
-			}
-			else{
-			break;
-			}
-				
-			} 
-		 }
-		  var text="",border="white";
-		  el='<div style="margin-top:22px;"/>'; 
-		  if(data.subscribedCourseList[i].elective!="0")
-		 { 
-		 text="Elective";
-		 border="black"
-		 el='<div class="elective " style="margin-top:3px;border-color:black;border:1px solid black;" ><center>Elective</center></div>'	;	 
-		 }
-		  if(data.subscribedCourseList[i].colour!="undefined")
-		  color=data.subscribedCourseList[i].colour.toLowerCase();
-           $('<option value= "'+data.subscribedCourseList[i].courseId+'">'+data.subscribedCourseList[i].courseName+'</option>').appendTo("#course");
-              
-            
-                var card=['<div class="ui card bottom " style="background-color:white;border:1px solid #ccc;height:160px;;color:black;width:340px;" id = "card">\
-				<div class="row" style="background-color:'+color+';padding:0px;margin-left:0px;padding-top:10px;">\
-				<div class="col-xs-7" >\
-                <div class="course-name" id="'+data.subscribedCourseList[i].courseId+'" style="margin-left:-10px;cursor:pointer;font-size:15px;">  <u>'+data.subscribedCourseList[i].courseName+'</u></div>\
-                <div class="proff" style="margin-left:0px;margin-top:3px;">By Prof.'+data.subscribedCourseList[i].professorName+'</div>\
-				</div>\
-				<div class="col-xs-5 " style="padding-right:0px;">\
-				<div id="calendar" style="font-size:15px;margin-left:5px;"><i class="fa fa-calendar" aria-hidden="true" style="font-size:15px;"></i><span style="font-size:15px;color:#ccc;" id="mon'+i+'"> M</span><span style="font-size:15px;color:#ccc;" id="tue'+i+'"> T</span><span style="font-size:15px;color:#ccc;" id="wed'+i+'"> W</span><span style="font-size:15px;color:#ccc;" id="thu'+i+'"> T</span><span style="font-size:15px;color:#ccc;" id="fri'+i+'"> F</span><span style="font-size:15px;color:#ccc;" id="sat'+i+'"> S</span></div>\
-				</div>\
-				</div>\
-				<div class="row" style="margin-left:0px;">\
-				<div class="col-md-4 col-xs-4">\
-				'+el+'\
-				</div>\
-				</div>\
-				<br>\
-                <div class="row" style="margin-top:-6px;margin-left:0px;">\
-                <div class="col-xs-3 notes"  id="'+data.subscribedCourseList[i].courseId+'/notes" style="cursor:pointer;padding-right:0px;border-right:1px solid #ccc">\
-                <div style="">NOTES</div>\
-                <br>\
-                <div class="notes-no" style="margin-left:15px;">+ '+data.subscribedCourseList[i].recentNotes+'</div>\
-                </div>\
-                <div class="col-xs-5 col-xs-offset-1 ass"  id="'+data.subscribedCourseList[i].courseId+'/assignments" style="cursor:pointer;padding:0px;border-right:1px solid #ccc"">\
-                <div>  ASSIGNMENTS</div>\
-                <br>\
-                <div class="ass-no" style="margin-left:40px;">'+data.subscribedCourseList[i].dueAssignments+'</div>\
-                </div>\
-                <div class="col-xs-3  exam"  id="'+data.subscribedCourseList[i].courseId+'/exams" style="cursor:pointer;padding:0px"><div> &nbsp &nbsp EXAMS</div>\
-                <br>\
-                <div class="date-no" style="margin-left:35px;">'+data.subscribedCourseList[i].dueExams+'</div>\
-                </div>\
-                </div>\
-                </div>'];
-                 $('#layout').layout('addBefore', card);
-              //document.getElementById("cid-"+i).addEventListener('click',f,123);
-	          
-                document.getElementById(data.subscribedCourseList[i].courseId).addEventListener('click',function(e){ 
-                 // id=document.getElementById(e.id).cid;
-				 //alert("hi");
-                window.location="/course?id="+this.id+"/notes#view1";
-                });
-              
-              s=
-                document.getElementById(data.subscribedCourseList[i].courseId+"/notes").addEventListener('click',function(e){ 
-                 // id=document.getElementById(e.id).cid;
-                window.location="/course?id="+this.id+"#view1";
-                });
-              
-              
-                document.getElementById(data.subscribedCourseList[i].courseId+"/assignments").addEventListener('click',function(e){ 
-                 // id=document.getElementById(e.id).cid;
-                window.location="/course?id="+this.id+"#view2";
-                });
-              
-                document.getElementById(data.subscribedCourseList[i].courseId+"/exams").addEventListener('click',function(e){ 
-                 // id=document.getElementById(e.id).cid;
-                window.location="/course?id="+this.id+"#view3";
-                });
-				
-				for(j=0;j<data.subscribedCourseList[i].date.length;j++)
-					{
-						if(data.subscribedCourseList[i].date[j]==1)
+    $.ajax({
+			  type:'GET',
+			  dataType: 'json',
+			  url: feed+'?profileId='+pId,
+			  data: data,
+			  beforeSend: function (xhr) {
+				if (xhr && xhr.overrideMimeType) {
+				  xhr.overrideMimeType('application/json;charset=utf-8');
+				}
+			  },
+			  success: function (data) {
+				  console.log(data);
+				 
+				   if(data.photoUrl!="undefined")
+				  {
+				  $('img[src="/static/style/profile.png"]').attr('src', data.photoUrl);
+				 
+				 }
+				 if(Cookies.get("profilePoints")=="undefined");
+				 {
+				 Cookies.set("profilePoints",data.points);
+				 Cookies.set("profileName",data.profileName);
+				 }
+				 $('#pts').text(data.points);
+				  
+				 $('#pname').text(data.profileName);
+				  
+				 dict={};
+				  for(i=0;i<data.subscribedCourseList.length;i++)
+					  {
+					 //setting time table
+					  for(j=0;j<data.subscribedCourseList[i].date.length;j++)
+					 {
+						 index=0;
+						 
+						for(k=parseInt(data.subscribedCourseList[i].startTime[j]);k<parseInt(data.subscribedCourseList[i].endTime[j]);k++)
 						{
-						 $("#mon"+i).css('color','black');
+						if(k==8)
+						index=1
+						else if(k==9)
+						index=2;
+						else if(k==10)
+						index=3;
+						else if(k==11)
+						index=4;
+						else if(k==12)
+						index=5;
+						else if(k==13)
+						index=6;
+						else if(k==14)
+						index=7;
+						else if(k==15)
+						index=8;
+						else if(k==16)
+						index=9;
+						else if(k==17)
+						index=10;
+						else if(k==18)
+						index=11;
+						else if(k==19)
+						index=12;
+						else if(k==20)
+						index=13;
+						//index=row number ie the time,td=column
+						if(($(".responsive tr:eq("+index+") td:eq("+(data.subscribedCourseList[i].date[j]-1)+")").css("background-color")=="rgba(0, 0, 0, 0)")||($(".responsive tr:eq("+index+") td:eq("+(data.subscribedCourseList[i].date[j]-1)+")").css("background-color")=="transparent"))
+						{
+						$(".responsive tr:eq("+index+") td:eq("+(data.subscribedCourseList[i].date[j]-1)+")").css("background-color",data.subscribedCourseList[i].colour);
+						$(".responsive tr:eq("+index+") td:eq("+(data.subscribedCourseList[i].date[j]-1)+")").text(data.subscribedCourseList[i].courseCode);
 						}
-					
-						if(data.subscribedCourseList[i].date[j]==2)
-						 $("#tue"+i).css('color','black');
+						else{
+						break;
+						}
+							
+						} 
+					 }
+					  var text="",border="white";
+					  el='<div style="margin-top:22px;"/>'; 
+					  //el is whether to add the 'elective' text to the card
+					  if(data.subscribedCourseList[i].elective!="0")
+					 { 
+					 text="Elective";
+					 border="black"
+					 el='<div class="elective " style="margin-top:3px;border-color:black;border:1px solid black;" ><center>Elective</center></div>'	;	 
+					 }
+					  if(data.subscribedCourseList[i].colour!="undefined")
+					  color=data.subscribedCourseList[i].colour.toLowerCase();
+					   $('<option value= "'+data.subscribedCourseList[i].courseId+'">'+data.subscribedCourseList[i].courseName+'</option>').appendTo("#course");
+						  
 						
-						if(data.subscribedCourseList[i].date[j]==3)
-						 $("#wed"+i).css('color','black');
-						
-						if(data.subscribedCourseList[i].date[j]==4)
-						 $("#thu"+i).css('color','black');
-						
-						if(data.subscribedCourseList[i].date[j]==5)
-						 $("#fri"+i).css('color','black');
-						
-						if(data.subscribedCourseList[i].date[j]==6)
-						 $("#sat"+i).css('color','black');
-					}
-				
-				
-          }
-		  
-  }
-});
+							var card=['<div class="ui card bottom " style="background-color:white;border:1px solid #ccc;height:160px;;color:black;width:340px;" id = "card">\
+							<div class="row" style="background-color:'+color+';padding:0px;margin-left:0px;padding-top:10px;">\
+							<div class="col-xs-7" >\
+							<div class="course-name" id="'+data.subscribedCourseList[i].courseId+'" style="margin-left:-10px;cursor:pointer;font-size:15px;">  <u>'+data.subscribedCourseList[i].courseName+'</u></div>\
+							<div class="proff" style="margin-left:0px;margin-top:3px;">By Prof.'+data.subscribedCourseList[i].professorName+'</div>\
+							</div>\
+							<div class="col-xs-5 " style="padding-right:0px;">\
+							<div id="calendar" style="font-size:15px;margin-left:5px;"><i class="fa fa-calendar" aria-hidden="true" style="font-size:15px;"></i><span style="font-size:15px;color:#ccc;" id="mon'+i+'"> M</span><span style="font-size:15px;color:#ccc;" id="tue'+i+'"> T</span><span style="font-size:15px;color:#ccc;" id="wed'+i+'"> W</span><span style="font-size:15px;color:#ccc;" id="thu'+i+'"> T</span><span style="font-size:15px;color:#ccc;" id="fri'+i+'"> F</span><span style="font-size:15px;color:#ccc;" id="sat'+i+'"> S</span></div>\
+							</div>\
+							</div>\
+							<div class="row" style="margin-left:0px;">\
+							<div class="col-md-4 col-xs-4">\
+							'+el+'\
+							</div>\
+							</div>\
+							<br>\
+							<div class="row" style="margin-top:-6px;margin-left:0px;">\
+							<div class="col-xs-3 notes"  id="'+data.subscribedCourseList[i].courseId+'/notes" style="cursor:pointer;padding-right:0px;border-right:1px solid #ccc">\
+							<div style="">NOTES</div>\
+							<br>\
+							<div class="notes-no" style="margin-left:15px;">+ '+data.subscribedCourseList[i].recentNotes+'</div>\
+							</div>\
+							<div class="col-xs-5 col-xs-offset-1 ass"  id="'+data.subscribedCourseList[i].courseId+'/assignments" style="cursor:pointer;padding:0px;border-right:1px solid #ccc"">\
+							<div>  ASSIGNMENTS</div>\
+							<br>\
+							<div class="ass-no" style="margin-left:40px;">'+data.subscribedCourseList[i].dueAssignments+'</div>\
+							</div>\
+							<div class="col-xs-3  exam"  id="'+data.subscribedCourseList[i].courseId+'/exams" style="cursor:pointer;padding:0px"><div> &nbsp &nbsp EXAMS</div>\
+							<br>\
+							<div class="date-no" style="margin-left:35px;">'+data.subscribedCourseList[i].dueExams+'</div>\
+							</div>\
+							</div>\
+							</div>'];
+							//using the layout manager for adding the card
+							 $('#layout').layout('addBefore', card);
+							//registering event listener for click to go to course page
+							document.getElementById(data.subscribedCourseList[i].courseId).addEventListener('click',function(e){ 
+							window.location="/course?id="+this.id+"/notes#view1";
+							});
+						  
+						  //registering event listener for click to go to course page and clicking on notes
+							document.getElementById(data.subscribedCourseList[i].courseId+"/notes").addEventListener('click',function(e){ 
+							 // id=document.getElementById(e.id).cid;
+							window.location="/course?id="+this.id+"#view1";
+							});
+						  
+						  //registering event listener for click to go to course page and clicking on assignments
+							document.getElementById(data.subscribedCourseList[i].courseId+"/assignments").addEventListener('click',function(e){ 
+							 // id=document.getElementById(e.id).cid;
+							window.location="/course?id="+this.id+"#view2";
+							});
+							
+						  //registering event listener for click to go to course page and clicking on exams
+							document.getElementById(data.subscribedCourseList[i].courseId+"/exams").addEventListener('click',function(e){ 
+							 // id=document.getElementById(e.id).cid;
+							window.location="/course?id="+this.id+"#view3";
+							});
+							
+						  //for setting the days of the week on the card
+							for(j=0;j<data.subscribedCourseList[i].date.length;j++)
+								{
+									if(data.subscribedCourseList[i].date[j]==1)
+									{
+									 $("#mon"+i).css('color','black');
+									}
+								
+									if(data.subscribedCourseList[i].date[j]==2)
+									 $("#tue"+i).css('color','black');
+									
+									if(data.subscribedCourseList[i].date[j]==3)
+									 $("#wed"+i).css('color','black');
+									
+									if(data.subscribedCourseList[i].date[j]==4)
+									 $("#thu"+i).css('color','black');
+									
+									if(data.subscribedCourseList[i].date[j]==5)
+									 $("#fri"+i).css('color','black');
+									
+									if(data.subscribedCourseList[i].date[j]==6)
+									 $("#sat"+i).css('color','black');
+								}
+							
+							
+					  }
+					  
+			  }
+			});
     
-    
-
-		
-	$('#b1').on('click',function(){
-	$('#layout').layout( 'addAfter' , append1);
-	});
+   
 	$('#cid-0').on('click',function(){
 	 window.location="/course";
 	 
 	 });
-	 
-	//$(".se-pre-con").hide();
+	
 	
 	});
-    
-    function  f(e,id)
-    {
-        v=id;
-            if(v!=0)
-            {
-                
-            }
-    }
 </script>
 
 <body>

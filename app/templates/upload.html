@@ -1,44 +1,57 @@
 <!DOCTYPE html>
 <html>
   <head>
-<meta name="google-signin-scope" content="profile email">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- google stuff-->
+	<meta name="google-signin-scope" content="profile email">
     <meta name="google-signin-client_id" content="22051677189-1f55k773ct0qnlb5dkr83surcfk6565t.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
+	
+  <!--cookie js-->
     <script src="/static/js/cookie-js.js"></script>
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
-      <script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-  
+	
+   <script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />
    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+   <!--date time picker-->
    <link rel="stylesheet" type="text/css" href="static/style/DateTimePicker.css" />
 	<script type="text/javascript" src="static/js/DateTimePicker.js"></script>
+	
 	<!--Nav bar and side bar-->
 	  <script src="/static/js/sidebar.js"></script>
     <link rel="stylesheet" href="/static/style/style-sidebar.css" />
     <link rel="stylesheet" href="/static/style/sidebar.css"/>
 	    <link rel="stylesheet" href="/static/style/index.css"/>
 	<!--Nav bar and side bar-->	
+	
 	<!--grid layout-->
    <script src="/static/js/brick-by-brick.js"></script>
    <link rel="stylesheet" href="/static/style/brick-by-brick.css" />
-<!--grid layout-->
-<script type="text/javascript" src="/static/js/jquery.simple-color.js"></script>
-<!-- upload-->
-	<link href="/static/style/fileinput.css" media="all" rel="stylesheet" type="text/css" />
+	<!--grid layout-->
+	
+  <script type="text/javascript" src="/static/js/jquery.simple-color.js"></script>
+	<!-- upload-->
+	 <link href="/static/style/fileinput.css" media="all" rel="stylesheet" type="text/css" />
 	 <script src="/static/js/fileinput.js" type="text/javascript"></script>
 	<!--upload-->
- <!--tabs-->
+	<!--tabs-->
     <link href="/static/style/generic-notForTabs.css" rel="stylesheet" type="text/css" />
     <link href="/static/style/responsive-tabs.css" rel="stylesheet" type="text/css" />
     <script src="/static/js/responsive-tabs.js" type="text/javascript"></script>
-<!--tabs-->
-   <link rel="stylesheet" type="text/css" href="/static/style/slick.css">
-	  <script src="/static/js/slick.js" type="text/javascript" charset="utf-8"></script>
-  <link rel="stylesheet" type="text/css" href="/static/style/slick-theme.css">
-  <link rel="icon" href="/static/style/bee-icon-h50px.png">
+	<!--tabs-->
+	 <link rel="stylesheet" type="text/css" href="/static/style/slick.css">
+	 <script src="/static/js/slick.js" type="text/javascript" charset="utf-8"></script>
+	 <link rel="stylesheet" type="text/css" href="/static/style/slick-theme.css">
+	 
+	<link rel="icon" href="/static/style/bee-icon-h50px.png">
+	<!--urls-->
+	 <script src="/static/js/url.js" type="text/javascript" charset="utf-8"></script>
+	
+	 
   </head>
   <title>Campus Connect</title>
+  
 <style>
 .no-js #loader { display: none;  }
 .js #loader { display: block; position: absolute; left: 100px; top: 0; }
@@ -184,88 +197,86 @@ display:none;
 }
 </style>
 <script>
+
+//bee icon
  $(window).load(function() {
 		// Animate loader off screen
 		$(".se-pre-con").fadeOut(2300);;
 	});
 $(document).on('ready',function(){
+	
+	
+	//search toggle and on submit url changes-notebook or course
 	$('#note-search').on('click',function(){
 		$('#note-search').css('display','none');
 		$('.nsearch').css('display','block');
 		$('.csearch').css('display','none');
 		$('#course-search').css('display','block');
 		$('#form').attr('action','/search?q=none&type=note');
-		
-		
 		});
 		
-		$('#course-search').on('click',function(){
+	$('#course-search').on('click',function(){
 		$('#note-search').css('display','block');
 		$('.nsearch').css('display','none');
 		$('.csearch').css('display','block');
 		$('#course-search').css('display','none');
 		$('#form').attr('action','/search?q=none&type=course');
-		
-		
 		});
 	$('#form').submit(function(){
-	text=$('#search').val();
-	if(text=="")
-	text="none";
-
-	action1=$('#form').attr('action');
-	action2=action1.split('&');
-	//alert(action2[0],action2[1])
-	action3=action2[0].split('=');
-	//alert(action3[0],action3[1]);
-	action=action3[0]+"="+text+"&"+action2[1];
-	$('#form').attr('action',action);
-	});
+		text=$('#search').val();
+		if(text=="")
+		text="none";
+		action1=$('#form').attr('action');
+		action2=action1.split('&');
+		//alert(action2[0],action2[1])
+		action3=action2[0].split('=');
+		//alert(action3[0],action3[1]);
+		action=action3[0]+"="+text+"&"+action2[1];
+		$('#form').attr('action',action);
+		});
 	
-$("#dtBox").DateTimePicker();
-$('#date').on('change',function(){
-alert(this.value);
-});
-//date 
-var today = new Date();
-var dd = today.getDate();
-var mm = today.getMonth()+1; //January is 0!
-var yyyy = today.getFullYear();
+	
+	
+	//intialising date time picker
+	$("#dtBox").DateTimePicker();
+	
 
-if(dd<10) {
-    dd='0'+dd
-} 
+   //setting todays date for date
+	var today = new Date();
+	var dd = today.getDate();
+	var mm = today.getMonth()+1; //January is 0!
+	var yyyy = today.getFullYear();
 
-if(mm<10) {
-    mm='0'+mm
-} 
+	if(dd<10) {
+		dd='0'+dd
+	} 
 
-today = dd+'-'+mm+'-'+yyyy;
-
-document.getElementById('date').value = today;
-document.getElementById('date1').value = today;
-
-
+	if(mm<10) {
+		mm='0'+mm
+	} 
+	today = dd+'-'+mm+'-'+yyyy;
+	document.getElementById('date').value = today;
+	document.getElementById('date1').value = today;
 
 
-url1= $(location).attr('href'); 
-url=url1.split('=');
-//alert(url[1]);
+
+	//url splitting for getting which course user selected
+	url1= $(location).attr('href'); 
+	url=url1.split('=');
+	
+	//getting profileId
 	pId=Cookies.get("profileId");
-		
-		//onchange for modal upload
+	
+	//onchange for modal upload
 	$('#course').on('change',function(){
-	//alert('dfd');
 	$('#upload').attr('href','/upload?id='+this.value);
-	//alert($('#upload').attr('href'));
 	});
-		
+		//feed API
 		data={"profileId":pId};
-        
 			  $.ajax({
 			  type:'GET',
 			  dataType: 'json',
-			  url: 'https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/feed/ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgLyhggoM',
+			  url: feed+'?profileId='+pId,
 			  data: data,
 			  beforeSend: function (xhr) {
 				if (xhr && xhr.overrideMimeType) {
@@ -274,128 +285,42 @@ url=url1.split('=');
 			  },
 			success: function (data) {
 					console.log(data);
+					
 					$('img[src="profile.png"]').attr('src', data.photoUrl);
-						 //$("#image").src()
-						  // alert(data.subscribedCourseList[i].points);
 					$('#pts').text(data.points);
 					$('#pname').text(data.profileName);
 					$('#profile-name').text(data.profileName);
 					$('#profile-pts').text(data.points);
-					  if(data.photoUrl!="undefined")
-					  {
-						$('img[src="/static/style/profile.png"]').attr('src', data.photoUrl);
-					  }
-	 for(i=0;i<data.subscribedCourseList.length;i++)
-          {//420  
-           $('<option value= "'+data.subscribedCourseList[i].courseId+'">'+data.subscribedCourseList[i].courseName+'</option>').appendTo("#course");}
-				}
+					
+					if(data.photoUrl!="undefined")
+					 {
+					 $('img[src="/static/style/profile.png"]').attr('src', data.photoUrl);
+					 }
+					 
+				 for(i=0;i<data.subscribedCourseList.length;i++)
+					  {//420  
+					   $('<option value= "'+data.subscribedCourseList[i].courseId+'">'+data.subscribedCourseList[i].courseName+'</option>').appendTo("#course");}
+							}
+					  });
+					  
+					  //dropdown toggle for type, if assignment,hide exam's fields and viceversa
+					$("#type-select").on('change',function(){
+					if(this.value=="assignment" || this.value=="exam" )
+					{
+					$("#due-date").css("display","block");
+					$("#due-time").css("display","block");
+					$("#class-number").css("display","none");
+					}
+					else if(this.value=="notes")
+					{
+					$("#due-date").css("display","none");
+					$("#due-time").css("display","none");
+					$("#class-number").css("display","block");
+					}
 				});
-		$("#type-select").on('change',function(){
-		if(this.value=="assignment" || this.value=="exam" )
-		{
-		$("#due-date").css("display","block");
-		$("#due-time").css("display","block");
-		$("#class-number").css("display","none");
-		
-		}
-		else if(this.value=="notes")
-		{
-		$("#due-date").css("display","none");
-		$("#due-time").css("display","none");
-		$("#class-number").css("display","block");
-		}
-	});
-	
-	     m=[]
-	 slideIndex=-1;
-   
-      $(".regular").slick({
-        dots: true,
-        infinite: false,
-        slidesToShow: 4,
-        variableWidth: true,
-        slidesToScroll: 4,
-		responsive: [
-                            {
-                              breakpoint: 1077,
-                              settings: {
-                                slidesToShow: 2,
-                                slidesToScroll: 2
-                              }
-                            },
-                            {
-                              breakpoint: 1088,
-                              settings: {
-                                slidesToShow: 3,
-                                slidesToScroll: 3
-                              }
-                            },
-                            {
-                              breakpoint: 800,
-                              settings:  {
-                                slidesToShow: 1,
-                                slidesToScroll: 1
-                              }
-                            }
-
-                          ]
-      });
 	 
-	 
-	 function f(value){
-     //$('.slides').slickCurrentSlide()+1);
-	 $('.regular').slick('slickRemove',value);
-	 if (slideIndex !== -1){
-    slideIndex--;
-	 for(i=value;i<=slideIndex;i++)
-	 {
-	var ar=i+1;
-	 var s="#page-"+ar;
-	 var id="#page-"+i;
-	 var fun="f("+i+")";
-	 var p="#c-"+ar;
-	 var id1="#c-"+i;
-	 var body="<center>"+i+"</center>";
-	  alert(fun+" "+p);
-	 $(p).attr("index",i);
-	 
-	 $(s).html(body);
-	 $(p).attr('onclick',fun);
-	 $(p).attr("id",id1);
-	 $(s).attr("id",id);
-	 }
-	 }
- 
-		}
-	 
-	 
-	 
- function  add(img) {
-  slideIndex++;
-  $('.regular').slick('slickAdd','<div><div class="img-wrap"><a href="'+img+'" target=_blank ><img src="'+img+'" width="241" height="300"><h3 id="page-'+slideIndex+'"style="margin-top:-75px;"> <center> '+(slideIndex+1)+'</center></h3></a><span index="'+slideIndex+'" id="c-'+slideIndex+'"class="close" onclick="f('+slideIndex+')"  >&times;</span></div></div>');
- //document.getElementsByClassName('close').addEventListener(
- /*data={
- "file":img
- };
-  $.ajax({
-        type:'POST',
-        dataType: 'json',
-        contentType: 'application/json',
-        url: 'https://uploadingtest-1344.appspot.com/img',
-        data: JSON.stringify(data),
-        success: function (data) {
-        console.log(data);}
-		});*/
-}
-
+	 //on selecting a file, u can do image compression here , option-1
     $("#fileUpload").on('change',function(){
-	/*  
-	  var fieldValuePairs = $('#upload').serializeArray();
-	$.each(fieldValuePairs, function(index, fieldValuePair) {
-    alert("Item " + index + " is [" + fieldValuePair.name + "," + fieldValuePair.value + "]");
-}); */   
-	//Get count of selected files
-	
 	$this=$("#fileUpload");
 		   countFiles =0;
           countFiles = $("#fileUpload")[0].files.length;
@@ -414,7 +339,6 @@ url=url1.split('=');
 			  
 			   var img = document.createElement("img");
 			   img.src = window.URL.createObjectURL($("#fileUpload")[0].files[i]);
-				add(img.src);
 				//alert(m.length);
               }
 			  
@@ -424,12 +348,8 @@ url=url1.split('=');
           } else {
             alert("Pls select only images");
           }
-		  //car();
-		  flag=1;
-		 // alert(m.length);
-		  //car();
         });
-		
+		/*
 		$('#upload').submit(function(eventObj) {
 			//ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgJuQxAgM
 			$(this).append('<input type="text" name="profileId" value="'+pId+'" style="display:none"/> ');
@@ -449,14 +369,17 @@ url=url1.split('=');
 			 var reader = new FileReader();
 			 
 			 console.log(reader);
-			/*for(i=0;i<files.length;i++)
-			alert(files[i].name);*/
+			for(i=0;i<files.length;i++)
+			alert(files[i].name);
 			
 			return true;
-								});
-								
+								});*/
+		
+
+		 
+		 //hitting upload API
 		$("#fileUpload").fileinput({
-		uploadUrl: 'https://uploadnotes-2016.appspot.com/img', // you must set a valid URL here else you will get an error
+		uploadUrl: fileUpload, // you must set a valid URL here else you will get an error
         allowedFileExtensions : ['jpg', 'png','gif'],
         overwriteInitial: false,
         maxFilesNum: 10,
@@ -474,56 +397,32 @@ url=url1.split('=');
 
             };
 		}
-		
-		
-    }).on('filesuccessremove', function(event, id) 
-	{alert(id);})
-	.on('filebatchuploaderror', function(event, data, previewId, index) {
-	var form = data.form, files = data.files, extra = data.extra, 
-    response = data.response, reader = data.reader;
-	alert('There was an error with your Upload,Please Upload again!');
-	})
-	.on('filepreajax', function(event, previewId, index) {
-    console.log('File pre ajax triggered');
-	/*$("#desc").val(),
-				alert($("#type-select").val());
-				alert($('#date').val());
-			alert($('#date1').val());
-			alert($('#time').val());*/
-	})
-	.on('fileuploaded', function(event, data, previewId, index) {
-    var form = data.form, files = data.files, extra = data.extra,
-        response = data.response, reader = data.reader;
-	
-		
-    console.log(response,reader);
-	//alert(ressponse.url[0])
-	})
-	.on('filebatchuploadsuccess', function(event, data, previewId, index) {
-	var form = data.form, files = data.files, extra = data.extra, 
-    response = data.response, reader = data.reader;
-    alert (extra.bdInteli + " " +  response.uploaded);
-	window.location="/notebook?id="+response.noteBookId+"&cId="+url[1];
-	});
-	
+		}).on('filesuccessremove', function(event, id) 
+			{alert(id);
+			})
+			.on('filebatchuploaderror', function(event, data, previewId, index) {
+			var form = data.form, files = data.files, extra = data.extra, 
+			response = data.response, reader = data.reader;
+			alert('There was an error with your Upload,Please Upload again!');
+			})
+			.on('filepreajax', function(event, previewId, index) {
+			console.log('File pre ajax triggered'); 
+			//CAN do image compression  here, rather should do it here -option2
+			})
+			.on('fileuploaded', function(event, data, previewId, index) {
+			var form = data.form, files = data.files, extra = data.extra,
+				response = data.response, reader = data.reader;
+			console.log(response,reader);
+			//alert(ressponse.url[0])
+			})
+			.on('filebatchuploadsuccess', function(event, data, previewId, index) {
+			var form = data.form, files = data.files, extra = data.extra, 
+			response = data.response, reader = data.reader;
+			window.location="/notebook?id="+response.noteBookId+"&cId="+url[1];
+			});
+			//filebatchuploadsuccess function is where the control comes when upload successful
 
 });
-	
-
-	
-	/*
-					title:'sds',
-				desc:$("#desc").val(),
-				type:$("#type-select").val(),
-				date:$('#date').val(),
-				dueDate:$('#date1').val(),
-				dueTime:$('#time').val()*/
-	
-		
-		
-
-
-
 </script>
 <body>
 <div class="se-pre-con"></div>
