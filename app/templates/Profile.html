@@ -550,7 +550,7 @@ $(document).ready(function(){
 				
 	$('#editModal').on('show.bs.modal', function (e) {	
 			
-			$('#loadingmessage').show(); 
+		$(".se-pre-con").show();	 
 			if(modal==0)
 			{
 			modal++;
@@ -616,7 +616,7 @@ $(document).ready(function(){
 				 }
 				});
 			k=0;	
-			$('#loadingmessage').hide(); 
+			$(".se-pre-con").fadeOut('slow');	
 			//change in college=>change in branch
 			/*$('#college').on('change',function(){
 					for(i=0;i<list.length;i++)
@@ -639,7 +639,8 @@ $(document).ready(function(){
 
 	//when user is done with editing his profile, submit 
 	 $(document).on("click", "#done", function(event){
-			if(imgSrc!='')
+$(".se-pre-con").show();	
+	 if(imgSrc!='')
 			{
 			data={ "profileId":pId,
 				  "file":imgSrc
@@ -670,6 +671,7 @@ $(document).ready(function(){
 
 function ajaxUpdate()
 {
+
 branchName = Cookies.get("branchName");
 			sectionName=Cookies.get("sectionName");
 			batchName=Cookies.get("batchName");
@@ -702,7 +704,7 @@ branchName = Cookies.get("branchName");
 							  "positionClass": "toast-top-full-width",
 							  "preventDuplicates": true,
 							  "onclick": null,
-							  "showDuration": "5",
+							  "showDuration": "10",
 							  "hideDuration": "1000",
 							  "timeOut": "1600",
 							  "extendedTimeOut": "1000",
@@ -711,7 +713,7 @@ branchName = Cookies.get("branchName");
 							  "showMethod": "fadeIn",
 							  "hideMethod": "fadeOut"
 							}
-							
+							$(".se-pre-con").hide('slow');	
 							Command: toastr["success"]("<center> Profile Updated Successfully!</center>");
 							//reinitialising toggle and resetting cookies to nwe value
 							modal=0;
