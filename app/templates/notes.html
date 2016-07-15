@@ -3,6 +3,7 @@
 
   <head>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <script src="/static/js/url.js" type="text/javascript" charset="utf-8"></script>
       <!--image viewer-->
       <meta name="apple-mobile-web-app-capable" content="yes" />
 	
@@ -182,24 +183,58 @@ display:none !important;
 		// Animate loader off screen
 		$(".se-pre-con").fadeOut(2500);;
 	});
-        var descp=[];
-    images=[];
+    
+	var descp=[];
+    images=[];//temp which contains the imageList to be displayed
         
 $(document).ready(function(){
  
 jQuery(document).ready(function() {
 	jQuery("time .timeago").timeago();
 	});
+	
+	//search
+	$('#note-search').on('click',function(){
+		$('#note-search').css('display','none');
+		$('.nsearch').css('display','block');
+		$('.csearch').css('display','none');
+		$('#course-search').css('display','block');
+		$('#form').attr('action','/search?q=none&type=note');
+		});
+		
+	$('#course-search').on('click',function(){
+		$('#note-search').css('display','block');
+		$('.nsearch').css('display','none');
+		$('.csearch').css('display','block');
+		$('#course-search').css('display','none');
+		$('#form').attr('action','/search?q=none&type=course');
+		
+		
+		});
+	$('#form').submit(function(){
+	text=$('#search').val();
+	if(text=="")
+	text="none";
+
+	action1=$('#form').attr('action');
+	action2=action1.split('&');
+	//alert(action2[0],action2[1])
+	action3=action2[0].split('=');
+	//alert(action3[0],action3[1]);
+	action=action3[0]+"="+text+"&"+action2[1];
+	$('#form').attr('action',action);
+	});
+	
 
       url2= $(location).attr('href'); 
 	  //split into cId and Id
 	  splitId=url2.split('&');
 	  url=splitId[0].split('=');
     type=url[0].split('/');
-	//alert(type[1]);
 	  //getting cId
 	  cId=splitId[1].split('=');
 	  
+	  //setting the navigation so that user can go back to courses
 	  $("#course-name").attr("href","/course?id="+cId[1]+"/notes#view1");
        $('#pts').text(Cookies.get("profilePoints"));
      $('#pname').text( Cookies.get("profileName"));
@@ -215,75 +250,79 @@ jQuery(document).ready(function() {
 	  
     data={};
     pId=Cookies.get("profileId");
+	//if the user clicked on a notebook on course page, get Notebook of thta person
     if(window.location.pathname=="/notebook")
         {
 		$("#type").text('Notebook');
-            URL="https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/getNoteBook";
+            URL=getNoteBookImages;
              data={
            "profileId":pId,
            "noteBookId" :url[1]
             } 
-                 $.ajax({
-  type:'POST',
-  dataType: 'json',
-  contentType: 'application/json',
-  url: URL,
-  data: JSON.stringify(data),
-  success: function (data) {
-      console.log(data);
-     // console.log(data);
-	  $('img[src="/static/style/profile.png"]').attr('src', data.photoUrl);
-     //$("#image").src()
-      // alert(data.subscribedCourseList[i].points);
-     $('#pts').text(data.points);
-     $('#pname').text(data.profileName);
-      $('#views').text(data.views);
-      $("#description").text(data.description);
-      $("#course-name-main").text(data.courseName);
-	  $("#course-name").text(data.courseName);
-		 name1=jQuery.timeago(data.lastUpdated);
-	 nameChar=name1.charAt(0).toUpperCase();
-	date = name1.replace(name1.charAt(0),nameChar);
-      $("#date-mod").text(date);
-      $("#prof").text("By "+data.uploaderName);
-	 
-	  if(data.bookmarkStatus==0)
-	  	{
-		$("#bookmark").css('background-color','#ccc');
-		$("#bookmark-text").text('BOOKMARK');
-		}
-	  else
-	  	{
-		$("#bookmark").css('background-color','#f7971d');
-		$("#bookmark-text").text('BOOKMARKED');
-		}
-      //alert(data.rated);
-      //$(".rating").val(data.rated);
-     
-	 if(data.isAuthor=="1")
-	  {
-	  
-	  $('#rating-input').css('display','none');
-	  $('#rating-name').css('display','none');
-	  }
-	  else
-	  {
-	   $('#rating-input').rating({
-              min: 0,
-              max: 5,
-              step:0.5,
-              size: 'xs',
-             
-           });
-           $('#rating-input').rating('update', data.rated);
-	  
-	  }
-      s='notes'
-      images=data.notes
-      //alert(images.urlList.length+'s');
-      index=0;
-      for(i=0;i<images.length;i++)
-                   { 
+            
+			$.ajax({
+			  type:'POST',
+			  dataType: 'json',
+			  contentType: 'application/json',
+			  url: URL,
+			  data: JSON.stringify(data),
+			  success: function (data) {
+				  console.log(data);
+				 // console.log(data);
+				  $('img[src="/static/style/profile.png"]').attr('src', data.photoUrl);
+				 //$("#image").src()
+				  // alert(data.subscribedCourseList[i].points);
+				 $('#pts').text(data.points);
+				 $('#pname').text(data.profileName);
+				  $('#views').text(data.views);
+				  $("#description").text(data.description);
+				  $("#course-name-main").text(data.courseName);
+				  $("#course-name").text(data.courseName);
+					 name1=jQuery.timeago(data.lastUpdated);
+				 nameChar=name1.charAt(0).toUpperCase();
+				date = name1.replace(name1.charAt(0),nameChar);
+				  $("#date-mod").text(date);
+				  $("#prof").text("By "+data.uploaderName);
+				 
+				 //if bookmarked or not
+				  if(data.bookmarkStatus==0)
+					{
+					$("#bookmark").css('background-color','#ccc');
+					$("#bookmark-text").text('BOOKMARK');
+					}
+				  else
+					{
+					$("#bookmark").css('background-color','#f7971d');
+					$("#bookmark-text").text('BOOKMARKED');
+					}
+				  //alert(data.rated);
+				  //$(".rating").val(data.rated);
+				 
+				 if(data.isAuthor=="1")
+				  {
+				  
+				  $('#rating-input').css('display','none');
+				  $('#rating-name').css('display','none');
+				  }
+				  else
+				  {
+				   $('#rating-input').rating({
+						  min: 0,
+						  max: 5,
+						  step:0.5,
+						  size: 'xs',
+						 
+					   });
+					   $('#rating-input').rating('update', data.rated);
+				  
+				  }
+					  s='notes'
+					  images=data.notes
+					  //alert(images.urlList.length+'s');
+					  index=0;
+					  //setting the carousel
+					  for(i=0;i<images.length;i++)
+					{ 
                     s='Class:'+images[i].classNumber+' '+images[i].date;
                     //alert(s);
                     for(j=0;j<images[i].urlList.length;j++)
@@ -300,7 +339,7 @@ jQuery(document).ready(function() {
                 (function(window, Util, PhotoSwipe){
 		  
 		
-		
+				//setting the pop up ,pls look up at plugin for details
 				var
 					sayHiEl,
                     captionText, captionEl,
@@ -394,12 +433,13 @@ jQuery(document).ready(function() {
              
              
         }
+		//if assignment clicked
     else if(window.location.pathname=="/assignment")
         { 
 			$("#type").text('Assignment');
 			//alert($("#type").text());
             //alert(url[1]);
-            URL=" https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/getAssignment";
+            URL=getAssignmentImages;
              data={
            "profileId":pId,
            "assignmentId" :url[1]
@@ -408,7 +448,7 @@ jQuery(document).ready(function() {
         }
     else
         {
-            URL="https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/getExam";
+            URL=getExamUrl;
              data={
            "profileId":pId,
            "examId" :url[1]
@@ -421,7 +461,7 @@ jQuery(document).ready(function() {
   $.ajax({
   type:'GET',
   dataType: 'json',
-  url:"https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/feed/ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgLyhggoM",
+  url:feed+'?profileId'+pId,
   data: data1,
   beforeSend: function (xhr) {
     if (xhr && xhr.overrideMimeType) {
@@ -429,10 +469,6 @@ jQuery(document).ready(function() {
     }
   },
   success: function (data) {
-     // console.log(data);
-      //$('img[src="profile.png"]').attr('src', data.photoUrl);
-     //$("#image").src()
-      // alert(data.subscribedCourseList[i].points);
      $('#pts').text(data.points);
      $('#pname').text(data.profileName);
         if(data.photoUrl!="undefined")
@@ -452,41 +488,34 @@ jQuery(document).ready(function() {
           
  function ajaxRetrieve()
     {
-    $.ajax({
-  type:'POST',
-  dataType: 'json',
-  contentType: 'application/json',
-  url: URL,
-  data: JSON.stringify(data),
-  success: function (data) {
-      console.log(data);
-     // console.log(data);
-      $('img[src="profile.png"]').attr('src', data.photoUrl);
-     //$("#image").src()
-      // alert(data.subscribedCourseList[i].points);
-     $('#pts').text(data.points);
-     $('#pname').text(data.profileName);
-      $('#views').text(data.views);
-      $("#description").text(data.assignmentDesc);
-      $("#course-name-main").text(data.courseName);
-	   $("#course-name").text(data.courseName);
-    name1=jQuery.timeago(data.lastUpdated);
-	 nameChar=name1.charAt(0).toUpperCase();
-	date = name1.replace(name1.charAt(0),nameChar);
-      $("#date-mod").text(date);
-      $("#prof").text("By "+data.uploaderName);
-      //alert(d0ata.rated);
-      //$(".rating").val(data.rated);
-      $('#rating-input').css('display','none');
-	  $('#rating-name').css('display','none');
-           //$('#rating-input').rating('update', data.rated);
-      s='notes'
-	  $('#bookmark').hide();
-      images=data.urlList;
-      //alert(images);
-      //alert(images.urlList.length+'s');
-     image1(images)
-  }
+			$.ajax({
+		  type:'POST',
+		  dataType: 'json',
+		  contentType: 'application/json',
+		  url: URL,
+		  data: JSON.stringify(data),
+		  success: function (data) {
+			  console.log(data);
+			  $('img[src="profile.png"]').attr('src', data.photoUrl);
+		   
+			 $('#pts').text(data.points);
+			 $('#pname').text(data.profileName);
+			  $('#views').text(data.views);
+			  $("#description").text(data.assignmentDesc);
+			  $("#course-name-main").text(data.courseName);
+			   $("#course-name").text(data.courseName);
+			name1=jQuery.timeago(data.lastUpdated);
+			 nameChar=name1.charAt(0).toUpperCase();
+			date = name1.replace(name1.charAt(0),nameChar);
+			  $("#date-mod").text(date);
+			  $("#prof").text("By "+data.uploaderName);
+			  $('#rating-input').css('display','none');
+			  $('#rating-name').css('display','none');
+			  s='notes'
+			  $('#bookmark').hide();
+			  images=data.urlList;
+			 image1(images)
+		  }
 });
     
     }
@@ -495,7 +524,7 @@ function image1(images)
 
      index=0;
       for(i=0;i<images.length;i++)
-                    {//console.log(images[i].urlList[j]);
+                    {
                         $('<div class="item"><center><a href="'+images[i]+'"><img id="img-'+index+'" src="'+images[i]+'" width=50% height=50% alt="" ></a></center></div>').appendTo('.carousel-inner');
                     index++;
                     }
@@ -586,7 +615,7 @@ function image1(images)
 				  "showMethod": "fadeIn",
 				  "hideMethod": "fadeOut"
 				}
-				//toastr.success('Your Product has been added to cart');
+				
 				Command: toastr["success"]("<center>  Thanx for Rating!</center>");
 					  
 							}
@@ -638,41 +667,9 @@ function image1(images)
 		
 		});
 	
-		$('#note-search').on('click',function(){
-		$('#note-search').css('display','none');
-		$('.nsearch').css('display','block');
-		$('.csearch').css('display','none');
-		$('#course-search').css('display','block');
-		$('#form').attr('action','/search?q=none&type=note');
-		
-		
-		});
-		
-		$('#course-search').on('click',function(){
-		$('#note-search').css('display','block');
-		$('.nsearch').css('display','none');
-		$('.csearch').css('display','block');
-		$('#course-search').css('display','none');
-		$('#form').attr('action','/search?q=none&type=course');
-		
-		
-		});
-	$('#form').submit(function(){
-	text=$('#search').val();
-	if(text=="")
-	text="none";
-
-	action1=$('#form').attr('action');
-	action2=action1.split('&');
-	//alert(action2[0],action2[1])
-	action3=action2[0].split('=');
-	//alert(action3[0],action3[1]);
-	action=action3[0]+"="+text+"&"+action2[1];
-	$('#form').attr('action',action);
-	});
 	
 	
-        });
+     });
         
         
     </script>
@@ -759,7 +756,7 @@ function image1(images)
     <div class="row">
       <div class="col-xs-6 col-md-2 sidebar sidebar-left sidebar-animate sidebar-md-show" >
         <ul class="nav navbar-stacked">
-		<li><center><a  href="/profile" width="50%" height="50%" class="profile.png"><img src="/static/style/profile.png" class="img-circle" width="50%" height="50%"></a></center></li>
+		<li><center><a  href="/profile" width="50%" height="50%" class="profile.png"><img src="/static/style/profile.png" class="img-circle"  style="max-height:100px;" width="50%" height="50%"></a></center></li>
 		 <li><center><span id="pname">Name</span></center></li>
         
         <li><center>Points: &nbsp <span id="pts">0</span></center></li>
@@ -800,8 +797,8 @@ function image1(images)
 			<!--margin-left:120px;margin-top:-24px;-->
 				
 				</div>	
-            <div class="col-md-2 hidden-xs" style="padding:0px;">
-                <div id="bookmark" class="btn btn-default" style="background-color:#ccc;color:white"><i class="glyphicon glyphicon-bookmark"><span id="bookmark-text">BOOKMARKS</span></i></div>
+            <div class="col-md-2 hidden-xs" style="padding:0px;margin-left:-10px;">
+                <div id="bookmark" class="btn btn-default" style="background-color:#ccc;color:white;"><i class="glyphicon glyphicon-bookmark"><span id="bookmark-text">BOOKMARKS</span></i></div>
                 </div>
             </div>
               </div>  

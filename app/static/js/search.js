@@ -1,0 +1,27 @@
+$('#note-search').on('click',function(){
+		$('#note-search').css('display','none');
+		$('.nsearch').css('display','block');
+		$('.csearch').css('display','none');
+		$('#course-search').css('display','block');
+		$('#form').attr('action','/search?q=none&type=note');
+		});
+		
+	$('#course-search').on('click',function(){
+		$('#note-search').css('display','block');
+		$('.nsearch').css('display','none');
+		$('.csearch').css('display','block');
+		$('#course-search').css('display','none');
+		$('#form').attr('action','/search?q=none&type=course');
+		});
+	$('#form').submit(function(){
+		text=$('#search').val();
+		if(text=="")
+		text="none";
+		action1=$('#form').attr('action');
+		action2=action1.split('&');
+		//alert(action2[0],action2[1])
+		action3=action2[0].split('=');
+		//alert(action3[0],action3[1]);
+		action=action3[0]+"="+text+"&"+action2[1];
+		$('#form').attr('action',action);
+		});

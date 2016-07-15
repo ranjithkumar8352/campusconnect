@@ -4,25 +4,32 @@
     <meta name="google-signin-scope" content="profile email">
     <meta name="google-signin-client_id" content="22051677189-1f55k773ct0qnlb5dkr83surcfk6565t.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
+	<!--urls-->
+	<script src="/static/js/url.js" type="text/javascript" charset="utf-8"></script>
+	
     <script src="/static/js/cookie-js.js"></script>
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-      <script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+	
+   <script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-  <div id="dtBox"></div>
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />
    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+   
    <link rel="stylesheet" type="text/css" href="static/style/DateTimePicker.css" />
 	<script type="text/javascript" src="static/js/DateTimePicker.js"></script>
+	
 	<!--Nav bar and side bar-->
 	  <script src="/static/js/sidebar.js"></script>
     <link rel="stylesheet" href="/static/style/style-sidebar.css" />
     <link rel="stylesheet" href="/static/style/sidebar.css"/>
 	    <link rel="stylesheet" href="/static/style/index.css"/>
 	<!--Nav bar and side bar-->	
+	
 	<!--grid layout-->
    <script src="/static/js/brick-by-brick.js"></script>
    <link rel="stylesheet" href="/static/style/brick-by-brick.css" />
 <!--grid layout-->
+
 <script type="text/javascript" src="/static/js/jquery.simple-color.js"></script>
  <!--tabs-->
     <link href="/static/style/generic-notForTabs.css" rel="stylesheet" type="text/css" />
@@ -31,6 +38,7 @@
 <!--tabs-->
 
  <link rel="icon" href="/static/style/bee-icon-h50px.png">
+ 
   </head>
   <title>Campus Connect</title>
 <style>
@@ -136,115 +144,152 @@ background-color:transparent;
 </style>
 <script>
  $(window).load(function() {
-		// Animate loader off screen
 		$(".se-pre-con").fadeOut("slow");
 	});
+	
 branchName = Cookies.get("branchName");
 sectionName=Cookies.get("sectionName");
 batchName=Cookies.get("batchName");
+
  $('#pts').text(Cookies.get("profilePoints"));
      $('#pname').text( Cookies.get("profileName"));
         if(Cookies.get("imageURL")!="undefined")
 	  {
 		$('img[src="/static/style/profile.png"]').attr('src',Cookies.get("imageURL"));
 	  }
-	 elective='0';
-days=[];
+	//temp variable ,default elective is 0  
+	elective='0';
+	//list to keep track of days
+	days=[];
+	//list to keep track of startTime,endTime of course
    startTime=[];
    endTime=[];
+   //color temp,to be sent
    color="#9a5194";
+ 
+ //function called when user selects a starttime on a particular day
 function start(day){
-  // alert(e.target.id);
- // alert("#startTime-"+day);
- //alert(day);
+//day param has theday of week
+//find index of day
  for(i=0;i<days.length;i++)
  if(days[i]==day)
  {
  index=i;
  }
- 
- //alert(index);
+ //set val in list
  startTime[index]=$("#startTime-"+day).val();
+ //setting endtime to a hr more
  temp=$("#startTime-"+day).val();
  newtemp=parseInt(temp.split(':')[0])+1;
  end=(newtemp>10?'':'0')+newtemp+':'+temp.split(':')[1];
+ 
  $("#endTime-"+day).val(end);
  endTime[index]=$("#endTime-"+day).val();
- 
- //alert(startTime[day]);
    }
-   
+   //same thing for endTime
  function end(day){
-  // alert(e.target.id);
   for(i=0;i<days.length;i++)
  if(days[i]==day)
  {
  index=i;
  }
- //alert($("#endTime-"+day).val())
  endTime[index]=$("#endTime-"+day).val();
- //alert(endTime[day]);
- 
    }
 
 $(document).ready(function(){
+    //search stuff
+ 
+   $('#note-search').on('click',function(){
+				$('#note-search').css('display','none');
+				$('.nsearch').css('display','block');
+				$('.csearch').css('display','none');
+				$('#course-search').css('display','block');
+				$('#form').attr('action','/search?q=none&type=note');
+				
+				
+				});
+				
+	$('#course-search').on('click',function(){
+				$('#note-search').css('display','block');
+				$('.nsearch').css('display','none');
+				$('.csearch').css('display','block');
+				$('#course-search').css('display','none');
+				$('#form').attr('action','/search?q=none&type=course');
+				
+				
+				});
+	$('#form').submit(function(){
+			text=$('#search').val();
+			if(text=="")
+			text="none";
 
+			action1=$('#form').attr('action');
+			action2=action1.split('&');
+			//alert(action2[0],action2[1])
+			action3=action2[0].split('=');
+			//alert(action3[0],action3[1]);
+			action=action3[0]+"="+text+"&"+action2[1];
+			$('#form').attr('action',action);
+			});
  $("#batch").attr("placeholder",batchName);
  $("#batch").val(batchName);
-$("#branch").val(branchName);
-$("#section").val(sectionName);
-
-
-
-
-
+ $("#branch").val(branchName);
+ $("#section").val(sectionName);
+ 
     pId = Cookies.get("profileId");
 	cId="";
 	//onchange for modal upload
 	$('#course').on('change',function(){
 	$('#upload').attr('href','/upload?id='+this.value);
 	});
-data={"profileId":pId};        
-$.ajax({
-  type:'GET',
-  dataType: 'json',
-  url: 'https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/feed/ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgLyhggoM',
-  data: data,
-  beforeSend: function (xhr) {
-    if (xhr && xhr.overrideMimeType) {
-      xhr.overrideMimeType('application/json;charset=utf-8');
-    }
-  },
-  success: function (data) {
-      console.log(data);
-	 if(data.photoUrl!="undefined")
-      $('img[src="/static/style/profile.png"]').attr('src', data.photoUrl);
-     //$("#image").src()
-      // alert(data.subscribedCourseList[i].points);
-     $('#pts').text(data.points);
-     $('#pname').text(data.profileName);
-	 cId=data.collegeId;
-	 for(i=0;i<data.subscribedCourseList.length;i++)
-          {//420  
-           $('<option value= "'+data.subscribedCourseList[i].courseId+'">'+data.subscribedCourseList[i].courseName+'</option>').appendTo("#course");}       
-      
-  }
-});
+	
+	//hitting the feed api		
+		data={"profileId":pId};        
 
-$("#dtBox").DateTimePicker();
+		$.ajax({
+		  type:'GET',
+		  dataType: 'json',
+		  url: feed+'?profileId'+pId,
+		  data: data,
+		  beforeSend: function (xhr) {
+			if (xhr && xhr.overrideMimeType) {
+			  xhr.overrideMimeType('application/json;charset=utf-8');
+			}
+		  },
+		  success: function (data) {
+			  console.log(data);
+			 if(data.photoUrl!="undefined")
+			  $('img[src="/static/style/profile.png"]').attr('src', data.photoUrl);
+			 //$("#image").src()
+			  // alert(data.subscribedCourseList[i].points);
+			 $('#pts').text(data.points);
+			 $('#pname').text(data.profileName);
+			 cId=data.collegeId;
+			 for(i=0;i<data.subscribedCourseList.length;i++)
+				  {//420  
+				   $('<option value= "'+data.subscribedCourseList[i].courseId+'">'+data.subscribedCourseList[i].courseName+'</option>').appendTo("#course");}       
+			  
+		  }
+		});
+	
+	//timepicker intialised
+	$("#dtBox").DateTimePicker();
+			//when user clicks on a day checkbox
         $('input[type="checkbox"]').click(function(){
             if($(this).prop("checked") == true)
 			{
+			//if day of week
 			if(this.value!="elective")
-				{days.push(this.value);
-				//alert('h');
+				{
+				days.push(this.value);
+				//generate startTime and endTime
 				$('<div id="time-'+this.value+'">Time:\
 				  <div><input type="text"  id="startTime-'+this.value+'"  value="08:00" data-field="time" placeholder="Start" style="width:60%" onchange="start('+this.value+')"></div>\
 				<div><input type="text"  id="endTime-'+this.value+'" value="09:00" data-field="time" placeholder="End" style="width:60%;margin-top:3px;" onchange="end('+this.value+')"></div>\
 				</div>').appendTo('.day-'+this.value);
+				//push the default time 
 				startTime.push("08:00");
 				endTime.push("09:00");
-				 //alert($("#endTime-"+day).val())
 				}
 			else{
 				elective='1';
@@ -254,8 +299,7 @@ $("#dtBox").DateTimePicker();
 			{
 				if(this.value!="elective")
                 {
-				//alert(this.value);
-				//alert('h');
+				//remove from list,both day and time
 				for(i=0;i<days.length;i++)
 					 if(days[i]==this.value)
 					 {
@@ -275,69 +319,34 @@ $("#dtBox").DateTimePicker();
         });
 		
 		
-		
+		//color picker intialize
 		$('.simple_color_kitchen_sink').simpleColor({
-    boxHeight: 34,
-	boxWidth:170,
-    cellWidth: 26,
-    cellHeight: 20,
-    chooserCSS: { 'border': '1px solid #660033' ,'width':'100%','left':'-5%','top':'100%'},
-    displayCSS: {  },
-	colors: [
-      '9a5194', 'ee5451', 'ab6bac','e47373',
-	  'c593c2', 'ed999a', '9bcb65','acd480',
-	  'c4dfa5','25a599','4cb5ab','80cac3'
-     
-    ],
-    displayColorCode: true,
-    livePreview: true,
-    onSelect: function(hex, element) {
-      color="#"+hex;
-	  //alert(color);
-    },
-    onCellEnter: function(hex, element) {
-      //console.log("You just entered #" + hex + " for input #" + element.attr('class'));
-    }
-  });
-$('#note-search').on('click',function(){
-		$('#note-search').css('display','none');
-		$('.nsearch').css('display','block');
-		$('.csearch').css('display','none');
-		$('#course-search').css('display','block');
-		$('#form').attr('action','/search?q=none&type=note');
-		
-		
-		});
-		
-		$('#course-search').on('click',function(){
-		$('#note-search').css('display','block');
-		$('.nsearch').css('display','none');
-		$('.csearch').css('display','block');
-		$('#course-search').css('display','none');
-		$('#form').attr('action','/search?q=none&type=course');
-		
-		
-		});
-	$('#form').submit(function(){
-	text=$('#search').val();
-	if(text=="")
-	text="none";
-
-	action1=$('#form').attr('action');
-	action2=action1.split('&');
-	//alert(action2[0],action2[1])
-	action3=action2[0].split('=');
-	//alert(action3[0],action3[1]);
-	action=action3[0]+"="+text+"&"+action2[1];
-	$('#form').attr('action',action);
-	});
+				boxHeight: 34,
+				boxWidth:170,
+				cellWidth: 26,
+				cellHeight: 20,
+				chooserCSS: { 'border': '1px solid #660033' ,'width':'100%','left':'-5%','top':'100%'},
+				displayCSS: {  },
+				colors: [
+				  '9a5194', 'ee5451', 'ab6bac','e47373',
+				  'c593c2', 'ed999a', '9bcb65','acd480',
+				  'c4dfa5','25a599','4cb5ab','80cac3'
+				 
+				],
+				displayColorCode: true,
+				livePreview: true,
+				onSelect: function(hex, element) {
+				  color="#"+hex;
+				  //alert(color);
+				},
+				onCellEnter: function(hex, element) {
+				  //console.log("You just entered #" + hex + " for input #" + element.attr('class'));
+				}
+			  });
 	
+	//submit for add course		
 	$('.btn-done').on('click',function(){
 		
-		
-		//pId="ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgMDhigkM";
-		
-		//alert(cId);
 		var courseName=$('#course-name').val();
 		 var courseCode=$('#course-code').val();
 		 var proff=$('#proff').val();
@@ -347,7 +356,6 @@ $('#note-search').on('click',function(){
 		 section.push($('#section').val());
 		 branch.push($('#branch').val());
 	
-		 //alert(typeof(e));
 		data={
 			"batchNames": batch,
 			"branchNames": branch,
@@ -364,8 +372,6 @@ $('#note-search').on('click',function(){
 			"startTime": startTime,
 			"elective":elective
         };
-		//"elective":elective
-		
 		
 		 console.log(JSON.stringify(data));
 		 $(".se-pre-con").show();
@@ -374,35 +380,16 @@ $('#note-search').on('click',function(){
 				  type:'POST',
 				  dataType: 'json',
 				  contentType: 'application/json',
-				  url: 'https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/addCourse',
+				  url: addCourseUrl,
 				  data: JSON.stringify(data),
 				  beforeSend:function(xhr){
 				  },
 				  success: function (data) {
 				  console.log(data.key);
-				//  $(".se-pre-con").hide();
 				 window.location="/course?id="+data.key+"/notes#view1";
 					}
 				});
-		/* 
-		 data={
-			"batchNames": ["2014"],
-			"branchNames": ["CSE"],
-			"collegeId": "ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB0NvbGxlZ2UYgICAgMCcggkM",
-			"colour": "ANY",
-			"courseCode": "DCS2",
-			"courseName": "Digital circuits2",
-			"date": ["1"],
-			"endTime": ["22:10"],
-			"professorName": "ME",
-			"profileId": "ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgMDhigkM",
-			"sectionNames": ["A"],
-			"semester": "Odd",
-			"startTime": ["21:00"]
 
-        };*/
-  
-		
 		});
 		
 });
@@ -490,7 +477,7 @@ $('#note-search').on('click',function(){
     <div class="row">
     <div class="col-xs-6 col-md-2 sidebar sidebar-left sidebar-animate sidebar-md-show" >
         <ul class="nav navbar-stacked">
-		<li><center><a  href="/profile" width="50%" height="50%" class="profile.png"><img src="/static/style/profile.png" class="img-circle" width="50%"></a></center></li>
+		<li><center><a  href="/profile" width="50%" height="50%" class="profile.png"><img src="/static/style/profile.png" class="img-circle" width="50%" style="max-height:100px;"></a></center></li>
 		 <li><center><span id="pname">Name</span></center></li>
         
         <li><center>Points: &nbsp <span id="pts">0</span></center></li>

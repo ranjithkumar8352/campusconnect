@@ -4,7 +4,8 @@
  <head>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
       <script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
-	  
+	  	<script src="/static/js/url.js" type="text/javascript" charset="utf-8"></script>
+	  	<!--<script src="/static/js/search.js" type="text/javascript" charset="utf-8"></script>-->
 	  <!---Google stuff-->
 <script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
     <meta name="google-signin-client_id" content="22051677189-1f55k773ct0qnlb5dkr83surcfk6565t.apps.googleusercontent.com">
@@ -63,11 +64,48 @@ $(window).load(function() {
 
 
 	$(document).ready(function(){
-	  pId=Cookies.get("profileId");
+	 //search stuff
+	 $('#note-search').on('click',function(){
+		$('#note-search').css('display','none');
+		$('.nsearch').css('display','block');
+		$('.csearch').css('display','none');
+		$('#course-search').css('display','block');
+		$('#form').attr('action','/search?q=none&type=note');
+		
+		
+		});
+		
+		$('#course-search').on('click',function(){
+		$('#note-search').css('display','block');
+		$('.nsearch').css('display','none');
+		$('.csearch').css('display','block');
+		$('#course-search').css('display','none');
+		$('#form').attr('action','/search?q=none&type=course');
+		
+		
+		});
+	$('#form').submit(function(){
+	text=$('#search').val();
+	if(text=="")
+	text="none";
+
+	action1=$('#form').attr('action');
+	action2=action1.split('&');
+	//alert(action2[0],action2[1])
+	action3=action2[0].split('=');
+	//alert(action3[0],action3[1]);
+	action=action3[0]+"="+text+"&"+action2[1];
+	$('#form').attr('action',action);
+	});
+	 
+	 
+	 
+	 pId=Cookies.get("profileId");
+	 
+	 //url split to see if user had pressed notebook or course and also get the search string
 	 url2= $(location).attr('href'); 
 	 url1=url2.split('?');
 	 url=url1[1].split('&');
-	 //alert(url[0]+';'+url[1]);
 	 name=url[1].split('=')[1];
 	
 	 URL='',query="";
@@ -75,6 +113,8 @@ $(window).load(function() {
 	 query="";
 	 else
 	  query=url[0].split('=')[1];
+	  
+	  
 	if(Cookies.get("profilePoints")!="undefined");
 	 {
 	 $('#pts').text(Cookies.get("profilePoints"));
@@ -85,11 +125,12 @@ $(window).load(function() {
 	  }
 	 }
 	 
+	 
 	 data={"profileId":pId};        
 			$.ajax({
 			  type:'GET',
 			  dataType: 'json',
-			  url: 'https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/feed/ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgLyhggoM',
+			  url: feed+'?profileId'+pId,
 			  data: data,
 			  beforeSend: function (xhr) {
 				if (xhr && xhr.overrideMimeType) {
@@ -97,22 +138,15 @@ $(window).load(function() {
 				}
 			  },
 			  success: function (data) {
-				 // console.log(data);
-				 
-				  // alert(data.subscribedCourseList[i].points);
-				 
 				 for(i=0;i<data.subscribedCourseList.length;i++)
-					  {//420  
+					  {  
 					   $('<option value= "'+data.subscribedCourseList[i].courseId+'">'+data.subscribedCourseList[i].courseName+'</option>').appendTo("#course");}
-				  
-			  }
+					  }
 			});
 		
-		
-			
 	 if(name=="note")
 	 {
-	 URL="https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/searchNotes";
+	 URL=searchNotesUrl;
 	  nameChar=name.charAt(0).toUpperCase();
 	  name = name.replace(name.charAt(0),nameChar);
 	 $("#search-name").text(name+'s');
@@ -121,13 +155,13 @@ $(window).load(function() {
 	 }
 	 else if(name=="course")
 	 {
-	 URL="https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/searchCourse";
-	  nameChar=name.charAt(0).toUpperCase();
-	  name = name.replace(name.charAt(0),nameChar);
+	 URL=searchCourseUrl;
+	 nameChar=name.charAt(0).toUpperCase();
+	 name = name.replace(name.charAt(0),nameChar);
 	 $("#search-name").text(name+'s');
 	 ajaxCourse();
 	 }
-	 
+	 //if user had clicked on notes call this function
 	function ajaxNote()
 	{
 	data={
@@ -154,22 +188,14 @@ $(window).load(function() {
 							itemMargin: 15,
 							itemPadding: 0
 							} );
+						//same as all cards
 						if(data.noteBookList.length!=0)
-						{
-							
-							
+						{							
 						  for(i=0;i<data.noteBookList.length;i++)
 						  {
-						  /*alert(date3);
-							date2=date3.split('.');
-							date1=date2[0].split(' ');
-							//alert(date1[0]+'s'+date1[1])
-							date=date1[0]+'T'+date1[1]+'Z';
-							//alert(date);*/
 							name1=jQuery.timeago(data.noteBookList[i].lastUpdated);
 							 nameChar=name1.charAt(0).toUpperCase();
 							 date = name1.replace(name1.charAt(0),nameChar);
-							//alert(p);
 							var card=['<div class="ui card bottom" id="'+data.noteBookList[i].noteBookId+'" style="cursor:pointer;background-color:white;border:1px solid\ #ccc;height:200px;color:black;width:340px;" >\
 							<div class="row" style="padding:10px;">\
 							<div class="col-xs-7">\
@@ -195,26 +221,18 @@ $(window).load(function() {
 							</div>'];
 						
 							   $('#layout').layout('addBefore', card);
-						
-							  //s="#card "+i;
 								document.getElementById(data.noteBookList[i].noteBookId).addEventListener('click',function(e){ 
-									 // id=document.getElementById(e.id).cid;
 									window.location="/notebook?id="+this.id+"&cId="+url[0];
 									});
-							  
-							  
 						  }
 						  
 						}
-				  
-				  
-				  
-				  
 				  }
 			  }
 			  });
 	
 	}
+	//if user had clicked on course call this function
 	function ajaxCourse()
 	{
 	
@@ -280,7 +298,7 @@ $(window).load(function() {
 							<center><div class="">'+section+'</div></center>\
 							</div>\
 							</div>\
-							<div class="row" style="margin-left:0px;bottom:0px;background-color:#ccc;position:relative;height:30px;">\
+							<div class="row" style="margin-left:0px;bottom:-3px;background-color:#ccc;position:relative;height:30px;">\
 							<div class="col-xs-4 col-xs-offset-2" style="margin-top:5px;">\
 							<div><i class="fa fa-sticky-note" aria-hidden="true"></i> '+data.courseList[i].notesCount+'</div>\
 							</div>\
@@ -297,50 +315,13 @@ $(window).load(function() {
 						  
 							 window.location="/course?id="+this.id+"/notes#view1";
 						   });
-							  
-							  
-							  
-							  
-							  
 						  }
 						}
-			  }
+					}
 			  });
-	
 	}
 			
-				$('#note-search').on('click',function(){
-		$('#note-search').css('display','none');
-		$('.nsearch').css('display','block');
-		$('.csearch').css('display','none');
-		$('#course-search').css('display','block');
-		$('#form').attr('action','/search?q=none&type=note');
 		
-		
-		});
-		
-		$('#course-search').on('click',function(){
-		$('#note-search').css('display','block');
-		$('.nsearch').css('display','none');
-		$('.csearch').css('display','block');
-		$('#course-search').css('display','none');
-		$('#form').attr('action','/search?q=none&type=course');
-		
-		
-		});
-	$('#form').submit(function(){
-	text=$('#search').val();
-	if(text=="")
-	text="none";
-
-	action1=$('#form').attr('action');
-	action2=action1.split('&');
-	//alert(action2[0],action2[1])
-	action3=action2[0].split('=');
-	//alert(action3[0],action3[1]);
-	action=action3[0]+"="+text+"&"+action2[1];
-	$('#form').attr('action',action);
-	});
 });
     
     </script>
@@ -427,7 +408,7 @@ $(window).load(function() {
     <div class="row">
       <div class="col-xs-6 col-md-2 sidebar sidebar-left sidebar-animate sidebar-md-show" >
         <ul class="nav navbar-stacked">
-		<li><center><a  href="/profile" width="50%" height="50%" class="profile.png"><img src="/static/style/profile.png" class="img-circle" width="50%" height="50%"></a></center></li>
+		<li><center><a  href="/profile" width="50%" height="50%" class="profile.png"><img src="/static/style/profile.png" style="max-height:100px;" class="img-circle" width="50%" height="50%"></a></center></li>
 		 <li><center><span id="pname">Name</span></center></li>
         
         <li><center>Points: &nbsp <span id="pts">0</span></center></li>

@@ -2,16 +2,29 @@
 <html>
 
   <head>
+  	<script src="/static/js/url.js" type="text/javascript" charset="utf-8"></script>
+	
     <meta name="google-signin-scope" content="profile email">
     <meta name="google-signin-client_id" content="22051677189-1f55k773ct0qnlb5dkr83surcfk6565t.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
+	
     <script src="/static/js/cookie-js.js"></script>
+	
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
       <script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+	  
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
    <script type="text/javascript" src="/static/js/jquery.responsiveText.js"></script>
+   
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" />
    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+   
+     
+   <link rel="stylesheet" type="text/css" href="static/style/DateTimePicker.css" />
+	<script type="text/javascript" src="static/js/DateTimePicker.js"></script>
+	
+	<script type="text/javascript" src="/static/js/jquery.simple-color.js"></script>
+	
    <link rel="stylesheet" type="text/css" href="static/style/DateTimePicker.css" />
 	<script type="text/javascript" src="static/js/DateTimePicker.js"></script>
 	<!--Nav bar and side bar-->
@@ -33,6 +46,8 @@
 	
 	<script src="/static/js/jquery.timeago.js" type="text/javascript"></script>
 	<link rel="icon" href="/static/style/bee-icon-h50px.png">
+	<link href="/static/style/toastr.min.css" rel="stylesheet"/>
+	<script src="/static/js/toastr.min.js"></script>
   </head>
   <title>Campus Connect</title>
 <style>
@@ -315,42 +330,279 @@ $(window).load(function() {
 		// Animate loader off screen
 		$(".se-pre-con").fadeOut(2300);
 	});
-       
+
+function start(day){
+		//day param has theday of week
+		//find index of day
+		 for(i=0;i<days.length;i++)
+		 if(days[i]==day)
+		 {
+		 index=i;
+		 }
+		 //set val in list
+		 startTime[index]=$("#startTime-"+day).val();
+		 //setting endtime to a hr more
+		 temp=$("#startTime-"+day).val();
+		 newtemp=parseInt(temp.split(':')[0])+1;
+		 end=(newtemp>10?'':'0')+newtemp+':'+temp.split(':')[1];
+		 
+		 $("#endTime-"+day).val(end);
+		 endTime[index]=$("#endTime-"+day).val();
+		   }
+		   //same thing for endTime
+		 function end(day){
+		  for(i=0;i<days.length;i++)
+		 if(days[i]==day)
+		 {
+		 index=i;
+		 }
+		 endTime[index]=$("#endTime-"+day).val();
+		   }	
 
 $(document).ready(function(){
-		$('#note-search').on('click',function(){
+		
+	//search toggle
+	$('#note-search').on('click',function(){
 		$('#note-search').css('display','none');
 		$('.nsearch').css('display','block');
 		$('.csearch').css('display','none');
 		$('#course-search').css('display','block');
 		$('#form').attr('action','/search?q=none&type=note');
-		
-		
 		});
 		
-		$('#course-search').on('click',function(){
+	$('#course-search').on('click',function(){
 		$('#note-search').css('display','block');
 		$('.nsearch').css('display','none');
 		$('.csearch').css('display','block');
 		$('#course-search').css('display','none');
 		$('#form').attr('action','/search?q=none&type=course');
-		
-		
 		});
+		
 	$('#form').submit(function(){
-	text=$('#search').val();
-	if(text=="")
-	text="none";
-
-	action1=$('#form').attr('action');
-	action2=action1.split('&');
-	//alert(action2[0],action2[1])
-	action3=action2[0].split('=');
-	//alert(action3[0],action3[1]);
-	action=action3[0]+"="+text+"&"+action2[1];
-	$('#form').attr('action',action);
-	});
+		text=$('#search').val();
+		if(text=="")
+		text="none";
+		action1=$('#form').attr('action');
+		action2=action1.split('&');
+		//alert(action2[0],action2[1])
+		action3=action2[0].split('=');
+		//alert(action3[0],action3[1]);
+		action=action3[0]+"="+text+"&"+action2[1];
+		$('#form').attr('action',action);
+		});
+	
+	
     pId = Cookies.get("profileId");
+	
+		//list to keep track of days
+			days=[];
+			//list to keep track of startTime,endTime of course
+		   startTime=[];
+		   endTime=[];
+		   //color temp,to be sent
+		   color="";
+			elective='0';
+	
+		
+
+	$("#dtBox").DateTimePicker();
+			//when user clicks on a day checkbox
+        $('input[type="checkbox"]').click(function(){
+            if($(this).prop("checked") == true)
+			{
+			//if day of week
+			if(this.value!="elective")
+				{
+				days.push(this.value);
+				//generate startTime and endTime
+				$('<div id="time-'+this.value+'">Time:\
+				  <div><input type="text"  id="startTime-'+this.value+'"  value="08:00" data-field="time" placeholder="Start" style="width:60%" onchange="start('+this.value+')"></div>\
+				<div><input type="text"  id="endTime-'+this.value+'" value="09:00" data-field="time" placeholder="End" style="width:60%;margin-top:3px;" onchange="end('+this.value+')"></div>\
+				</div>').appendTo('.day-'+this.value);
+				//push the default time 
+				startTime.push("08:00");
+				endTime.push("09:00");
+				}
+			else{
+				elective='1';
+				}
+            }
+            else if($(this).prop("checked") == false)
+			{
+				if(this.value!="elective")
+                {
+				//remove from list,both day and time
+				for(i=0;i<days.length;i++)
+					 if(days[i]==this.value)
+					 {
+					 index=i;
+					 }
+				
+				days.pop(this.value);
+				startTime.splice(index,1);
+				endTime.splice(index,1);
+				$('#time-'+this.value).remove();
+				}
+				else{
+				elective='0';
+				}
+			}
+          
+        });
+		$("#dtBox").DateTimePicker();
+		//function to assign values in edit course
+		function assignTime(day,start,end)
+		{
+		days.push(day);
+				//generate startTime and endTime
+				$('<div id="time-'+day+'">Time:\
+				  <div><input type="text"  id="startTime-'+day+'"  value="'+start+'" data-field="time" placeholder="Start" style="width:60%" onchange="start('+day+')"></div>\
+				<div><input type="text"  id="endTime-'+day+'" value="'+end+'" data-field="time" placeholder="End" style="width:60%;margin-top:3px;" onchange="end('+day+')"></div>\
+				</div>').appendTo('.day-'+day);
+				//push the default time 
+				startTime.push(start);
+				endTime.push(end);
+		
+		}
+		//color picker intialize
+		
+	$('.btn-done').on('click',function(){
+		
+		var courseName=$('#course-name1').val();
+		 var courseCode=$('#course-code').val();
+		 var proff=$('#proff').val();
+		 var sem=$('#sem').val();
+		 batch=[],section=[],branch=[];
+		 batch.push($('#batch').val()); 
+		 section.push($('#section').val());
+		 branch.push($('#branch').val());
+	
+		data={
+			"batchNames": batch,
+			"branchNames": branch,
+			"collegeId": '',
+			"colour": color,
+			"courseCode": courseCode,
+			"courseName": courseName,
+			"date": days,
+			"endTime": endTime,
+			"professorName": proff,
+			"profileId": pId,
+			"sectionNames": section,
+			"semester": sem,
+			"startTime": startTime,
+			"elective":elective,
+			"courseId":url[0]
+        };
+		
+		 //alert(JSON.stringify(data));
+		 $(".se-pre-con").show();
+				  
+		$.ajax({
+				  type:'POST',
+				  dataType: 'json',
+				  contentType: 'application/json',
+				  url: editCourseUrl,
+				  data: JSON.stringify(data),
+				  beforeSend:function(xhr){
+				  },
+				  success: function (data) {
+				  console.log(data);
+			
+				 if(data.response=="0")
+				 {
+				 	toastr.options = {
+							  "closeButton": true,
+							  "debug": false,
+							  "newestOnTop": false,
+							  "progressBar": false,
+							  "positionClass": "toast-top-full-width",
+							  "preventDuplicates": true,
+							  "onclick": null,
+							  "showDuration": "15",
+							  "hideDuration": "1000",
+							  "timeOut": "1600",
+							  "extendedTimeOut": "1000",
+							  "showEasing": "swing",
+							  "hideEasing": "linear",
+							  "showMethod": "fadeIn",
+							  "hideMethod": "fadeOut"
+							}
+							
+						
+							$("#course-name-main").text(courseName);
+					
+					$("#course-name").text(courseName);
+					$("#prof").text("By Prof."+proff);
+				
+					for(i=0;i<branch.length;i++)
+					{
+					$("#college-branch").text(branch[i]);
+					}
+				
+					for(i=0;i<batch.length;i++)
+					{
+					$("#college-year").text(batch[i]);
+					}
+					for(i=0;i<section.length;i++)
+					{
+					$("#section").val(section[i]);
+					}
+					
+					if(elective==0)
+					{
+					$("#elective").hide();
+					}
+					else{
+					$("#elective").show();
+					}
+					
+					//setting days of week
+					for(i=0;i<days.length;i++)
+					{
+						if(days[i]==1)
+						{
+						 $("#mon").css('color','black');
+						}
+					
+						if(days[i]==2)
+						{ 
+						 $("#tue").css('color','black');
+						 }
+						if(days[i]==3)
+						 {
+						  $("#wed").css('color','black');
+						}
+						if(days[i]==4)
+						 {
+						 $("#thu").css('color','black');
+						 }
+						if(days[i]==5)
+						 {
+						 $("#fri").css('color','black');
+						}
+						if(days[i]==6)
+						 {
+						 $("#sat").css('color','black');
+						 }
+					}
+					
+				
+					$("#card").css('background-color',color);
+							 $(".se-pre-con").fadeOut('slow');	
+							
+							
+							
+							
+							
+							Command: toastr["success"]("<center> Profile Updated Successfully!</center>");
+						$('#editCourseModal').modal('hide');
+				 }
+				}
+				});
+
+		});
+	
 	
 	//setting the sidebar
 	 $('#pts').text(Cookies.get("profilePoints"));
@@ -362,89 +614,19 @@ $(document).ready(function(){
 	 
 	
 	 
-    var noteBookId=[];
-    courseList=[];
-    notesPressed=0;
-    assPressed=0; assList=[];
-    examPressed=0;examList=[];
-	examEvent=[],assEvent=[],noteEvent=[];
-	modal=0; 
-    //url splitting
+    var noteBookId=[]; 
+    courseList=[]; //array for courseList card
+    notesPressed=0; //check if notes pressed
+    assPressed=0; assList=[]; //check if ass pressed and list for card
+    examPressed=0;examList=[];  //check if exam pressed and list for card
+	examEvent=[],assEvent=[],noteEvent=[];  //eventListener array
+	modal=0; //keep track of studentList pressed
+
+   
+   	 //url splitting to check if user had selected notes,assignment or exam
    url2= $(location).attr('href'); 
    url1=url2.split('=');
    url=url1[1].split('/');
-   //getting course details    
-   console.log(pId+':'+url[0]);
-data={"profileId":pId,
-      "courseId" :url[0]
-     };
- $.ajax({
-  type:'POST',
-  dataType: 'json',
-  contentType: 'application/json',
-  url: 'https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/coursePage',
-  data: JSON.stringify(data),
-  success: function (data) {
-      console.log(data,'sds');
-      
-   //$(".course-name").text(data.courseName);
-        $("#course-name-main").text(data.courseName);
-        //alert(data.studentCount);
-        $("#student-no").text(data.studentCount);
-        $("#student-no").text(data.studentCount);
-		$("#course-name").text(data.courseName);
-		$("#prof").text("By Prof."+data.professorName);
-		$("#course-name").text(data.courseName);
-		for(i=0;i<data.branchNames.length;i++)
-		$("#college-branch").text(data.branchNames[i]);
-		$("#college-name").text(data.collegeName);
-		
-		for(i=0;i<data.batchNames.length;i++)
-		$("#college-year").text(data.batchNames[i]);
-		
-		if(data.elective==0)
-		{
-		$("#elective").hide();
-		}
-		
-		
-		 if(data.isSubscribed==0)
-	  	{
-		$("#subscribe").css('background-color','#ccc');
-		$("#subscribe-text").text('SUBSCRIBE');
-		}
-	  else
-	  	{
-		$("#subscribe").css('background-color','#f7971d');
-		$("#subscribe-text").text('SUBSCRIBED');
-		}
-        for(i=0;i<data.date.length;i++)
-        {
-            if(data.date[i]==1)
-            {
-             $("#mon").css('color','black');
-            }
-        
-            if(data.date[i]=='2')
-             $("#tue").css('color','black');
-            
-            if(data.date[i]==3)
-             $("#wed").css('color','black');
-            
-            if(data.date[i]==4)
-             $("#thu").css('color','black');
-            
-            if(data.date[i]==5)
-             $("#fri").css('color','black');
-            
-            if(data.date[i]==6)
-             $("#sat").css('color','black');
-        }
-		///alert(data.color);
-		$("#card").css('background-color',data.colour);
-       
-  }
-});
    if(url.length!=1)
    {
    tabShow=url[1].split('#');
@@ -454,7 +636,6 @@ data={"profileId":pId,
     ajaxAssignments();
     assPressed=1;
    }
-       
    else if(tabShow[1]=='view1')
     {
 	 
@@ -469,6 +650,140 @@ data={"profileId":pId,
     }
        
    }
+   
+			data={"profileId":pId,
+				  "courseId" :url[0]
+				 };
+				 
+			 $.ajax({
+			  type:'POST',
+			  dataType: 'json',
+			  contentType: 'application/json',
+			  url: getCourseDetailsUrl,
+			  data: JSON.stringify(data),
+			  success: function (data) {
+				  console.log(data,'sds');
+					$("#course-name-main").text(data.courseName);
+					$("#course-name1").val(data.courseName);
+					$("#course-code").val(data.courseCode);
+					$("#student-no").text(data.studentCount);
+					$("#student-no").text(data.studentCount);
+					$("#course-name").text(data.courseName);
+					$("#prof").text("By Prof."+data.professorName);
+					$("#proff").val(data.professorName);
+					$("#sem").val(data.semester);
+					$("#course-name").text(data.courseName);
+					for(i=0;i<data.branchNames.length;i++)
+					{
+					$("#college-branch").text(data.branchNames[i]);
+					$("#branch").val(data.branchNames[i]);
+					
+					}
+					
+					$("#college-name").text(data.collegeName);
+					for(i=0;i<data.batchNames.length;i++)
+					{
+					$("#college-year").text(data.batchNames[i]);
+					$("#batch").val(data.batchNames[i]);
+					}
+					for(i=0;i<data.sectionNames.length;i++)
+					{
+					//$("#college-year").text(data.sectionNames[i]);
+					$("#section").val(data.sectionNames[i]);
+					}
+					
+					if(data.elective==0)
+					{
+					$("#elective").hide();
+					}
+					else{
+					$('#elective1').prop('checked', true);
+					}
+					
+					//setting the subscribe text
+					 if(data.isSubscribed==0)
+					{
+					$("#subscribe").css('background-color','#ccc');
+					$("#subscribe-text").text('SUBSCRIBE');
+					}
+				  else
+					{
+					$("#subscribe").css('background-color','#f7971d');
+					$("#subscribe-text").text('SUBSCRIBED');
+					}
+					//setting days of week
+					for(i=0;i<data.date.length;i++)
+					{
+						if(data.date[i]==1)
+						{
+						 $("#mon").css('color','black');
+						 $('#day1').prop('checked', true);
+						 assignTime(data.date[i],data.startTime[i],data.endTime[i]);
+						}
+					
+						if(data.date[i]=='2')
+						{ 
+						 $("#tue").css('color','black');
+						 $('#day2').prop('checked', true);
+						 assignTime(data.date[i],data.startTime[i],data.endTime[i]);
+						 }
+						if(data.date[i]==3)
+						 {
+						  $("#wed").css('color','black');
+							 $('#day3').prop('checked', true);
+						 assignTime(data.date[i],data.startTime[i],data.endTime[i]);
+						}
+						if(data.date[i]==4)
+						 {
+						 $("#thu").css('color','black');
+						  $('#day4').prop('checked', true);
+						 assignTime(data.date[i],data.startTime[i],data.endTime[i]);
+						 }
+						if(data.date[i]==5)
+						 {
+						 $('#day5').prop('checked', true);
+						 $("#fri").css('color','black');
+						 assignTime(data.date[i],data.startTime[i],data.endTime[i]);
+						}
+						if(data.date[i]==6)
+						 {
+						 $("#sat").css('color','black');
+						 $('#day6').prop('checked', true);
+						 assignTime(data.date[i],data.startTime[i],data.endTime[i]);
+						}
+					}
+					color=data.colour;
+				
+					$("#color-picker").val(color);
+					//alert($("#color-picker").val());
+					$("#card").css('background-color',data.colour);
+					
+						$('.simple_color_kitchen_sink').simpleColor({
+				boxHeight: 34,
+				boxWidth:80,
+				cellWidth: 26,
+				cellHeight: 20,
+				chooserCSS: { 'border': '1px solid #660033' ,'width':'100%','left':'-5%','top':'100%'},
+				displayCSS: {  },
+				colors: [
+				  '9a5194', 'ee5451', 'ab6bac','e47373',
+				  'c593c2', 'ed999a', '9bcb65','acd480',
+				  'c4dfa5','25a599','4cb5ab','80cac3'
+				 
+				],
+				displayColorCode: true,
+				livePreview: true,
+				onSelect: function(hex, element) {
+				  color="#"+hex;
+				  //alert(color);
+				},
+				onCellEnter: function(hex, element) {
+				  //console.log("You just entered #" + hex + " for input #" + element.attr('class'));
+				}
+			  });
+				   
+			  }
+			});
   
   
 //onchange for modal upload
@@ -486,7 +801,7 @@ jQuery(document).ready(function() {
 	jQuery("time .timeago").timeago();
 	});
 
-    
+ //calling notebook api   
  function ajaxNotes()
 {
       
@@ -500,141 +815,132 @@ jQuery(document).ready(function() {
         "courseId" :url[0]
         };
    
-      $.ajax({
-  type:'POST',
-  dataType: 'json',
-  contentType: 'application/json',
-  url: 'https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/notebookList',
-  data: JSON.stringify(data),
-  success: function (data) {
-  console.log(data,'s');
-try{
-      if(data.noteBookList.length!=0)
-    {
-		
-		
-      for(i=data.noteBookList.length-1;i>=0;i--)
-      {
-	  /*alert(date3);
-		date2=date3.split('.');
-		date1=date2[0].split(' ');
-		//alert(date1[0]+'s'+date1[1])
-		date=date1[0]+'T'+date1[1]+'Z';
-		//alert(date);*/
-		name1=jQuery.timeago(data.noteBookList[i].lastUpdated);
-		 nameChar=name1.charAt(0).toUpperCase();
-		 date = name1.replace(name1.charAt(0),nameChar);
-		//alert(p);
-        var card=['<div class="ui card bottom" id="'+data.noteBookList[i].noteBookId+'" style="cursor:pointer;background-color:white;border:1px solid\ #ccc;height:218px;color:black;width:340px;" >\
-        <div class="row" style="padding:10px;">\
-        <div class="col-xs-7">\
-        <div class="course-name"  style="font-size:15px;"> &nbsp '+data.noteBookList[i].courseName+'</div>\
-        <div class="author-name"  style="font-size:10px;"> &nbsp;  &nbsp;By '+data.noteBookList[i].uploaderName+'</div>\
-        </div>\
-        <div class="col-xs-5" style="padding:0px;">\
-        <center><div>Posted on</div>\
-        <time id="date1" class="timeago responsive" >'+date+'</time></center>\
-        </div>\
-        </div>\
-        <div class="row" style="margin-left:0px;bottom:-130px;background-color:#ccc;padding:0px;position:relative;height:30px;">\
-        <div class="col-xs-4" style="margin-top:5px;">\
-        <div><i class="fa fa-eye" aria-hidden="true"></i> '+data.noteBookList[i].views+'</div>\
-        </div>\
-        <div class="col-xs-4" style="margin-top:5px;">\
-        <div><center><i class="fa fa-star" aria-hidden="true"></i> '+data.noteBookList[i].totalRating+'</center></div>\
-        </div>\
-        <div class="col-xs-3 col-xs-offset-1" style="margin-top:5px;">\
-        <center><div><i class="fa fa-file" aria-hidden="true"></i> '+data.noteBookList[i].pages+'</center></div>\
-        </div>\
-        </div>\
-        </div>'];
-        courseList.push(card);
-           $('#layout1').layout('addBefore', card);
-          noteBookId.push(data.noteBookList[i].noteBookId);
-		   noteEvent.push(data.noteBookList[i].noteBookId);
-          //s="#card "+i;
-            document.getElementById(data.noteBookList[i].noteBookId).addEventListener('click',function(e){ 
-                 // id=document.getElementById(e.id).cid;
-                window.location="/notebook?id="+this.id+"&cId="+url[0];
-                });
-          
-          
-      }
-      
-    }
-   }
-    catch(err){
-	$("#layout1").text('NO NOTEBOOKS!');
-	}
-  }
-});
-}
+				  $.ajax({
+			  type:'POST',
+			  dataType: 'json',
+			  contentType: 'application/json',
+			  url: noteBookUrl,
+			  data: JSON.stringify(data),
+			  success: function (data) {
+			  console.log(data,'s');
+			try{
+				  if(data.noteBookList.length!=0)
+				{
+					
+					
+				  for(i=data.noteBookList.length-1;i>=0;i--)
+				  {
+					//setting the last posted on
+					name1=jQuery.timeago(data.noteBookList[i].lastUpdated);
+					 nameChar=name1.charAt(0).toUpperCase();
+					 date = name1.replace(name1.charAt(0),nameChar);
+					///setting card UI
+					var card=['<div class="ui card bottom" id="'+data.noteBookList[i].noteBookId+'" style="cursor:pointer;background-color:white;border:1px solid\ #ccc;height:218px;color:black;width:340px;" >\
+					<div class="row" style="padding:10px;">\
+					<div class="col-xs-7">\
+					<div class="course-name"  style="font-size:15px;"> &nbsp '+data.noteBookList[i].courseName+'</div>\
+					<div class="author-name"  style="font-size:10px;"> &nbsp;  &nbsp;By '+data.noteBookList[i].uploaderName+'</div>\
+					</div>\
+					<div class="col-xs-5" style="padding:0px;">\
+					<center><div>Posted </div>\
+					<time id="date1" class="timeago responsive" >'+date+'</time></center>\
+					</div>\
+					</div>\
+					<div class="row" style="margin-left:0px;bottom:-130px;background-color:#ccc;padding:0px;position:relative;height:30px;">\
+					<div class="col-xs-4" style="margin-top:5px;">\
+					<div><i class="fa fa-eye" aria-hidden="true"></i> '+data.noteBookList[i].views+'</div>\
+					</div>\
+					<div class="col-xs-4" style="margin-top:5px;">\
+					<div><center><i class="fa fa-star" aria-hidden="true"></i> '+data.noteBookList[i].totalRating+'</center></div>\
+					</div>\
+					<div class="col-xs-3 col-xs-offset-1" style="margin-top:5px;">\
+					<center><div><i class="fa fa-file" aria-hidden="true"></i> '+data.noteBookList[i].pages+'</center></div>\
+					</div>\
+					</div>\
+					</div>'];
+					courseList.push(card);
+					   $('#layout1').layout('addBefore', card);
+					  noteBookId.push(data.noteBookList[i].noteBookId);
+					   noteEvent.push(data.noteBookList[i].noteBookId);
+						document.getElementById(data.noteBookList[i].noteBookId).addEventListener('click',function(e){ 
+							window.location="/notebook?id="+this.id+"&cId="+url[0];
+							});
+				  }
+				  
+				}
+			   }
+				catch(err){
+				$("#layout1").text('NO NOTEBOOKS!');
+				}
+			  }
+			});
+			}
 
     
     
-	
+	//assignment API
 function ajaxAssignments()
 {
     $('#layout2').layout({
 			itemMargin: 10,
 			itemPadding: 0
-							});
+						});
  data={
-        
         "courseId" :url[0]
         };
 
-          
-          
+        
         $.ajax({
         type:'POST',
         dataType: 'json',
         contentType: 'application/json',
-        url: 'https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/assignmentList',
+        url: getassignmentUrl,
         data: JSON.stringify(data),
         success: function (data) {
         console.log(data);
     try{
         if(data.assList.length!=0)
-    {
+		{
         for(i=data.assList.length-1;i>=0;i--)
           {
-                name1=jQuery.timeago(data.assList[i].lastUpdated);  
+         name1=jQuery.timeago(data.assList[i].lastUpdated);  
 		nameChar=name1.charAt(0).toUpperCase();
 		 date = name1.replace(name1.charAt(0),nameChar);
-         var ass=['<div class="ui card bottom " id="'+data.assList[i].assignmentId+'" style="cursor:pointer;background-color:white;border:1px solid\ #ccc;height:218px;color:black;width:340px;" >\
-        <div class="row" style="padding:10px;">\
-        <div class="col-xs-8">\
-        <div class="course-name"  style="font-size:15px;"> &nbsp '+data.assList[i].assignmentTitle+'</div>\
-        <div class="author-name"  style="font-size:10px;"> &nbsp;  &nbsp;By '+data.assList[i].uploaderName+'</div>\
-        </div>\
-        <div class="col-xs-4" style="padding:0px;">\
-        <center><div>Posted on</div>\
-        <div id="date1">'+date+'</div></center>\
-        </div>\
-        </div>\
-        <div class="row" style="margin-left:-6px;padding:10px;">\
-        <div class="col-xs-12">\
-        <br>\
-        <div class="desc"  style="font-size:10px;">'+data.assList[i].assignmentDesc+' </div>\
-        </div>\
-        </div>\
-        <div class="row" style="margin-left:0px;bottom:-56px;background-color:#ccc;position:relative;height:30px;">\
-        <div class="col-xs-4" style="margin-top:5px;">\
-        <div><i class="fa fa-eye" aria-hidden="true"></i> '+data.assList[i].views+'</div>\
-        </div>\
-        <div class="col-xs-8" style="padding:0px;margin-top:5px;">\
-        <div><center><i class="fa fa-calendar" aria-hidden="true"></i> DUE: <span id="due-date">'+data.assList[i].dueDate+'</span></center></div>\
-        </div>\
-        </div>\
-        </div>'];
-              assList.push(ass);
-			  assEvent.push(data.assList[i].assignmentId);
-            $('#layout2').layout('addBefore', ass);  
-            document.getElementById(data.assList[i].assignmentId).addEventListener('click',function(e){ 
-                 // id=document.getElementById(e.id).cid;
-                window.location="/assignment?id="+this.id+'&cid='+url[0];
-                });
+				 var ass=['<div class="ui card bottom " id="'+data.assList[i].assignmentId+'" style="cursor:pointer;background-color:white;border:1px solid\ #ccc;height:218px;color:black;width:340px;" >\
+				<div class="row" style="padding:10px;">\
+				<div class="col-xs-8">\
+				<div class="course-name"  style="font-size:15px;"> &nbsp '+data.assList[i].assignmentTitle+'</div>\
+				<div class="author-name"  style="font-size:10px;"> &nbsp;  &nbsp;By '+data.assList[i].uploaderName+'</div>\
+				</div>\
+				<div class="col-xs-4" style="padding:0px;">\
+				<center><div>Posted on</div>\
+				<div id="date1">'+date+'</div></center>\
+				</div>\
+				</div>\
+				<div class="row" style="margin-left:-6px;padding:10px;">\
+				<div class="col-xs-12">\
+				<br>\
+				<div class="desc"  style="font-size:10px;">'+data.assList[i].assignmentDesc+' </div>\
+				</div>\
+				</div>\
+				<div class="row" style="margin-left:0px;bottom:-56px;background-color:#ccc;position:relative;height:30px;">\
+				<div class="col-xs-4" style="margin-top:5px;">\
+				<div><i class="fa fa-eye" aria-hidden="true"></i> '+data.assList[i].views+'</div>\
+				</div>\
+				<div class="col-xs-8" style="padding:0px;margin-top:5px;">\
+				<div><center><i class="fa fa-calendar" aria-hidden="true"></i> DUE: <span id="due-date">'+data.assList[i].dueDate+'</span></center></div>\
+				</div>\
+				</div>\
+				</div>'];
+				//pushing the card
+				assList.push(ass);
+				//pushing the id for eventListener
+				assEvent.push(data.assList[i].assignmentId);
+				$('#layout2').layout('addBefore', ass);  
+				//event Listener
+				document.getElementById(data.assList[i].assignmentId).addEventListener('click',function(e){ 
+					window.location="/assignment?id="+this.id+'&cid='+url[0];
+					});
           }
   }
     }
@@ -646,7 +952,7 @@ function ajaxAssignments()
       }
         });
 }
-  
+ //Exam API 
 function ajaxExam()
 {
     $('#layout3').layout({
@@ -658,19 +964,18 @@ function ajaxExam()
         "courseId" :url[0]
         };
 
-          
-          
+         
         $.ajax({
         type:'POST',
         dataType: 'json',
         contentType: 'application/json',
-        url: 'https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/examList',
+        url: getExamUrl,
         data: JSON.stringify(data),
         success: function (data) {
         console.log(data);
     try{
         if(data.examList.length!=0)
-    {
+		{
         for(i=data.examList.length-1;i>=0;i--)
           {
           name1=jQuery.timeago(data.examList[i].lastUpdated);
@@ -725,80 +1030,82 @@ function ajaxExam()
     }
 
     	data={"profileId":pId};        
-$.ajax({
-  type:'GET',
-  dataType: 'json',
-  url: 'https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/feed/ahJzfnVwbG9hZG5vdGVzLTIwMTZyFAsSB1Byb2ZpbGUYgICAgLyhggoM',
-  data: data,
-  beforeSend: function (xhr) {
-    if (xhr && xhr.overrideMimeType) {
-      xhr.overrideMimeType('application/json;charset=utf-8');
-    }
-  },
-  success: function (data) {
-     // console.log(data);
-     
-      // alert(data.subscribedCourseList[i].points);
-     
-	 for(i=0;i<data.subscribedCourseList.length;i++)
-          {//420  
-           $('<option value= "'+data.subscribedCourseList[i].courseId+'">'+data.subscribedCourseList[i].courseName+'</option>').appendTo("#course");}
-      
-  }
-});
-  $('#tab1').on('click',function(){
-	$('#layout1').layout({
-		itemMargin: 10,
-		itemPadding: 0
+			$.ajax({
+			  type:'GET',
+			  dataType: 'json',
+			  url: feed+'?profileId='+pId,
+			  data: data,
+			  beforeSend: function (xhr) {
+				if (xhr && xhr.overrideMimeType) {
+				  xhr.overrideMimeType('application/json;charset=utf-8');
+				}
+			  },
+			  success: function (data) {
+				 // console.log(data);
+				 
+				  // alert(data.subscribedCourseList[i].points);
+				 
+				 for(i=0;i<data.subscribedCourseList.length;i++)
+					  {//420  
+					   $('<option value= "'+data.subscribedCourseList[i].courseId+'">'+data.subscribedCourseList[i].courseName+'</option>').appendTo("#course");}
+				  
+			  }
 			});
-      if(notesPressed==0)
-        {
-          ajaxNotes();
-          notesPressed++;
-        }
-      else
-    {
-      for(i=0;i<courseList.length;i++)
-          {
-              
-              	$('#layout1').layout('addBefore', courseList[i]);
-				 document.getElementById(noteEvent[i]).addEventListener('click',function(e){ 
-						 // id=document.getElementById(e.id).cid;
-						window.location="/notebook?id="+this.id+'&cid='+url[0];
+			//click on notes tab
+			  $('#tab1').on('click',function(){
+			  //intialise layout
+				$('#layout1').layout({
+					itemMargin: 10,
+					itemPadding: 0
 						});
-          }
-    }
-       // $(".course-name").text('Python');
-  
-  });
-  
-     $('#tab2').on('click',function(){
-		$('#layout2').layout({
-			itemMargin: 10,
-			itemPadding: 0
+						//this means that user did not click on notes in home
+				  if(notesPressed==0)
+					{
+					  ajaxNotes();
+					  notesPressed++;
+					}
+				  else
+				{
+				  for(i=0;i<courseList.length;i++)
+					  {
+						  //reintialise cards and listeners
+							$('#layout1').layout('addBefore', courseList[i]);
+							 document.getElementById(noteEvent[i]).addEventListener('click',function(e){ 
+									 // id=document.getElementById(e.id).cid;
+									window.location="/notebook?id="+this.id+'&cid='+url[0];
+									});
+					  }
+				}
+				   // $(".course-name").text('Python');
+			  
+			  });
+				//click on assignments
+				 $('#tab2').on('click',function(){
+					$('#layout2').layout({
+						itemMargin: 10,
+						itemPadding: 0
+										});
+				if(assPressed==0)   
+				  {
+					 ajaxAssignments();
+					  assPressed++;
+				  }
+					else
+						{
+							
+						for(i=0;i<assList.length;i++)
+					  {
+						  
+							$('#layout2').layout('addBefore', assList[i]);
+							document.getElementById(assEvent[i]).addEventListener('click',function(e){ 
+							window.location="/assignment?id="+this.id+"&cId="+url[0];
 							});
-    if(assPressed==0)   
-      {
-         ajaxAssignments();
-          assPressed++;
-      }
-        else
-            {
-                
-                  for(i=0;i<assList.length;i++)
-          {
-              
-              	$('#layout2').layout('addBefore', assList[i]);
-				document.getElementById(assEvent[i]).addEventListener('click',function(e){ 
-                 // id=document.getElementById(e.id).cid;
-                window.location="/assignment?id="+this.id+"&cId="+url[0];
-                });
-		
-          }
-                
-                
-            }
-  });
+					
+					  }
+							
+							
+						}
+			  });
    
    $('#tab3').on('click',function(){
 		$('#layout3').layout({
@@ -818,7 +1125,6 @@ $.ajax({
               
             $('#layout2').layout('addBefore', examList[i]);
 		document.getElementById(examEvent[i]).addEventListener('click',function(e){ 
-                 // id=document.getElementById(e.id).cid;
                 window.location="/exam?id="+this.id+"&cId="+url[0];
                 });
           }    
@@ -831,7 +1137,7 @@ $.ajax({
 		});
 	
 
-		//subscribe
+		//subscribe toggle
 		$("#subscribe").on('click',function(){
 		//console.log(cId[1],pId)
 		ID=this.id;
@@ -844,7 +1150,7 @@ $.ajax({
 				  type:'POST',
 				  dataType: 'json',
 				  contentType: 'application/json',
-				  url: "https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/unsubscribeCourse",
+				  url: subscribeButtonUrl,
 				  data: JSON.stringify(data),
 				  success: function (data) {
 					  console.log(data);
@@ -865,57 +1171,15 @@ $.ajax({
 							
 			});
 			});
-			 /*
-			 
-			  data={
-           "profileId":pId,
-           "noteBookId" :url[1]
-            } 
-			 
-			 $.ajax({
-				  type:'POST',
-				  dataType: 'json',
-				  contentType: 'application/json',
-				  url: "https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/rateThis",
-				  data: JSON.stringify(data),
-				  success: function (data) {
-					  console.log(data);
-			   if(this.style.backgroundColor == "rgb(247, 151, 29)") {
-			   //ID.pop(this.id);
-			   this.style.backgroundColor="#ccc";
-			   $('#bookmark-text').text('BOOKMARK');
-			   }
-			   else
-			   {
-			  // ID.push(this.id);
-			   this.style.backgroundColor="#f7971d";
-			   $('#bookmark-text').text('BOOKMARKED');
-			   }
-			}
-		});*/
-		
-		
-		
-
-
-							
- 
-   /* $('window').on('scroll', function() {
-        if($(this).scrollTop() + $(this).innerHeight() >= $(this)[0].scrollHeight) {
-            alert('end reached');
-        }
-    })*/
 
     pressed=0;//flag for removing scrolling in mobile
      $('.toggle-left').on('click', function(){ 
           
           if (pressed) {
             $('body').css({overflow: 'none'}); 
-               // $('body').css({postion: ' '});
-            //  var cssObject = $('body').prop('style'); cssObject.removeProperty('position');
               pressed=0;
         }else
-                {  $('body').css({overflow: 'hidden'}); pressed++} // $('body').css({position: 'fixed'});  
+                {  $('body').css({overflow: 'hidden'}); pressed++} 
      });
 	 
 	 $('.responsive').responsiveText();
@@ -923,150 +1187,153 @@ $.ajax({
 	 
 	 
 	 
-	
+	//modal for students 
 	 $('#studentModal').on('show.bs.modal', function (e) {
-	  
-  //if (!data) return e.preventDefault() // stops modal from being shown
-if(modal==0)
-{
-modal++;
-data={
-        "courseId" :url[0],
-		"profileId" :pId
-        };
-   
-  
-      $.ajax({
-  type:'POST',
-  dataType: 'json',
-  contentType: 'application/json',
-  url: 'https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/studentList/ahJzfnVwbG9hZG5vdGVzLTIwMTZyEwsSBkNvdXJzZRiAgICA2uOGCQw',
-  data: JSON.stringify(data),
-  success: function (data) {
-  console.log(data,'s');
-  if(data.isAdmin=='1')
-  {
-  temp='btn btn-default';
-  //color='background-color:#ccc;';
-  class1='tog';
-    if(Cookies.get("imageURL")!="undefined")
-	  {
-		photo=Cookies.get("imageURL");
-	  }
-	  else
-	  photo="/static/style/profile.png";
-  $('<div class="row" style="border-bottom:1px solid #ccc;margin-left:0px;" >\
-	   <div class="col-xs-12 ">\
-			<div class="col-xs-3">\
-			<img src='+photo+' alt="profile.png" style="height:10%;width:60%;border-radius: 50%;">\
-			<br><br>\
-			</div>\
-			<div class="col-xs-6">\
-			<div id="student-name" style="margin-top:-10px;"><br>'+Cookies.get('profileName')+'</div>\
-			</div>\
-			<div class="col-xs-3">\
-			<div class="btn btn-default form-control tog"  style="color:white;background-color: rgb(247, 151, 29);" ><center>Admin</center></div>\
-			</div>\
-			</div>\
-		</div>\
-	   </div>\
-	   <br>').appendTo('.modal-body ');
-  
-  }
-  else
-  {
-  temp='';
-  class1=''
-  }
-  //color= 'background-color: rgb(247, 151, 29);';
-  for(i=0;i<data.studentList.length;i++)
-  {
-  buttonText='';
-  if(data.studentList[i].isAdmin=='1')
- { 
- color= 'background-color: rgb(247, 151, 29);';
- buttonText='<div class="col-xs-3">\
-				<div id='+data.studentList[i].profileId+'" class=" '+temp+' form-control '+class1+'"  style="color:white;'+color+'" ><center>Admin</center></div>\
-				</div>';
-				//alert(document.getElementById(data.studentList[i].profileId));
-				
-				}
-				
-  else
-  {
-  if(temp!='')
- {
- color='background-color:#ccc;';
-   buttonText='<div class="col-xs-3">\
-				<div class=" '+temp+' form-control tog" id="'+data.studentList[i].profileId+'" style="color:white;'+color+'"><center>Make Admin</center></div>\
-				</div>';
-				//document.getElementById('admin-'+data.studentList[i].profileId).style.backgroundColor="#ccc";
-}
-  }
-	
-  
-  $('<div class="row" style="border-bottom:1px solid #ccc;margin-left:0px;" >\
-	   <div class="col-xs-12 ">\
-			<div class="col-xs-3">\
-			<img src='+data.studentList[i].photoUrl+'  alt="profile.png" style="height:10%;width:60%;border-radius: 50%;">\
-			<br><br>\
-			</div>\
-			<div class="col-xs-6">\
-			<div id="student-name" style="margin-top:-10px;"><br>'+data.studentList[i].profileName+'</div>\
-			</div>\
-			'+buttonText+'\
-			</div>\
-		</div>\
-	   </div>\
-	   <br>').appendTo('.modal-body ');
 	 
-  }
-  }
-  
+			if(modal==0)
+			{
+			modal++;
+			data={
+					"courseId" :url[0],
+					"profileId" :pId
+					};
+			   
+			  
+				  $.ajax({
+			  type:'POST',
+			  dataType: 'json',
+			  contentType: 'application/json',
+			  url: studentListUrl,
+			  data: JSON.stringify(data),
+			  success: function (data) {
+			  console.log(data,'s');
+			  //check if is admin, if he is,add him to make admin page
+			  if(data.isAdmin=='1')
+			  {
+			  temp='btn btn-default';
+			  //color='background-color:#ccc;';
+			  class1='tog';
+				if(Cookies.get("imageURL")!="undefined")
+				  {
+					photo=Cookies.get("imageURL");
+				  }
+				  else
+				  photo="/static/style/profile.png";
+				  
+			/*  $('<div class="row" style="border-bottom:1px solid #ccc;margin-left:0px;" >\
+				   <div class="col-xs-12 ">\
+						<div class="col-xs-3">\
+						<img src='+photo+' alt="profile.png" style="height:10%;width:60%;border-radius: 50%;">\
+						<br><br>\
+						</div>\
+						<div class="col-xs-6">\
+						<div id="student-name" style="margin-top:-10px;"><br>'+Cookies.get('profileName')+'</div>\
+						</div>\
+						<div class="col-xs-3">\
+						<div class="btn btn-default form-control tog"  style="color:white;background-color: rgb(247, 151, 29);" ><center>Admin</center></div>\
+						</div>\
+						</div>\
+					</div>\
+				   </div>\
+				   <br>').appendTo('#sbody');*/
+			  
+			  }
+			  else
+			  {
+			  temp='';
+			  class1=''
+			  }
+			  //color= 'background-color: rgb(247, 151, 29);';
+			  for(i=0;i<data.studentList.length;i++)
+			  {
+			  buttonText='';
+			  //if student is admin then display admin else nothing
+			  if(data.studentList[i].isAdmin=='1')
+			 { 
+			 color= 'background-color: rgb(247, 151, 29);';
+			 buttonText='<div class="col-xs-3">\
+							<div id='+data.studentList[i].profileId+'" class=" '+temp+' form-control '+class1+'"  style="color:white;'+color+'" ><center>Admin</center></div>\
+							</div>';
+							//alert(document.getElementById(data.studentList[i].profileId));
+							
+							}
+							
+			  else
+			  {
+			  if(temp!='')
+			 {
+			 color='background-color:#ccc;';
+			   buttonText='<div class="col-xs-3">\
+							<div class=" '+temp+' form-control tog" id="'+data.studentList[i].profileId+'" style="color:white;'+color+'"><center>Make Admin</center></div>\
+							</div>';
+			}
+			  }
+				
+			  
+			  $('<div class="row" style="border-bottom:1px solid #ccc;margin-left:0px;" >\
+				   <div class="col-xs-12 ">\
+						<div class="col-xs-3" id="photo">\
+						<img src='+data.studentList[i].photoUrl+'  alt="profile.png" style="height:10%;width:60%;border-radius: 50%;">\
+						<div class="edit" style="display:none"><a href="#"><i class="fa fa-pencil fa-lg"></i></a></div>\
+						<br><br>\
+						</div>\
+						<div class="col-xs-6">\
+						<div id="student-name" style="margin-top:-10px;"><br>'+data.studentList[i].profileName+'</div>\
+						</div>\
+						'+buttonText+'\
+						</div>\
+					</div>\
+				   </div>\
+				   <br>').appendTo('#sbody');
+				 
+			  }
+			  }
+			  
 
-  });
- }
- }); 
+			  });
+			 }
+			});
 	 
 	 $(document).on("click", ".tog", function(event){
 
-   data={"profileId":this.id,
-	   "courseId":url[0]
- };
- count=0;
- id=this.id;
- //text=this.innerHTML;
- $.ajax({
-  type:'POST',
-  dataType: 'json',
-  contentType: 'application/json',
-  url:' https://uploadnotes-2016.appspot.com/_ah/api/notesapi/v1/addAdmin/ahJzfnVwbG9hZG5vdGVzLTIwMTZyEwsSBkNvdXJzZRiAgICA2uOGCQw',
-  data: JSON.stringify(data),
-  success: function (data) {
-  console.log(data);
-   count=1;
-  }
-  });
-	  s="rgb(247,151,29)"
-	if(this.style.backgroundColor == "rgb(247, 151, 29)") {
-			  // ID.pop(this.id);
-			   this.style.backgroundColor="#ccc";
-			   this.innerHTML="Make Admin";
-			   }
-			   else
-			   {
-			   //alert(this.style.backgroundColor);
-			   //ID.push(this.id);
-			   this.style.backgroundColor="#f7971d";
-			   this.innerHTML="Admin";
-				}
-  
-  
-  
- 	 
- });
+		   data={"profileId":this.id,
+			   "courseId":url[0]
+		 };
+		 count=0;
+		 id=this.id;
+		 //text=this.innerHTML;
+		 $.ajax({
+		  type:'POST',
+		  dataType: 'json',
+		  contentType: 'application/json',
+		  url:makeAdminUrl,
+		  data: JSON.stringify(data),
+		  success: function (data) {
+		  console.log(data);
+		   count=1;
+		  }
+		  });
+		  //change color
+			  s="rgb(247,151,29)"
+			if(this.style.backgroundColor == "rgb(247, 151, 29)") {
+					  // ID.pop(this.id);
+					   this.style.backgroundColor="#ccc";
+					   this.innerHTML="Make Admin";
+					   }
+					   else
+					   {
+					   //alert(this.style.backgroundColor);
+					   //ID.push(this.id);
+					   this.style.backgroundColor="#f7971d";
+					   this.innerHTML="Admin";
+						}
+		  
+		  
+		  
+			 
+		 });
 
-	 
+		
 	 
 });
 	
@@ -1155,7 +1422,7 @@ data={
     <div class="row">
       <div class="col-xs-6 col-md-2 sidebar sidebar-left sidebar-animate sidebar-md-show" >
         <ul class="nav navbar-stacked">
-		<li><center><a  href="/profile" width="50%" height="50%" class="profile.png"><img src="/static/style/profile.png" class="img-circle" width="50%" height="50%"></a></center></li>
+		<li><center><a  href="/profile" width="50%" height="50%" class="profile.png"><img src="/static/style/profile.png" style="max-height:100px;" class="img-circle" width="50%" height="50%"></a></center></li>
 		 <li><center><span id="pname">Name</span></center></li>
         
         <li><center>Points: &nbsp <span id="pts">0</span></center></li>
@@ -1179,6 +1446,8 @@ data={
       </div>
       <div class="main col-xs-12 col-md-10 col-md-offset-2 " style="padding-left:20px;">
 	  <div style="font-size:24px;"><a id="course-nav" href="/home">Courses </a> > <span id="course-name"> Name</span></div>
+	  <div class="btn btn-default" style="background:transparent" data-toggle="modal" data-target="#editCourseModal"><i class="fa fa-pencil"></i>  Edit Course</div>
+	  <br><br>
 	  <div class="row">
 		<div class="col-xs-12" style=" padding-right: 0px;">
 		  <div class="ui card bottom " style="background-color:white;border:1px solid #ccc;margin-bottom:1px;color:black;height:230px;width:100%;" id = "card">
@@ -1187,7 +1456,7 @@ data={
 			<div id="course-name-main" style="font-size:20px;margin-left:0px;"> COURSE NAME</div>
 			<div id="prof" style="margin-left:0px;">By Prof .XYZ</div>
 			<div class="col-md-1 col-xs-5" style="padding:0px;">
-			<div id="elective" class="btn-default" style="margin-left:0px;border:1px solid black;border-color:black;background-color:transparent;">&nbsp;&nbsp;Elective</div>
+			<div id="elective" class="btn-default" style="margin-left:0px;border:1px solid black;border-color:black;background-color:transparent;">&nbsp;Elective</div>
 			</div>
 			<br>
 			<br>
@@ -1305,7 +1574,7 @@ data={
   <div class="modal-dialog" role="document">
     <div class="modal-content studentModal-title" >
         <h4 class="modal-title " id="studentModalLabel" style="border:1px solid #ccc;"><center><b>&nbsp Students in this course</b></center></h4>
-      <div class="modal-body" style="overflow-y:scroll!important;max-height:500px!important;padding-bottom:0px;min-height:120px;">
+      <div class="modal-body" id="sbody" style="overflow-y:scroll!important;max-height:500px!important;padding-bottom:0px;min-height:120px;">
 	 
 	  
       </div>
@@ -1313,6 +1582,68 @@ data={
   </div>
 </div>
 
+
+<div class="modal fade " id="editCourseModal" tabindex="-1" role="dialog" aria-labelledby="editCourseLabel" >
+  <div class="modal-dialog" role="document">
+    <div class="modal-content studentModal-title" >
+        <h4 class="modal-title " id="editCourseLabel" style="border:1px solid #ccc;"><center><b>&nbsp Edit Course</b></center></h4>
+      <div class="modal-body" style="overflow-y:scroll;height:80%!important;max-height:500px!important">
+				    <div class="col-xs-12" >
+						  <div class="col-xs-7 col-md-10" style="padding:0px;padding-right:3px;">
+							<p><input class="form-control" type="text" id="course-name1" placeholder="Course Name" required>
+							</p>
+							</div>
+						  <div class="col-xs-5 col-md-2" style="padding:0px;">
+						<span> <input id="color-picker" class='simple_color_kitchen_sink form-control' style="display:inline-block !important;margin-top:-5px;"/></span>
+							</div>
+							<p><input class="form-control" id="course-code" type="text" placeholder="Course Code.. e.g..,CHE402" required></p>
+							<p><input class="form-control" id="proff" type="text" placeholder="Professor" required></p>
+							<p><input class="form-control" id="sem" type="text" placeholder="Semester..Odd/Even" required></p>
+							<p><input type="checkbox"  id="elective1" name="elective" value="elective" style="margin-top:-1px;" placeholder="" required><span>Elective</span></p>
+							<div style="border:1px solid #ccc;" placeholder="Semester" required></div><br>
+							<p><input class="form-control" id="batch" type="text"  required></p>
+							<p><input class="form-control" id="section" type="text" placeholder="Section" required></p>
+							<p><input class="form-control" id="branch" type="text" placeholder="Branch" required></p>
+						   <div style="border:1px solid #ccc;" ></div><br>
+						   <b>Timetable</b><br>
+						   <div class="col-xs-2 day-1" style="padding-left:0px;">
+						   <div><input type="checkbox" id="day1" name="Mon" value="1" class="days" > Mon
+						   </div>
+						   <div id="dtBox"></div>
+						   
+						   </div>
+						   <div class="col-xs-2 day-2" style="padding-left:0px;">
+						   <div><input type="checkbox" id="day2" name="Tue" value="2" class="days">Tue</div>
+						   </div>
+						  <div class="col-xs-2 day-3" style="padding-left:0px;">
+						   <div><input type="checkbox" id="day3" name="Wed" value="3" class="days"> Wed</div>
+						   </div>
+						   <div class="col-xs-2 day-4" style="padding-left:0px;">
+						   <div><input type="checkbox" id="day4" name="Thur" value="4" class="days"> Thur</div>
+						   </div>
+						   <div class="col-xs-2 day-5" style="padding-left:0px;">
+						   <div><input type="checkbox" id="day5" name="Fri" value="5" class="days"> Fri</div>
+						   </div>
+						   <div class="col-xs-2 day-6" style="padding-left:0px;">
+						   <div><input type="checkbox" id="day6" name="Sat" value="6" class="days"> Sat</div>
+							</div>
+						   <br>
+						   <br>
+						   <br>
+						   <br>
+						   <br>
+						  <center> <div value="create" id="done" class="btn btn-done" style="background-color:#f7971d;border-color:#f7971d;color:white">Edit</div></center>
+						  </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="dtBox"></div>
+	   
+	   </div>
+<div id='loadingmessage' style='display:none'>
+  <img src='/static/style/loading1.gif'/>
+</div>
 </body>
 
 </html>
